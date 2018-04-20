@@ -1,0 +1,290 @@
+/*
+ * It is advised not to edit the smartadmin_production.css
+ * as this will override any changes you make in the
+ * later versions of this theme.
+ *
+ * We advise that you use use this CSS to override
+ * SmartAdmin styles.
+ *
+ * Rename the stylesheet to whatever your liking so it will stay
+ * unique to you with each update of SmartAdmin.
+ */
+
+/*
+ * INDEX
+ *
+ * - HTML
+ * - BODY
+ * - CUSTOM STYLES
+ */
+
+@font-face {
+    font-family: "akbalthom+koulen+1+plus";
+    src: url("/fonts/akbalthom+koulen+1+plus/akbalthom+koulen+1+plus.ttf") format("truetype");
+}
+@font-face {
+    font-family: "akbalthom+moul5";
+    src: url("/fonts/akbalthom+moul5/akbalthom+moul5.ttf") format("truetype");
+}
+@font-face {
+    font-family: "akbalthom+basic";
+    src: url("/fonts/akbalthom+basic/akbalthom+basic.ttf") format("truetype");
+}
+@font-face {
+    font-family: "ang+daunteav";
+    src: url("/fonts/ang+daunteav/ang+daunteav.ttf") format("truetype");
+}
+
+.font-koulen1plus {
+    font-family: 'akbalthom+koulen+1+plus', sans-serif !important;
+}
+.font-moul5 {
+    font-family: 'akbalthom+moul5', sans-serif !important;
+}
+.font-basic {
+    font-family: 'akbalthom+basic', sans-serif !important;
+}
+.font-angdaunteav {
+    font-family: 'ang+daunteav', sans-serif !important;
+}
+.font-ubuntu {
+    font-family: 'Ubuntu', sans-serif !important;
+}
+.font-lato {
+    font-family: 'Lato', sans-serif !important;
+}
+.font-kanit {
+    font-family: 'Kanit', sans-serif !important;
+}
+
+/* Loading overlay */
+.loading-overlay {
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    z-index: 999;
+    max-width: 100%;
+    max-height: 100%;
+    margin: auto;
+    overflow: auto;
+    background: rgba(0, 0, 0, 0.3);
+}
+#loading-start, #loading-saved {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    max-width: 100%;
+    max-height: 100%;
+    margin: auto;
+    overflow: auto;
+}
+#loading-error {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 375px;
+    height: 135px;
+    max-width: 100%;
+    max-height: 100%;
+    background-color: #333;
+    opacity: 1;
+    color: #fff;
+    margin: auto;
+    overflow: auto;
+}
+#close-loading {
+    color: #fff;
+    text-shadow: none;
+    opacity: 1;
+}
+
+/* custom fixed style - ; */
+.inline-block {
+    display: inline-block !important;
+    vertical-align: top;
+    zoom: 1;
+    /* Fix for IE7 */
+    *display: inline;
+    /* Fix for IE7 */
+}
+.no-margin {
+    margin: 0px !important;
+    margin-left: 0px !important;
+    margin-right: 0px !important;
+    margin-top: 0px !important;
+    margin-bottom: 0px !important;
+}
+.line-through {
+    text-decoration: line-through;
+}
+.font-bold {
+    font-weight: 700 !important;
+}
+.font-light {
+    font-weight: 200 !important;
+}
+.clearboth {
+    clear: both;
+}
+.child-privileges {
+    background-color: #fafafa;
+}
+.atoslug {
+    line-height: 11px;
+}
+.hyper {
+    position: relative;
+    top: -17px;
+}
+.btn-action {
+    min-width: 93px;
+}
+.table .btn {
+    margin-bottom: 3px;
+}
+.table-footer {
+    margin-top: 17px;
+}
+
+/* dropdown menu bootstrap */
+.dropdown-menu.customize {
+    left: auto;
+    right: 0;
+}
+.dropdown-menu.customize > li > a {
+    text-align: right;
+}
+
+/* Hr */
+.multi > hr {
+    margin: 3px 0px;
+}
+
+/* Image */
+.backgroundless {
+    background: transparent !important;
+    background-color: transparent !important;
+    background-image: transparent !important;
+}
+
+/* Table custom ; */
+.borderless td, .borderless th {
+    border-radius: 0px 0px 0px 0px !important;
+    -moz-border-radius: 0px 0px 0px 0px !important;
+    -webkit-border-radius: 0px 0px 0px 0px !important;
+    border: 0px none #ffffff !important;
+}
+
+/* Flexibled -error ; */
+.flexibled-error {
+    position: relative;
+}
+.error-badge {
+    position: absolute;
+    *display: inline-block;
+    top: 0px;
+    right: 0px;
+}
+.flexibled-error .msg, .flexibled-error .msg .alert {
+    position: relative;
+    color: red;
+    z-index: 9;
+    padding: 2px 7px 0px;
+    margin: 0px !important;
+}
+.flexibled-error .msg > .alert-danger {
+    border-color: #953b3945;
+    background-color: #ececec91;
+}
+
+/* Custom theme style ; */
+.smart-form footer .btn {
+    float: none;
+}
+.smart-form.custom-sf section {
+    margin-top: 7px !important;
+    margin-bottom: 7px !important;
+}
+.pagination > li > a, .pagination > li > span {
+    font-family: 'Ubuntu', sans-serif;
+    padding: 4px 7px;
+    margin-left: 3px;
+}
+.mce-content-body {
+    font-size: 13px;
+}
+.smart-form .label {
+    font-weight: 700 !important;
+}
+
+/* Page printing, A3, A4, A5 */
+page {
+    background: white;
+    display: block;
+    margin: 0 auto;
+    margin-bottom: 0.5cm;
+    *box-shadow: 0 0 0.5cm rgba(0,0,0,0.5);
+}
+page[size="A4"] {
+    width: 21cm;
+    height: 29.7cm;
+}
+page[size="A4"][layout="portrait"] {
+    width: 29.7cm;
+    height: 21cm;
+}
+page[size="A3"] {
+    width: 29.7cm;
+    height: 42cm;
+}
+page[size="A3"][layout="portrait"] {
+    width: 42cm;
+    height: 29.7cm;
+}
+page[size="A5"] {
+    width: 14.8cm;
+    height: 21cm;
+}
+page[size="A5"][layout="portrait"] {
+    width: 21cm;
+    height: 14.8cm;
+}
+
+/* Custom base on site ; */
+.ajax-tr > td {
+    font-family: 'Ubuntu', sans-serif;
+    text-align: center;
+    vertical-align: middle !important;
+    width: 75px;
+}
+.custom-tbl th {
+    font-size: 13px;
+    color: #333;
+}
+.objective, .hereby {
+    display: inline-block;
+    min-width: 75px;
+}
+.sloto {
+    border-top: none;
+    margin: 7px 0px;
+}
+.print-req-tbl > thead > tr > th, .print-req-tbl > tbody > tr > td {
+    padding: 5px 8px;
+}
+
+
+
+
+
+
+
+
+
+
