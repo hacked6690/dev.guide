@@ -57,7 +57,6 @@ class AjaxController extends Controller
             ]);
     }
 
-    // just testing ... ;
     public function realtime_upload(Request $request)
     {
         // assign empty array +v.01;
