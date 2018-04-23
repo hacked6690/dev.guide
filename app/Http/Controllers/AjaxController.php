@@ -24,7 +24,7 @@ class AjaxController extends Controller
         $this->middleware('auth');
     }
 
-    // Fixed method - ;
+    // these are fixed method ;
     public function of_taxonomy(Request $request)
     {
         $result = false;
