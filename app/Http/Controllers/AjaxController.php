@@ -59,7 +59,7 @@ class AjaxController extends Controller
 
     public function realtime_upload(Request $request)
     {
-        // assign empty array ;
+        // assign empty array +v.01;
         $msg = \Helper::layout()->label->realtime->title;
         $success = $errors = [];
 
