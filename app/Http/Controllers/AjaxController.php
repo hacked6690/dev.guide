@@ -24,7 +24,7 @@ class AjaxController extends Controller
         $this->middleware('auth');
     }
 
-    // these are fixed method .v1;
+    // these are fixed method v.01;
     public function of_taxonomy(Request $request)
     {
         $result = false;
@@ -59,7 +59,7 @@ class AjaxController extends Controller
 
     public function realtime_upload(Request $request)
     {
-        // assign empty array +v.01;
+        // assign empty array v.01;
         $msg = \Helper::layout()->label->realtime->title;
         $success = $errors = [];
 
