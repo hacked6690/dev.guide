@@ -44,6 +44,8 @@ Route::resource('user_passwords', 'UserPasswordsController', ['only' => ['update
 
 Route::resource('privileges', 'PrivilegesController', ['except' => ['show']]);
 
+Route::get('home',function(){ return view('home.index');});
+
 // Static Ajax routes ;
 Route::prefix('ajax')->group(function () {
 	Route::post('of_taxonomy', ['as' => 'ajax.of_taxonomy', 'uses' => 'AjaxController@of_taxonomy']);
