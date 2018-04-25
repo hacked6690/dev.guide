@@ -18,11 +18,24 @@
 	<script type="text/javascript" src="{{asset('assets/frontend/js/plugins/owl-carousel.js')}}"></script>
 	<script type="text/javascript" src="{{asset('assets/frontend/js/plugins/style-switcher.js')}}"></script>
 	<script type="text/javascript" src="{{asset('assets/frontend/js/plugins/parallax-slider.js')}}"></script>
+
+	<script type="text/javascript" src="{{asset('assets/frontend/plugins/smoothScroll.js')}}"></script>
+	<script src="{{asset('assets/frontend/plugins/sky-forms-pro/skyforms/js/jquery.maskedinput.min.js')}}"></script>
+	<script src="{{asset('assets/frontend/plugins/sky-forms-pro/skyforms/js/jquery-ui.min.js')}}"></script>
+	<script src="{{asset('assets/frontend/plugins/sky-forms-pro/skyforms/js/jquery.validate.min.js')}}"></script>
+	<script type="text/javascript" src="{{asset('assets/frontend/js/plugins/datepicker.js')}}"></script>
+	<script type="text/javascript" src="{{asset('assets/frontend/js/plugins/masking.js')}}"></script>
+	
+
 	<script type="text/javascript">
 		jQuery(document).ready(function() {
 			App.init();
+			Masking.initMasking();
+			Datepicker.initDatepicker();
 			OwlCarousel.initOwlCarousel();
 			StyleSwitcher.initStyleSwitcher();
 			ParallaxSlider.initParallaxSlider();
 		});
 	</script>
+
+	
