@@ -18,7 +18,7 @@ class RedirectIfAuthenticated
     public function handle($request, Closure $next, $guard = null)
     {
         if (Auth::guard($guard)->check()) {
-            return redirect('/requests');
+            return redirect()->route('profiles.edit', encrypt(Auth::user()->id));
         }
 
         return $next($request);
