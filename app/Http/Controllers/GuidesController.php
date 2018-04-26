@@ -9,6 +9,7 @@ use Session;
 use App\Languages;
 use App\ContentRelationships;
 use App\Posts;
+use App\ContentTerms;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Pagination\Paginator;
@@ -43,8 +44,18 @@ class GuidesController extends Controller
                         ->leftJoin('privileges as p2', 'p1.parent', '=', 'p2.id')
                         ->orderBy('p1.id', 'desc')
                         ->paginate($display);
+       $nationalities= ContentTerms::terms_by(['taxonomy' => 'nationalities']);
+       $provinces= ContentTerms::terms_by(['taxonomy' => 'provinces']);
+       $partner_types= ContentTerms::terms_by(['taxonomy' => 'partner_types']);
+       $guide_types= ContentTerms::terms_by(['taxonomy' => 'guide_types']);
+       $guide_languages= ContentTerms::terms_by(['taxonomy' => 'guide_languages']);
+       $proficiencies= ContentTerms::terms_by(['taxonomy' => 'proficiencies']);
+      
 
-        return view('guides.index', compact(['privileges', 'display']));
+     
+
+        return view('guides.index', compact(['privileges', 'display','nationalities','provinces','partner_types',
+            'guide_types','guide_languages','proficiencies']));
 
     }
 
