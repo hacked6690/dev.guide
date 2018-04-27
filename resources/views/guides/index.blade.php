@@ -4,13 +4,7 @@
 	<link rel="stylesheet" href="{{asset('assets/frontend/plugins/sky-forms-pro/skyforms/custom/custom-sky-forms.css')}}">
 	<link rel="stylesheet" type="text/css" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 	<style type="text/css">
-	table {
-	font-size: 1em;
-}
-
-.ui-draggable, .ui-droppable {
-	background-position: top;
-}
+	
 	
 	</style>
 @endsection
@@ -18,14 +12,29 @@
 	<div id="content">
 	<div class="wrapper">
 		<div class="container" style="width:90%">
-			<form action="#" id="sky-form4" class="sky-form">
+			<form action="{{ route('guides.index') }}" id="sky-form4" class="sky-form" class="smart-form" method="post" >
 				<div class="col-lg-5 col-md-5">
 								<header>
 									{{ $layout->label->guide_registration->title }}
 								</header>
 
 								<fieldset>
-									
+									<div class="row">
+												<section class="col col-10 flexibled-error">
+													<label class="label">
+														Title <code>*</code>
+
+														@if($errors->has('title'))
+															<div class="error-badge" id="for-title">
+																{!! Helper::alert('danger', $errors->first('title')) !!}
+															</div>
+														@endif
+													</label>
+													<label class="input">
+														<input type="text" name="title" value="{{ old('title') }}" class="input-sm border-0 border-bottom-1 font-bold font-18">
+													</label>
+												</section>
+											</div>
 									<div class="row">
 										<section class="col col-6 flexibled-error">
 											<label class="label">
@@ -533,16 +542,18 @@
 									</div>
 							        <section class="col col-lg-5 col-md-5 flexibled-error">
 											<label class="label">
+											
 																{{ $layout->label->language->title }}<code>*</code>
-																@if($errors->has('guide_language'))
+																@if($errors->has('guide_language1'))
 																	<div class="error-badge" id="for-guide_language">															
-																		{!! Helper::alert('danger', $errors->first('guide_language')) !!}
+																		{!! Helper::alert('danger', $errors->first('guide_language1')) !!}
 																	</div>
 																@endif
+											
 											</label>
 											<label class="select">
-												<select value="{{ old('guide_language') }}" name="guide_language" >
-													<option value="0" selected disabled>Select Below</option>
+												<select value="{{ old('guide_language1') }}" id="guide_language1" class="guide_language" name="guide_language1" >
+													<option value="" selected disabled>Select Below</option>
 													@foreach($guide_languages as $guide_language)
 														@if(old('guide_language') ==$guide_language->term_id)
 																	<option value="{{$guide_language->term_id}}" selected >{{$guide_language->title}}</option>
@@ -602,7 +613,7 @@
 																@endif
 												</label>
 												<label class="input">
-													<input type="text" value="{{old('price_description')}}" class="price" id="price_description" name="price_description" placeholder="">
+													<input type="text" value="{{old('price_description')}}" class="price" id="price_description" name="price_description[]" placeholder="">
 												</label>
 									</section>							
 								</div>
@@ -612,6 +623,7 @@
 											<i class=" fa fa-plus-circle" aria-hidden="true"></i>&nbsp;{{ $layout->label->add_language->title }}
 									</section>
 								</div>
+								
 							</div><!--end block language-->
 							<hr/>
 							<div class="block_location">
@@ -632,7 +644,7 @@
 												<select value="{{ old('province') }}" name="province" >
 													<option value="0" selected disabled>Select Below</option>
 													@foreach($provinces as $province)
-														@if(old('proficiency') ==$proficiency->term_id)
+														@if(old('province') ==$province->term_id)
 																	<option value="{{$province->term_id}}" selected >{{$province->title}}</option>
 														@else
 																	<option value="{{$province->term_id}}">{{$province->title}}</option>
@@ -689,7 +701,8 @@
 											<label class="checkbox"><input type="checkbox" name="terms" id="terms"><i></i>{{ $layout->label->i_agree_term->title }}</label>
 										</section>
 										<footer>
-											<button type="submit" class="btn-u">Submit</button>
+											{{ csrf_field() }}
+											<button type="submit"  class="btn-u">Submit</button>
 										</footer>
 							</div>
 
@@ -708,15 +721,39 @@
 @section('script')
 <script type="text/javascript" src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
  <script>
-            var c = 0;
+            var c = 1;
             $('.add_language').on('click', function() {            	
+               /* var last_ele=$(".language_item:last");
                 c++;
-                 // alert(c);
-                 var last_ele=$(".language_item:last");
-                 var new_ele=last_ele.clone(true);
-                 last_ele.after(new_ele);
+                  var new_ele=last_ele.clone(true);
+                 last_ele.after(new_ele);*/
+                 
+                var orginalDiv = $('.language_item:last');
+				var clonedDiv = orginalDiv.clone();
+				c++;
+				clonedDiv.find('.guide_language').attr('name','guide_language'+c);
+				clonedDiv.appendTo('.language_item');
+
+
+
+               
                 
             });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             $('.add_location').on('click', function() {            	
                 c++;
                  // alert(c);

@@ -94,6 +94,7 @@ class PostsController extends Controller
                 'description' => 'required',
                 'content_parent' => 'nullable|numeric',
             ]);
+        dd($validator);
 
         if($validator->fails()) {
             return redirect()->back()

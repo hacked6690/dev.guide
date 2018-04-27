@@ -34,9 +34,9 @@ class GuidesController extends Controller
     public function create()
     {
         //
-       if(!Auth::user()->authorized('posts')) {
+      /* if(!Auth::user()->authorized('posts')) {
             abort(403, 'Unauthorized action.');
-        }
+        }*/
          $display = Input::has('display') ? Input::get('display') :7;
 
         $privileges = DB::table('privileges as p1')
@@ -68,6 +68,25 @@ class GuidesController extends Controller
     public function store(Request $request)
     {
         //
+
+         $validator = Validator::make($request->all(), [
+                'title' => 'required',
+                'first_name' => 'required',
+                'guide_language1' =>'required',
+            ]);
+        
+         // dd($validator->errors());
+
+        if($validator->fails()) {
+
+            return redirect()->back()
+                        ->withInput()
+                        ->withErrors($validator);
+        }
+        echo $request->title;
+
+
+
     }
 
     /**
