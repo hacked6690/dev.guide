@@ -14,7 +14,7 @@
 Auth::routes();
 
 Route::resource('posts', 'PostsController');
-Route::resource('guides', 'GuidesController');
+Route::resource('guides', 'frontend\GuidesController');
 Route::resource('pages', 'PagesController');
 
 Route::resource('content_terms', 'ContentTermsController', ['except' => ['show']]);

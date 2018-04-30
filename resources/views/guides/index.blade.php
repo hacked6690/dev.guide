@@ -4,7 +4,10 @@
 	<link rel="stylesheet" href="{{asset('assets/frontend/plugins/sky-forms-pro/skyforms/custom/custom-sky-forms.css')}}">
 	<link rel="stylesheet" type="text/css" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 	<style type="text/css">
-	
+	.inline-block{
+		padding:0px;
+		margin: 0px;
+	}
 	
 	</style>
 @endsection
@@ -19,22 +22,7 @@
 								</header>
 
 								<fieldset>
-									<div class="row">
-												<section class="col col-10 flexibled-error">
-													<label class="label">
-														Title <code>*</code>
-
-														@if($errors->has('title'))
-															<div class="error-badge" id="for-title">
-																{!! Helper::alert('danger', $errors->first('title')) !!}
-															</div>
-														@endif
-													</label>
-													<label class="input">
-														<input type="text" name="title" value="{{ old('title') }}" class="input-sm border-0 border-bottom-1 font-bold font-18">
-													</label>
-												</section>
-											</div>
+									
 									<div class="row">
 										<section class="col col-6 flexibled-error">
 											<label class="label">
@@ -362,7 +350,7 @@
 																@endif
 											</label>
 											<label class="select">
-												<select value="{{ old('province') }}" name="province" >
+												<select value="{{ old('partner_type') }}" name="partner_type" >
 													<option value="0" selected disabled>Select Below</option>
 													@foreach($partner_types as $partner_type)
 														@if(old('partner_type') ==$partner_type->term_id)
@@ -535,7 +523,8 @@
 												</label>
 											</section>								
 							</div>
-							<div class="block_language">
+							<!-- Add block language -->
+							<!-- <div class="block_language">
 								<div class="row language_item">	
 									<div class="col-lg-12 col-md-12">
 										<div  style="border-top:1px dashed green;height:10px"></div>
@@ -624,9 +613,11 @@
 									</section>
 								</div>
 								
-							</div><!--end block language-->
+							</div> -->
+							<!--end block language-->
 							<hr/>
-							<div class="block_location">
+							<!-- Add Block Location -->
+							<!-- <div class="block_location">
 								<div class="row location_item">	
 									<div class="col-lg-12 col-md-12">
 										<div  style="border-top:1px dashed green;height:10px"></div>
@@ -683,7 +674,7 @@
 												<label class="input">
 													<input type="text" value="{{ old('location_price')}}" class="price" id="location_price" name="location_price" placeholder="">
 												</label>
-									</section>									
+									</section>								
 														
 								</div>
 								<div class="row">
@@ -693,12 +684,23 @@
 										</button>
 									</section>
 								</div>
-							</div><!--end block province-->
+							</div> -->
+							<!--end block location-->
 							
 							
 							<div class="row">
 										<section class="col col-lg-12">
-											<label class="checkbox"><input type="checkbox" name="terms" id="terms"><i></i>{{ $layout->label->i_agree_term->title }}</label>
+											<label class="label">
+																
+																@if($errors->has('agree'))
+																	<div class="error-badge" id="for-agree">															
+																		{!! Helper::alert('danger', $errors->first('agree')) !!}
+																	</div>
+																@endif
+											</label>
+											<label class="checkbox">
+												<input type="checkbox" name="agree" id="terms"><i></i>{{ $layout->label->i_agree_term->title }}
+											</label>
 										</section>
 										<footer>
 											{{ csrf_field() }}

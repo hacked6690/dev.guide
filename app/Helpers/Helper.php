@@ -402,6 +402,11 @@ class Helper
 									</div>
 								</div>');
 	}
+	public static function MyFormatDate($date)
+	{
+		$date=date_create($date);
+       return $date=date_format($date,"Y-m-d");
+	}
 }
 
 
