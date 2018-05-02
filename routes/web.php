@@ -52,3 +52,6 @@ Route::prefix('ajax')->group(function () {
 	Route::post('realtime_upload', ['as' => 'ajax.realtime_upload', 'uses' => 'AjaxController@realtime_upload']);
 });
 
+
+
+

@@ -8,6 +8,15 @@
 		padding:0px;
 		margin: 0px;
 	}
+	.border-0{
+		border: 0px solid #bdbdbd !important;
+	}
+	.border-bottom-1{
+		border-bottom: 1px solid #bdbdbd !important;
+	}
+	.ui-widget.ui-widget-content{
+		width:250px;
+	}
 	
 	</style>
 @endsection
@@ -15,14 +24,20 @@
 	<div id="content">
 	<div class="wrapper">
 		<div class="container" style="width:90%">
-			<form action="{{ route('guides.index') }}" id="sky-form4" class="sky-form" class="smart-form" method="post" >
+			<form action="{{ route('guides.index') }}" id="sky-form4" class="sky-form" class="smart-form" method="post" enctype="multipart/form-data" >
 				<div class="col-lg-5 col-md-5">
 								<header>
 									{{ $layout->label->guide_registration->title }}
 								</header>
 
 								<fieldset>
-									
+									<div class="row">
+										@if(Session::has('inserted'))
+											<section class="col col-6">
+												{!! Helper::alert('success', Session::get('inserted'), 'block font-15') !!}
+											</section>
+										@endif
+									</div>
 									<div class="row">
 										<section class="col col-6 flexibled-error">
 											<label class="label">
@@ -105,7 +120,7 @@
 										</label>
 										<label class="textarea">
 											<i class="icon-append fa fa-comment"></i>
-											<textarea value="{{ old('address') }}" rows="4" name="address" id="address"></textarea>
+											<textarea  rows="4" name="address" id="address">{{ old('address') }}</textarea>
 										</label>
 									</section>
 
@@ -136,9 +151,19 @@
 											</label>
 											<label class="select">
 												<select name="gender" >
-													<option value="{{ old('gender') }}" value="0" selected disabled>Select Gender</option>
-													<option value="1">Male</option>
-													<option value="2">Female</option>
+													<option value="{{ old('gender') }}" value="" selected disabled>Select Gender</option>
+													@if(old('gender')=='m')
+														<option selected value="m">Male</option>
+														<option value="f">Female</option>
+													@elseif(old('gender')=='f')
+														<option value="m">Male</option>
+														<option selected value="f">Female</option>
+													@else
+														<option value="m">Male</option>
+														<option  value="f">Female</option>
+													@endif
+
+													
 												</select>
 												<i></i>
 											</label>
@@ -215,7 +240,7 @@
 										<section class="col col-6 flexibled-error">
 											<label class="label">
 																{{ $layout->label->password->title }}<code>*</code>
-																@if($errors->has('province'))
+																@if($errors->has('password'))
 																	<div class="error-badge" id="for-password">															
 																		{!! Helper::alert('danger', $errors->first('password')) !!}
 																	</div>
@@ -223,22 +248,22 @@
 											</label>
 											<label class="input">
 												<i class="icon-append fa fa-lock"></i>
-												<input type="password" name="password" placeholder="Password" id="password">
+												<input type="password" value="{{old('password')}}" name="password" placeholder="Password" id="password">
 												<b class="tooltip tooltip-bottom-right">Don't forget your password</b>
 											</label>
 										</section>
 										<section class="col col-6 flexibled-error">
 											<label class="label">
 																{{ $layout->label->confirm_password->title }}<code>*</code>
-																@if($errors->has('confirm_password'))
+																@if($errors->has('password_confirmation'))
 																	<div class="error-badge" id="for-confirm_password">															
-																		{!! Helper::alert('danger', $errors->first('confirm_password')) !!}
+																		{!! Helper::alert('danger', $errors->first('password_confirmation')) !!}
 																	</div>
 																@endif
 											</label>
 											<label class="input">
 												<i class="icon-append fa fa-lock"></i>
-												<input type="password" name="confirm_password" placeholder="Password" id="confirm_password">
+												<input type="password"  name="password_confirmation" placeholder="Password" id="password_confirmation">
 												<b class="tooltip tooltip-bottom-right">Don't forget your password</b>
 											</label>
 										</section>									
@@ -335,7 +360,7 @@
 																@endif
 											</label>
 											<label class="input">
-												<input type="text" value="{{ old('id_number') }}" name="lastname" placeholder="ID Number">
+												<input type="text" value="{{ old('id_number') }}" name="id_number" placeholder="ID Number">
 											</label>
 								</section>
 
@@ -491,7 +516,7 @@
 												</label>
 												<label class="input">
 													<i class="icon-append fa fa-calendar"></i>
-													<input type="text" name="issued_date" id="issued_date"  placeholder="Issued Date">
+													<input type="text" value="{{old('issued_date')}}" name="issued_date" id="issued_date"  placeholder="Issued Date">
 												</label>
 											</section>	
 											<section class="col col-4 flexibled-error">
@@ -505,7 +530,7 @@
 												</label>
 												<label class="input">
 													<i class="icon-append fa fa-calendar"></i>
-													<input type="text" name="expired_date" id="expired_date" placeholder="Expired Date">
+													<input type="text" value="{{old('expired_date')}}"  name="expired_date" id="expired_date" placeholder="Expired Date">
 												</label>
 											</section>	
 											<section class="col col-4 flexibled-error">
@@ -519,7 +544,7 @@
 												</label>
 												<label class="input">
 													<i class="icon-append fa fa-calendar"></i>
-													<input type="text" name="service_date" id="service_date"  placeholder="Service Date">
+													<input type="text" value="{{old('service_date')}}"  name="service_date" id="service_date"  placeholder="Service Date">
 												</label>
 											</section>								
 							</div>
@@ -686,8 +711,25 @@
 								</div>
 							</div> -->
 							<!--end block location-->
-							
-							
+							<div class="row">
+										<section class="col col-6 flexibled-error">
+											<label class="label">
+												Profile
+
+												@if($errors->has('profile'))
+													<div class="error-badge" id="for-profile">
+														{!! Helper::alert('danger', $errors->first('profile')) !!}
+													</div>
+												@endif
+											</label>
+											<div class="input input-file">
+												<span class="button">
+													<input type="file"  name="profile" accept="image/*" onchange="this.parentNode.nextSibling.value = this.value">
+														Browse
+												</span><input type="text" class="border-0 border-bottom-1" placeholder="" readonly="">
+											</div>
+										</section>
+							</div>							
 							<div class="row">
 										<section class="col col-lg-12">
 											<label class="label">
@@ -699,7 +741,12 @@
 																@endif
 											</label>
 											<label class="checkbox">
-												<input type="checkbox" name="agree" id="terms"><i></i>{{ $layout->label->i_agree_term->title }}
+												@if(old('agree')!=='')
+													<input type="checkbox"  name="agree" id="agree"><i></i>{{ $layout->label->i_agree_term->title }}
+												@else
+													<input type="checkbox" value="{{old('agree')}}" name="agree" id="agree"><i></i>{{ $layout->label->i_agree_term->title }}
+												@endif
+												
 											</label>
 										</section>
 										<footer>
