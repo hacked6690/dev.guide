@@ -38,59 +38,46 @@
 											</section>
 										@endif
 									</div>
+									
+									<section class="flexibled-error">
+											<label class="label">
+														{{ $layout->label->license_id->title }} <code>*</code>
+														@if($errors->has('license_id'))
+															<div class="error-badge" id="for-license_id">
+																{!! Helper::alert('danger', $errors->first('license_id')) !!}
+															</div>
+														@endif
+											</label>
+											<label class="input">
+												<input type="text" value="{{ old('license_id') }}" name="license_id" placeholder="">
+											</label>
+									</section>
+								
 									<div class="row">
 										<section class="col col-6 flexibled-error">
 											<label class="label">
-														{{ $layout->label->first_name_latin->title }} <code>*</code>
-														@if($errors->has('first_name'))
-															<div class="error-badge" id="for-first_name">
-																{!! Helper::alert('danger', $errors->first('first_name')) !!}
+														{{ $layout->label->fullname_kh->title }}<code>*</code>
+														@if($errors->has('fullname_kh'))
+															<div class="error-badge" id="for-fullname_kh">
+																{!! Helper::alert('danger', $errors->first('fullname_kh')) !!}
 															</div>
 														@endif
 											</label>
 											<label class="input">
-												<input type="text" value="{{ old('first_name') }}" name="first_name" placeholder="">
+												<input type="text" value="{{ old('fullname_kh') }}" name="fullname_kh" placeholder="">
 											</label>
 										</section>
 										<section class="col col-6 flexibled-error">
 											<label class="label">
-														{{ $layout->label->last_name_latin->title }} <code>*</code>
-														@if($errors->has('last_name'))
-															<div class="error-badge" id="for-last_name">
-																{!! Helper::alert('danger', $errors->first('last_name')) !!}
-															</div>
-														@endif
-											</label>										
-											<label class="input">
-												<input type="text" value="{{ old('last_name') }}" name="last_name" placeholder="">
-											</label>
-										</section>
-									</div>
-									<div class="row">
-										<section class="col col-6 flexibled-error">
-											<label class="label">
-														{{ $layout->label->first_name_khmer->title }}<code>*</code>
-														@if($errors->has('first_name_kh'))
-															<div class="error-badge" id="for-first_name_kh">
-																{!! Helper::alert('danger', $errors->first('first_name_kh')) !!}
+														{{ $layout->label->fullname_en->title }}<code>*</code>
+														@if($errors->has('fullname_en'))
+															<div class="error-badge" id="for-fullname_en">															
+																{!! Helper::alert('danger', $errors->first('fullname_en')) !!}
 															</div>
 														@endif
 											</label>
 											<label class="input">
-												<input type="text" value="{{ old('first_name_kh') }}" name="first_name_kh" placeholder="">
-											</label>
-										</section>
-										<section class="col col-6 flexibled-error">
-											<label class="label">
-														{{ $layout->label->last_name_khmer->title }}<code>*</code>
-														@if($errors->has('last_name_kh'))
-															<div class="error-badge" id="for-last_name_kh">															
-																{!! Helper::alert('danger', $errors->first('last_name_kh')) !!}
-															</div>
-														@endif
-											</label>
-											<label class="input">
-												<input type="text" value="{{ old('last_name_kh') }}" name="last_name_kh" placeholder="">
+												<input type="text" value="{{ old('fullname_en') }}" name="fullname_en" placeholder="">
 											</label>
 										</section>
 									</div>
@@ -109,6 +96,39 @@
 											<b class="tooltip tooltip-bottom-right">Pls Fill your email account</b>
 										</label>
 									</section>
+
+									<div class="row">
+										<section class="col col-6 flexibled-error">
+											<label class="label">
+																{{ $layout->label->password->title }}<code>*</code>
+																@if($errors->has('password'))
+																	<div class="error-badge" id="for-password">															
+																		{!! Helper::alert('danger', $errors->first('password')) !!}
+																	</div>
+																@endif
+											</label>
+											<label class="input">
+												<i class="icon-append fa fa-lock"></i>
+												<input type="password" value="{{old('password')}}" name="password" placeholder="Password" id="password">
+												<b class="tooltip tooltip-bottom-right">Don't forget your password</b>
+											</label>
+										</section>
+										<section class="col col-6 flexibled-error">
+											<label class="label">
+																{{ $layout->label->confirm_password->title }}<code>*</code>
+																@if($errors->has('password_confirmation'))
+																	<div class="error-badge" id="for-confirm_password">															
+																		{!! Helper::alert('danger', $errors->first('password_confirmation')) !!}
+																	</div>
+																@endif
+											</label>
+											<label class="input">
+												<i class="icon-append fa fa-lock"></i>
+												<input type="password"  name="password_confirmation" placeholder="Password" id="password_confirmation">
+												<b class="tooltip tooltip-bottom-right">Don't forget your password</b>
+											</label>
+										</section>									
+									</div>
 									<section class="flexibled-error">
 										<label class="label">
 														{{ $layout->label->address->title }}<code>*</code>
@@ -129,15 +149,15 @@
 											<section class="col col-6 flexibled-error">
 												<label class="label">
 														{{ $layout->label->date_of_birth->title }}<code>*</code>
-														@if($errors->has('date_of_birth'))
-															<div class="error-badge" id="for-date_of_birth">															
-																{!! Helper::alert('danger', $errors->first('date_of_birth')) !!}
+														@if($errors->has('dob'))
+															<div class="error-badge" id="for-dob">															
+																{!! Helper::alert('danger', $errors->first('dob')) !!}
 															</div>
 														@endif
 												</label>
 												<label class="input">
 													<i class="icon-append fa fa-calendar"></i>
-													<input type="text" value="{{ old('date_of_birth') }}" name="date_of_birth" id="date_of_birth" placeholder="">
+													<input type="text" value="{{ old('dob') }}" name="dob" id="dob" placeholder="">
 												</label>
 											</section>	
 											<section class="col col-6 flexibled-error">
@@ -188,17 +208,17 @@
 											<section class="col col-lg-12 flexibled-error">
 											<label class="label">
 																{{ $layout->label->nationality->title }}<code>*</code>
-																@if($errors->has('nationality'))
-																	<div class="error-badge" id="for-nationality">															
-																		{!! Helper::alert('danger', $errors->first('nationality')) !!}
+																@if($errors->has('nationality_id'))
+																	<div class="error-badge" id="for-nationality_id">															
+																		{!! Helper::alert('danger', $errors->first('nationality_id')) !!}
 																	</div>
 																@endif
 											</label>
 											<label class="select">
-												<select value="{{ old('nationality') }}" name="nationality" >
+												<select value="{{ old('nationality_id') }}" name="nationality_id" >
 													<option value="0" selected disabled>Select Below</option>
 													@foreach($nationalities as $nationality)
-														@if(old('nationality') ==$nationality->term_id)
+														@if(old('nationality_id') ==$nationality->term_id)
 																	<option value="{{$nationality->term_id}}" selected >{{$nationality->title}}</option>
 														@else
 																	<option value="{{$nationality->term_id}}">{{$nationality->title}}</option>
@@ -236,38 +256,7 @@
 											</label>
 										</section>										
 									</div>
-									<div class="row">
-										<section class="col col-6 flexibled-error">
-											<label class="label">
-																{{ $layout->label->password->title }}<code>*</code>
-																@if($errors->has('password'))
-																	<div class="error-badge" id="for-password">															
-																		{!! Helper::alert('danger', $errors->first('password')) !!}
-																	</div>
-																@endif
-											</label>
-											<label class="input">
-												<i class="icon-append fa fa-lock"></i>
-												<input type="password" value="{{old('password')}}" name="password" placeholder="Password" id="password">
-												<b class="tooltip tooltip-bottom-right">Don't forget your password</b>
-											</label>
-										</section>
-										<section class="col col-6 flexibled-error">
-											<label class="label">
-																{{ $layout->label->confirm_password->title }}<code>*</code>
-																@if($errors->has('password_confirmation'))
-																	<div class="error-badge" id="for-confirm_password">															
-																		{!! Helper::alert('danger', $errors->first('password_confirmation')) !!}
-																	</div>
-																@endif
-											</label>
-											<label class="input">
-												<i class="icon-append fa fa-lock"></i>
-												<input type="password"  name="password_confirmation" placeholder="Password" id="password_confirmation">
-												<b class="tooltip tooltip-bottom-right">Don't forget your password</b>
-											</label>
-										</section>									
-									</div>
+									
 									
 								</fieldset>								
 								
@@ -353,14 +342,14 @@
 								<section class="col col-lg-3 col-md-3 flexibled-error">
 											<label class="label">
 																{{ $layout->label->id_number->title }}<code>*</code>
-																@if($errors->has('id_number'))
-																	<div class="error-badge" id="for-id_number">															
-																		{!! Helper::alert('danger', $errors->first('id_number')) !!}
+																@if($errors->has('id_card'))
+																	<div class="error-badge" id="for-id_card">															
+																		{!! Helper::alert('danger', $errors->first('id_card')) !!}
 																	</div>
 																@endif
 											</label>
 											<label class="input">
-												<input type="text" value="{{ old('id_number') }}" name="id_number" placeholder="ID Number">
+												<input type="text" value="{{ old('id_card') }}" name="id_card" placeholder="ID Number">
 											</label>
 								</section>
 
@@ -368,17 +357,17 @@
 
 									<label class="label">
 																{{ $layout->label->partner_type->title }}<code>*</code>
-																@if($errors->has('partner_type'))
-																	<div class="error-badge" id="for-partner_type">															
-																		{!! Helper::alert('danger', $errors->first('partner_type')) !!}
+																@if($errors->has('partner_id'))
+																	<div class="error-badge" id="for-partner_id">															
+																		{!! Helper::alert('danger', $errors->first('partner_id')) !!}
 																	</div>
 																@endif
 											</label>
 											<label class="select">
-												<select value="{{ old('partner_type') }}" name="partner_type" >
+												<select value="{{ old('partner_id') }}" name="partner_id" >
 													<option value="0" selected disabled>Select Below</option>
 													@foreach($partner_types as $partner_type)
-														@if(old('partner_type') ==$partner_type->term_id)
+														@if(old('partner_id') ==$partner_type->term_id)
 																	<option value="{{$partner_type->term_id}}" selected >{{$partner_type->title}}</option>
 														@else
 																	<option value="{{$partner_type->term_id}}">{{$partner_type->title}}</option>
@@ -452,19 +441,19 @@
 
 											<label class="label">
 																Re{{ $layout->label->renewal_type->title }}<code>*</code>
-																@if($errors->has('renewal_type'))
-																	<div class="error-badge" id="for-renewal_type">															
-																		{!! Helper::alert('danger', $errors->first('renewal_type')) !!}
+																@if($errors->has('new_renew'))
+																	<div class="error-badge" id="for-new_renew">															
+																		{!! Helper::alert('danger', $errors->first('new_renew')) !!}
 																	</div>
 																@endif
 											</label>
 											<label class="select">
-												<select value="{{ old('renewal_type') }}" name="renewal_type" >
+												<select value="{{ old('new_renew') }}" name="new_renew" >
 													
-													@if(old('renewal_type') == 'new')
+													@if(old('new_renew') == 'new')
 														<option value="new" selected>New</option>
-														<option value="renewal">Renewal</option>
-													@elseif(old('renewal_type') == 'renewal')
+														<option value="renewal\">Renewal</option>
+													@elseif(old('new_renew') == 'renewal')
 														<option value="new" >New</option>
 														<option value="renewal" selected>Renewal</option>
 													@else
@@ -482,17 +471,17 @@
 
 									<label class="label">
 																{{ $layout->label->guide_type->title }}<code>*</code>
-																@if($errors->has('guide_type'))
-																	<div class="error-badge" id="for-guide_type">															
-																		{!! Helper::alert('danger', $errors->first('guide_type')) !!}
+																@if($errors->has('guide_type_id'))
+																	<div class="error-badge" id="for-guide_type_id">															
+																		{!! Helper::alert('danger', $errors->first('guide_type_id')) !!}
 																	</div>
 																@endif
 											</label>
 											<label class="select">
-												<select value="{{ old('guide_type') }}" name="guide_type" >
+												<select value="{{ old('guide_type_id') }}" name="guide_type_id" >
 													<option value="0" selected disabled>Select Below</option>
 													@foreach($guide_types as $guide_type)
-														@if(old('guide_type') ==$guide_type->term_id)
+														@if(old('guide_type_id') ==$guide_type->term_id)
 																	<option value="{{$guide_type->term_id}}" selected >{{$guide_type->title}}</option>
 														@else
 																	<option value="{{$guide_type->term_id}}">{{$guide_type->title}}</option>
@@ -536,15 +525,15 @@
 											<section class="col col-4 flexibled-error">
 												<label class="label">
 																{{ $layout->label->service_date->title }}<code>*</code>
-																@if($errors->has('service_date'))
-																	<div class="error-badge" id="for-service_date">															
-																		{!! Helper::alert('danger', $errors->first('service_date')) !!}
+																@if($errors->has('date_in_service'))
+																	<div class="error-badge" id="for-date_in_service">															
+																		{!! Helper::alert('danger', $errors->first('date_in_service')) !!}
 																	</div>
 																@endif
 												</label>
 												<label class="input">
 													<i class="icon-append fa fa-calendar"></i>
-													<input type="text" value="{{old('service_date')}}"  name="service_date" id="service_date"  placeholder="Service Date">
+													<input type="text" value="{{old('date_in_service')}}"  name="date_in_service" id="date_in_service"  placeholder="Service Date">
 												</label>
 											</section>								
 							</div>
@@ -812,10 +801,10 @@
                 
             });
             $( function() {
-			    $( "#date_of_birth" ).datepicker();
+			    $( "#dob" ).datepicker();
 			    $( "#issued_date" ).datepicker();
 			    $( "#expired_date" ).datepicker();
-			    $( "#service_date" ).datepicker();
+			    $( "#date_in_service" ).datepicker();
 			  } );
 
         </script>

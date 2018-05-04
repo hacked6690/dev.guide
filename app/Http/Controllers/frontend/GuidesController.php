@@ -87,29 +87,29 @@ class GuidesController extends Controller
          $validator = Validator::make($request->all(), [
                  
                
-                'first_name' => 'required',
-                'last_name' => 'required',
-                'first_name_kh' => 'required',
-                'last_name_kh' => 'required',
+                'license_id' => 'required',
+                'fullname_kh' => 'required',
+                'fullname_en' => 'required',
                 'email' => 'required|email',
                 'address' => 'required',
-                'date_of_birth' => 'required',
+                'dob' => 'required',
                 'gender' => 'required',
                 'telephone' => 'required|numeric',
-                'nationality' => 'required',
+                'nationality_id' => 'required',
                 'province' => 'required',
                 'password' => 'required|min:6|confirmed',
                 'generation' => 'required|numeric',
                 'guide_certified' => 'required',
                 'behavior_certified' => 'required',
-                'id_number' => 'required',
-                'partner_type' => 'required',
+                'guide_type_id' => 'required',
+                'id_card' => 'required',
+                'partner_id' => 'required',
                 'cv_provided' => 'required',
                 'domicile_certified' => 'required',
-                'renewal_type' => 'required',
+                'new_renew' => 'required',
                 'issued_date' => 'required',
                 'expired_date' => 'required',
-                'service_date' => 'required',
+                'date_in_service' => 'required',
                 'agree' => 'required',
                 'profile' => 'image|mimes:jpg,jpeg,png,bmp|max:' . (1024 *16),
             ]);
@@ -121,23 +121,36 @@ class GuidesController extends Controller
         }             
         // decrypted role_id, cause encrypted at frontend
         $user = new User([
-                // 'role_id' => $request->input('role_id'),
                 'role_id' => 1,
                 'email' => $request->input('email'),
                 'password' => $request->input('password'),
             ]);
         $user->save(); 
 
+         $request->merge(['password' => Hash::make($request->input('password'))]);
+
+        //Old Table Field on Guide table----Store User meta
+               /* $old_fields=array('rate_one','rate_two','rate_three','rate_four','rate_five',
+                    'is_recommended','certificate_number','global_rate','number_group_visitors','number_visitors');
+                for($i=0;$i<sizeof($old_fields);$i++){
+                    $user_meta = new UserMetas([
+                            'user_id' => $user->id,
+                            'meta_key' => $old_fields[$i],
+                            'meta_value' => ''
+                        ]);
+                    $user_meta->save();
+                }*/
+        //end Old Table Fields
+
          // store user meta if inputed ____
-        $default = array('first_name', 'last_name','first_name_kh',
-            'last_name_kh', 'last_name','address',
-            'date_of_birth', 'gender','telephone',
+        $default = array('license_id','fullname_en', 'fullname_kh','address',
+            'dob', 'gender','telephone',
             'nationality', 'province','password',
             'generation', 'guide_certified','behavior_certified',
-            'id_number', 'partner_type','cv_provided',
-            'first_name', 'last_name','first_name_kh',
-            'domicile_certified','renewal_type','issued_date','expired_date',
-            'service_date','profile'
+            'id_card', 'partner_id','cv_provided',
+            'first_name', 'last_name','first_name_kh','guide_type_id',
+            'domicile_certified','new_renew','issued_date','expired_date',
+            'date_in_service','profile'
 
             );
 
@@ -171,8 +184,12 @@ class GuidesController extends Controller
                     ]);
 
                 $user_meta->save();
-            }
+            }           
+            
         }
+
+        
+
         Session::flash('inserted', 'Guide profile is saved successfully...');
 
         return redirect('guides');
