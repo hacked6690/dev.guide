@@ -13,6 +13,8 @@
 
 Auth::routes();
 
+Route::get('dashboard', ['uses' => 'DashboardController@index']);
+
 Route::resource('posts', 'PostsController');
 Route::resource('guides', 'frontend\GuidesController');
 Route::resource('pages', 'PagesController');
