@@ -16,7 +16,7 @@ use App\UserMetas;
 use App\UserAccounts;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Hash;
-
+use App\UserRoles;
 use App\ContentTerms;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
@@ -43,7 +43,10 @@ class GuidesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-
+    public  function getRoleID($slug=''){
+          $id = DB::table('user_roles')->select('id')->where('slug', $slug)->first();
+          return $id;
+    }
     public function create()
     {
         //
@@ -81,6 +84,10 @@ class GuidesController extends Controller
 
     public function store(Request $request)
     {
+            return redirect('login');
+    }
+    public function store2(Request $request)
+    {
         //
          // dd(Helper::MyFormatDate($request->date_of_birth));
 
@@ -114,6 +121,7 @@ class GuidesController extends Controller
                 'profile' => 'image|mimes:jpg,jpeg,png,bmp|max:' . (1024 *16),
             ]);
         // dd($validator->errors());
+    
         if($validator->fails()) {
             return redirect()->back()
                         ->withInput()
@@ -121,10 +129,11 @@ class GuidesController extends Controller
         }             
         // decrypted role_id, cause encrypted at frontend
         $user = new User([
-                'role_id' => 1,
+                'role_id' => getRoleID('guide'),
                 'email' => $request->input('email'),
                 'password' => $request->input('password'),
             ]);
+
         $user->save(); 
 
          $request->merge(['password' => Hash::make($request->input('password'))]);
@@ -192,7 +201,7 @@ class GuidesController extends Controller
 
         Session::flash('inserted', 'Guide profile is saved successfully...');
 
-        return redirect('guides');
+        return redirect('login');
 
 
         
