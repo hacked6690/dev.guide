@@ -16,7 +16,6 @@ Auth::routes();
 Route::get('dashboard', ['uses' => 'DashboardController@index']);
 
 Route::resource('posts', 'PostsController');
-Route::resource('guides', 'frontend\GuidesController');
 Route::resource('pages', 'PagesController');
 
 Route::resource('content_terms', 'ContentTermsController', ['except' => ['show']]);
@@ -54,6 +53,9 @@ Route::prefix('ajax')->group(function () {
 	Route::post('realtime_upload', ['as' => 'ajax.realtime_upload', 'uses' => 'AjaxController@realtime_upload']);
 });
 
+
+Route::resource('guides', 'frontend\GuidesController');
+Route::resource('homepage', 'frontend\HomeController');
 
 
 
