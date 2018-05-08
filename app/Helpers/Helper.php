@@ -378,6 +378,40 @@ class Helper
 
 		return $str_navigated;
 	}
+	public static function paginator_fr($route =['route' => 'posts'], $items =['items' => null], $display =['display' =>7])
+	{
+		$pages = array(7 => '7 default', 25 => '25', 50 => '50', 75 => '75', 125 => '125');
+
+		$str_paginate ='';
+
+		foreach($pages as $key => $page)
+		{
+			$str_paginate .='<option value="'. $key .'" '. ($key ==$display[key($display)] ? 'selected' :'') .'>'. $page .'</option>';
+		}
+
+		$str_navigated = '<form action="'. route($route[key($route)] .'.index') .'" id="sky-form4" class="sky-form" class="smart-form" method="get">
+									<div class="row custom-paginated">
+										<section class="col col-3">
+											<label class="select">
+												<select class="input-sm border-0 border-bottom-1" name="display" onchange="this.form.submit();">
+
+													'. self::empty_option('Display') .'
+
+													'. $str_paginate .'
+
+												</select><i></i>
+											</label>
+										</section>
+										<section class="col col-9">
+											<label class="input pull-right">
+												'. $items[key($items)]->appends(['display' => $display[key($display)]])->links() .'
+											</label>
+										</section>
+									</div>
+								</form>';
+
+		return $str_navigated;
+	}
 
 	public static function empty_option($custom_text ='')
 	{

@@ -55,6 +55,7 @@ Route::prefix('ajax')->group(function () {
 
 
 Route::resource('guides', 'frontend\GuidesController');
+Route::get(' guides/detail/{id}','frontend\GuidesController@detail');
 Route::resource('homepage', 'frontend\HomeController');
 
 

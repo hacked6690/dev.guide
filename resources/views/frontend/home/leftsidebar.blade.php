@@ -1,4 +1,11 @@
-					<ul class="list-group">
+					<style type="text/css">
+						.list-group-item{
+							padding:5px 10px;
+						}
+						.media-heading{margin-bottom: -5px;}
+						.media-left img{width:40px;margin-left:5px;}
+					</style>
+					<!-- <ul class="list-group">
 					    				<li class="list-group-item  li_parent">
 					    						<img src="https://d30y9cdsu7xlg0.cloudfront.net/png/14236-200.png">
 							    				Searching Guide...
@@ -52,16 +59,16 @@
 															<span class="button_search"><i class="fa fa-search"></i></span>
 															Search	
 
-													</button>								    		
-							    		</li>
-					    							 
-					 </ul>
+													</button>	
+											</form>							    		
+							    		</li>					    							 
+					 </ul> -->
 					<ul class="list-group">
 					    				<li class="list-group-item  li_parent">
 					    						<img src="https://d30y9cdsu7xlg0.cloudfront.net/png/14236-200.png">
 							    				Guide By Location...
 							    		</li>	
-					    			<?php for($i=1;$i<=10;$i++){ ?>
+					    			<?php for($i=1;$i<=24;$i++){ ?>
 					    				<li class="list-group-item">
 							            <div class="media">
 								              <div class="media-left">
@@ -111,53 +118,4 @@
 					 </ul>
 
 					
-					<div class="headline-v2 bg-color-light"><h2>Top 10 Guides</h2></div>
-					<!-- Photostream -->
-					<ul class="list-inline blog-photostream margin-bottom-50">
-						<li>
-							<a href="assets/img/main/img22.jpg" rel="gallery" class="fancybox img-hover-v2" title="Image 1">
-								<span><img class="img-responsive" src="assets/img/main/img22.jpg" alt=""></span>
-							</a>
-						</li>
-						<li>
-							<a href="assets/img/main/img23.jpg" rel="gallery" class="fancybox img-hover-v2" title="Image 2">
-								<span><img class="img-responsive" src="assets/img/main/img23.jpg" alt=""></span>
-							</a>
-						</li>
-						<li>
-							<a href="assets/img/main/img4.jpg" rel="gallery" class="fancybox img-hover-v2" title="Image 3">
-								<span><img class="img-responsive" src="assets/img/main/img4.jpg" alt=""></span>
-							</a>
-						</li>
-						<li>
-							<a href="assets/img/main/img9.jpg" rel="gallery" class="fancybox img-hover-v2" title="Image 4">
-								<span><img class="img-responsive" src="assets/img/main/img9.jpg" alt=""></span>
-							</a>
-						</li>
-						<li>
-							<a href="assets/img/main/img25.jpg" rel="gallery" class="fancybox img-hover-v2" title="Image 5">
-								<span><img class="img-responsive" src="assets/img/main/img25.jpg" alt=""></span>
-							</a>
-						</li>
-						<li>
-							<a href="assets/img/main/img6.jpg" rel="gallery" class="fancybox img-hover-v2" title="Image 6">
-								<span><img class="img-responsive" src="assets/img/main/img6.jpg" alt=""></span>
-							</a>
-						</li>
-						<li>
-							<a href="assets/img/main/img20.jpg" rel="gallery" class="fancybox img-hover-v2" title="Image 7">
-								<span><img class="img-responsive" src="assets/img/main/img20.jpg" alt=""></span>
-							</a>
-						</li>
-						<li>
-							<a href="assets/img/main/img3.jpg" rel="gallery" class="fancybox img-hover-v2" title="Image 8">
-								<span><img class="img-responsive" src="assets/img/main/img3.jpg" alt=""></span>
-							</a>
-						</li>
-						<li>
-							<a href="assets/img/main/img7.jpg" rel="gallery" class="fancybox img-hover-v2" title="Image 9">
-								<span><img class="img-responsive" src="assets/img/main/img7.jpg" alt=""></span>
-							</a>
-						</li>
-					</ul>
-					<!-- End Photostream -->
+				

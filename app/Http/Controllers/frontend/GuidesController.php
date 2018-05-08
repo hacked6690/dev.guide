@@ -35,7 +35,49 @@ class GuidesController extends Controller
     public function index()
     {
         //
-       return $this->create();
+          $display = Input::has('display') ? Input::get('display') :7;
+         $privileges = DB::table('privileges as p1')
+                        ->select('p1.*', 'p2.title as parent_title')
+                        ->leftJoin('privileges as p2', 'p1.parent', '=', 'p2.id')
+                        ->orderBy('p1.id', 'desc')
+                        ->paginate($display);
+       $nationalities= ContentTerms::terms_by(['taxonomy' => 'nationalities']);
+       $provinces= ContentTerms::terms_by(['taxonomy' => 'provinces']);
+       $partner_types= ContentTerms::terms_by(['taxonomy' => 'partner_types']);
+       $guide_types= ContentTerms::terms_by(['taxonomy' => 'guide_types']);
+       $guide_languages= ContentTerms::terms_by(['taxonomy' => 'languages']);
+       $proficiencies= ContentTerms::terms_by(['taxonomy' => 'proficiencies']);
+
+       /* init filter collection ; */
+        $filter = collect([]);        
+        if(Input::has('filter')) 
+        {
+            $filter->put('layout_category', Input::get('filter'));
+        }
+       $layout_items = DB::table('layout_items as li')
+                            ->select(
+                                'li.*', 
+                                'lc.title as layout_category', 
+                                DB::raw("(GROUP_CONCAT(languages.slug ORDER BY languages.slug ASC SEPARATOR ',')) as 'translated'")
+                            )
+                            ->leftJoin('layout_categories as lc', 'li.category_id', '=', 'lc.id')
+                            ->leftJoin('layout_item_translates as lit', 'li.id', '=', 'lit.item_id')
+                            ->leftJoin('languages', 'lit.language_id', '=', 'languages.id')
+                            ->groupBy('li.id')
+                            ->where(function($qry) use ($filter) {
+                                if($filter->contains('layout_category')) {
+                                    // $qry->where('li.category_id', '=', $filter->pull('layout_category'));
+                                }
+                            })
+                            ->orderBy('li.id', 'desc')
+                            ->paginate($display);
+
+      
+
+     
+
+        return view('frontend.guides.listing', compact(['privileges', 'display','nationalities','provinces','partner_types',
+            'guide_types','guide_languages','proficiencies','layout_items'])) ->with('filter', $filter->values());;
     }
 
     /**
@@ -70,9 +112,32 @@ class GuidesController extends Controller
 
      
 
-        return view('guides.index', compact(['privileges', 'display','nationalities','provinces','partner_types',
+        return view('frontend.guides.index', compact(['privileges', 'display','nationalities','provinces','partner_types',
             'guide_types','guide_languages','proficiencies']));
 
+    }
+    public function detail($id)
+    {
+       //
+        $display = Input::has('display') ? Input::get('display') :7;
+        $privileges = DB::table('privileges as p1')
+                        ->select('p1.*', 'p2.title as parent_title')
+                        ->leftJoin('privileges as p2', 'p1.parent', '=', 'p2.id')
+                        ->orderBy('p1.id', 'desc')
+                        ->paginate($display);
+       $nationalities= ContentTerms::terms_by(['taxonomy' => 'nationalities']);
+       $provinces= ContentTerms::terms_by(['taxonomy' => 'provinces']);
+       $partner_types= ContentTerms::terms_by(['taxonomy' => 'partner_types']);
+       $guide_types= ContentTerms::terms_by(['taxonomy' => 'guide_types']);
+       $guide_languages= ContentTerms::terms_by(['taxonomy' => 'languages']);
+       $proficiencies= ContentTerms::terms_by(['taxonomy' => 'proficiencies']);
+
+       
+      
+
+     
+
+        return view('frontend.guides.detail');
     }
 
     /**
