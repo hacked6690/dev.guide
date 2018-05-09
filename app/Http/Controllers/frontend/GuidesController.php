@@ -48,6 +48,17 @@ class GuidesController extends Controller
        $guide_languages= ContentTerms::terms_by(['taxonomy' => 'languages']);
        $proficiencies= ContentTerms::terms_by(['taxonomy' => 'proficiencies']);
 
+     
+       $users=DB::table('users')->paginate($display);
+       // $users = User::all()->user_metas;
+       /*foreach ($users as $user) {
+           echo $user->id."-----".$user->meta_key."---".$user->meta_value."---".$user->user_id."<br>";
+           echo "<span style='margin-left:25px;color:green'>".$user->user->id."---".$user->user->email."</span>";
+           echo "<hr/>";
+       }
+       exit;*/
+       
+
        /* init filter collection ; */
         $filter = collect([]);        
         if(Input::has('filter')) 
@@ -76,8 +87,12 @@ class GuidesController extends Controller
 
      
 
-        return view('frontend.guides.listing', compact(['privileges', 'display','nationalities','provinces','partner_types',
+        return view('frontend.guides.listing', compact(['users','privileges', 'display','nationalities','provinces','partner_types',
             'guide_types','guide_languages','proficiencies','layout_items'])) ->with('filter', $filter->values());;
+    }
+    public static function get_user_meta($user_id=1)
+    {
+         return $users=User::find($user_id)->user_metas;
     }
 
     /**

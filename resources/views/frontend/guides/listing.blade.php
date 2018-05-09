@@ -23,6 +23,7 @@
 			/*height:140px;
 			width: 140px;*/
 			width:80%;
+			min-height: 130px;
 			max-height: 130px;
 		}
 		.table-footer .sky-form{
@@ -34,6 +35,11 @@
 	</style>
 @endsection
 @section('content')
+
+
+
+
+
 	<div id="content" class="mycontent">
 		<div class="row mycarousel" style="width:80%;margin:10px auto">
 				@include('frontend.home.slide')

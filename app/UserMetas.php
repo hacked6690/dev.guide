@@ -13,4 +13,8 @@ class UserMetas extends Model
     	'meta_key',
     	'meta_value',
     ];
+    // DEFINE RELATIONSHIPS --------------------------------------------------
+    public function user() {
+        return $this->belongsTo('App\User');
+    }
 }

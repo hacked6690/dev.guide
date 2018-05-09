@@ -14,6 +14,7 @@ class User extends Authenticatable
      *
      * @var array
      */
+    public  $table='users';
     protected $fillable = [
         'role_id', 'email', 'password',
     ];
@@ -41,4 +42,10 @@ class User extends Authenticatable
 
         return in_array($privilege, $privileges->toArray());
     }
+
+     // 
+    public function user_metas() {
+        return $this->hasMany('App\UserMetas');
+    }
+
 }

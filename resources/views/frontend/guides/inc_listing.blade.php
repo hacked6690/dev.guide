@@ -1,3 +1,7 @@
+<?php 
+use App\Http\Controllers\frontend\GuidesController; 
+use App\User; 
+?>
 <div class="row" style="border:1px dashed green;margin-bottom:5px;background:#c2d6d6">
     <form action="{{ route('guides.index') }}" id="sky-form4" class="sky-form" class="smart-form" method="get"  >
         <div class="col-lg-2 col-md-2 col-xs-12">
@@ -121,21 +125,27 @@
 </div>
 
 
-<div class="table-footer">
-    {!! \Helper::paginator_fr(['route' => 'layout_items'], ['items' => $layout_items], ['display' => $display]) !!}
-</div>
+<?php
 
-<?php for($i=1;$i<=10;$i++){?>
- <div class="row" >
+foreach ($users as $user) {
+  $uid=$user->id."---";
+  $uemail=$user->email;  
+  // $user_metas=User::find($uid)->user_metas;
+
+    $user_meta=Helper::metas('user_meta',['user_id' => $uid] );
+
+ 
+echo '
+  <div class="row" >
             <div class="well well-sm" style="margin-bottom:10px">
                 <div class="row" >
                     <div class="col-xs-12 col-md-2 text-center">
-                        <img src="https://4.bp.blogspot.com/--_laOkwN518/WpZz6ihj_TI/AAAAAAAAFa8/PjkP1DlrYY8CumcmG1OJzEA0jGiz21aBwCLcBGAs/s1600/26238792_2024008117887535_2499545972778675283_n.jpg" alt="Guide"
+                        <img src="'. URL::asset('/assets/guide_profile_test/'.$user_meta->profile->value) .'" alt="Guide"
                             class="img-rounded img-responsive guideprofile" />
                     </div>
                     <div class="col-xs-12 col-md-8 section-box">
                         <h2 class="text text-info">
-                            Vom Vannoch 
+                             '.$user_meta->fullname_en->value.'
                                 <span style="font-size:14px">
                                     <span class="glyphicon glyphicon-star-empty"></span><span class="glyphicon glyphicon-star-empty">
                                     </span><span class="glyphicon glyphicon-star-empty"></span><span class="glyphicon glyphicon-star-empty">
@@ -144,7 +154,7 @@
                                 </span>                               
                         </h2>
                         <p>
-                            KHMER | 42 Years old | Male | Service Location: Siem Reap   
+                            Nationality: '.$user_meta->nationality->title.' | 42 Years old | Male | Service Location: Siem Reap   
                         </p>
                          <p>
                             Guide Type: National | Language: English  
@@ -161,12 +171,22 @@
                     </div>
                 </div>
             </div>
-</div>
-<?php } ?>
+    </div>
+    ';
+
+
+
+}
+
+?>
+
+
+
+
 
 
 <div class="table-footer">
-    {!! \Helper::paginator_fr(['route' => 'layout_items'], ['items' => $layout_items], ['display' => $display]) !!}
+    {!! \Helper::paginator_fr(['route' => 'guides'], ['items' => $users], ['display' => $display]) !!}
 </div>
 
 

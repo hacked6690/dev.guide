@@ -7,7 +7,7 @@ use Auth;
 use Carbon\Carbon;
 use File;
 use Image;
-
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
@@ -142,7 +142,7 @@ class Helper
 	{
 		$qry = DB::table($table)
 				->select("{$table}.*", 'content_terms.*')
-				->leftJoin('content_terms', "{$table}.meta_key", '=', 'content_terms.term_id')
+				->leftJoin('content_terms', "{$table}.meta_value", '=', 'content_terms.term_id')
 				->where(function($query) use ($table, $where, $meta) {
 					if($meta[key($meta)] !='') {
 						if(key($meta) =='except') {
@@ -164,7 +164,7 @@ class Helper
 			$obj = new \stdClass();
 
 			foreach ($qry as $key => $value)
-			{
+			{				
 				$obj->{$value->meta_key} = (object) array(
 												'term_id' => $value->term_id,
 												'slug' => $value->slug,
@@ -441,6 +441,56 @@ class Helper
 		$date=date_create($date);
        return $date=date_format($date,"Y-m-d");
 	}
+	public static function guide_profile_main($user_id=1)
+	{
+		$str="";
+		$user_metas=User::find($user_id)->user_metas;
+		foreach ($user_metas as $um) {
+		    $str.= "<p>".$um->meta_key.":" .$um->meta_value."</p>";
+		 }
+
+		$str.='
+		 <div class="row" >
+            <div class="well well-sm" style="margin-bottom:10px">
+                <div class="row" >
+                    <div class="col-xs-12 col-md-2 text-center">
+                        <img src="https://4.bp.blogspot.com/--_laOkwN518/WpZz6ihj_TI/AAAAAAAAFa8/PjkP1DlrYY8CumcmG1OJzEA0jGiz21aBwCLcBGAs/s1600/26238792_2024008117887535_2499545972778675283_n.jpg" alt="Guide"
+                            class="img-rounded img-responsive guideprofile" />
+                    </div>
+                    <div class="col-xs-12 col-md-8 section-box">
+                        <h2 class="text text-info">
+                            '.$layout->label->license_id->title .'
+                                <span style="font-size:14px">
+                                    <span class="glyphicon glyphicon-star-empty"></span><span class="glyphicon glyphicon-star-empty">
+                                    </span><span class="glyphicon glyphicon-star-empty"></span><span class="glyphicon glyphicon-star-empty">
+                                    </span><span class="glyphicon glyphicon-star-empty"></span><span class="separator">|</span>
+                                    <span class="glyphicon glyphicon-comment"></span>(100 Comments)
+                                </span>                               
+                        </h2>
+                        <p>
+                            KHMER | 42 Years old | Male | Service Location: Siem Reap   
+                        </p>
+                         <p>
+                            Guide Type: National | Language: English  
+                        </p>
+                        <p>
+                            Number of Booking: <b>34</b> BOOKINGS
+                        </p>
+                       
+                       
+                    </div>
+                     <div class="col-xs-12 col-md-2 text-center">
+                        <h3 class="price">50 USD</h3>
+                        <em class="perday">Per day</em>
+                    </div>
+                </div>
+            </div>
+		</div>
+		';
+		return $str;
+	}
+
+
 }
 
 
