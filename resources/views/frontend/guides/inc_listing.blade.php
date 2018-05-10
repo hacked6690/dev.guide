@@ -1,6 +1,7 @@
 <?php 
 use App\Http\Controllers\frontend\GuidesController; 
 use App\User; 
+use Illuminate\Support\Facades\Storage;
 ?>
 <div class="row" style="border:1px dashed green;margin-bottom:5px;background:#c2d6d6">
     <form action="{{ route('guides.index') }}" id="sky-form4" class="sky-form" class="smart-form" method="get"  >
@@ -30,20 +31,17 @@ use App\User;
                        @endif
                     </label>
                     <label class="select">
-                            <select name="gender" >
-                                    <option value="{{ old('gender') }}" value="" selected >Select Gender</option>
-                                        @if(old('gender')=='m')
-                                         <option selected value="m">Male</option>
-                                         <option value="f">Female</option>
-                                        @elseif(old('gender')=='f')
-                                          <option value="m">Male</option>
-                                          <option selected value="f">Female</option>
-                                        @else
-                                          <option value="m">Male</option>
-                                          <option  value="f">Female</option>
-                                        @endif                                                    
-                            </select>
-                            <i></i>
+                       <select value="{{ old('gender') }}" name="gender" >
+                           <option value="0" selected >{{$layout->label->please_select_below->title}}</option>
+                              @foreach($genders as $gender)
+                                   @if(old('gender') ==$gender->term_id)
+                                      <option value="{{$gender->term_id}}" selected >{{$gender->title}}</option>
+                                   @else
+                                      <option value="{{$gender->term_id}}">{{$gender->title}}</option>
+                                  @endif
+                              @endforeach
+                      </select>
+                      <i></i>
                     </label>
         </section>       
         <section class="col col-lg-2 col-md-2 col-xs-12 flexibled-error">
@@ -57,7 +55,7 @@ use App\User;
                 </label>
                 <label class="select">
                      <select value="{{ old('guide_type_id') }}" name="guide_type_id" >
-                         <option value="0" selected >Select Below</option>
+                         <option value="0" selected >{{$layout->label->please_select_below->title}}</option>
                             @foreach($guide_types as $guide_type)
                                  @if(old('guide_type_id') ==$guide_type->term_id)
                                     <option value="{{$guide_type->term_id}}" selected >{{$guide_type->title}}</option>
@@ -80,7 +78,7 @@ use App\User;
                 </label>
                 <label class="select">
                      <select value="{{ old('nationality') }}" name="nationality" >
-                         <option value="" selected >Select Below</option>
+                         <option value="0" selected >{{$layout->label->please_select_below->title}}</option>
                             @foreach($nationalities as $nationality)
                                  @if(old('nationality') ==$nationality->term_id)
                                     <option value="{{$nationality->term_id}}" selected >{{$nationality->title}}</option>
@@ -103,7 +101,7 @@ use App\User;
                 </label>
                 <label class="select">
                      <select value="{{ old('guide_language') }}" name="guide_language" >
-                         <option value="0" selected >Select Below</option>
+                         <option value="0" selected >{{$layout->label->please_select_below->title}}</option>
                             @foreach($guide_languages as $guide_language)
                                  @if(old('guide_language') ==$guide_language->term_id)
                                     <option value="{{$guide_language->term_id}}" selected >{{$guide_language->title}}</option>
@@ -128,19 +126,23 @@ use App\User;
 <?php
 
 foreach ($users as $user) {
-  $uid=$user->id."---";
+  $uid=$user->id;
   $uemail=$user->email;  
   // $user_metas=User::find($uid)->user_metas;
 
     $user_meta=Helper::metas('user_meta',['user_id' => $uid] );
-
+$photo_path='';
+$photo_path=Storage::url('guide_profile_test/' . $user_meta->photo->value);
+/*if($uid>7027){
+$photo_path=Storage::url($uid.'/profile/' . $user_meta->photo->value);
+}*/
  
 echo '
   <div class="row" >
             <div class="well well-sm" style="margin-bottom:10px">
                 <div class="row" >
                     <div class="col-xs-12 col-md-2 text-center">
-                        <img src="'. URL::asset('/assets/guide_profile_test/'.$user_meta->profile->value) .'" alt="Guide"
+                        <img src="'. $photo_path .'" alt="Guide"
                             class="img-rounded img-responsive guideprofile" />
                     </div>
                     <div class="col-xs-12 col-md-8 section-box">
@@ -154,20 +156,23 @@ echo '
                                 </span>                               
                         </h2>
                         <p>
-                            Nationality: '.$user_meta->nationality->title.' | 42 Years old | Male | Service Location: Siem Reap   
+                            '.$layout->label->nationality->title.': '.$user_meta->nationality_id->title.' 
+                            | '.$layout->label->date_of_birth->title.':'.$user_meta->dob->value.' 
+                            | '.$layout->label->gender->title.': '.$user_meta->gender->title.' 
+                            | '.$layout->label->guide_type->title.': '.$user_meta->guide_type_id->title.'  
                         </p>
                          <p>
-                            Guide Type: National | Language: English  
+                            '.$layout->label->location->title.': '.$user_meta->province_id->title.' | '.$layout->label->language->title.': '.$user_meta->language_id->title.'  
                         </p>
                         <p>
-                            Number of Booking: <b>34</b> BOOKINGS
+                            '.$layout->label->number_of_booking->title.': <b>34</b> BOOKINGS
                         </p>
                        
                        
                     </div>
                      <div class="col-xs-12 col-md-2 text-center">
-                        <h3 class="price">50 USD</h3>
-                        <em class="perday">Per day</em>
+                        <h3 class="price"><b>'.$user_meta->guide_price->value.'</b> '.$layout->label->usd->title.'</h3>
+                        <em class="perday">'.$layout->label->per_day->title.'</em>
                     </div>
                 </div>
             </div>

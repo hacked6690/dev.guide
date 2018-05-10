@@ -9,7 +9,7 @@
 			<a href="javascript:void(0);" id="show-shortcut" data-action="toggleShortcut-o">
 				<img src="{{ isset($user_meta->profile) ? Storage::url($user_id .'/profile/'. $user_meta->profile) : asset('assets/admin/img/avatars/male.png') }}" alt="me" class="online" />
 				<span>
-					{{ $user_meta->name }}
+					<?php //{{ $user_meta->name }} ?>
 				</span>
 				<i class="fa fa-angle-down"></i>
 			</a>

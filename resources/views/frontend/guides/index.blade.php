@@ -161,32 +161,27 @@
 												</label>
 											</section>	
 											<section class="col col-6 flexibled-error">
-											<label class="label">
-														{{ $layout->label->gender->title }}<code>*</code>
-														@if($errors->has('gender'))
-															<div class="error-badge" id="for-gender">															
-																{!! Helper::alert('danger', $errors->first('gender')) !!}
-															</div>
-														@endif
-											</label>
-											<label class="select">
-												<select name="gender" >
-													<option value="{{ old('gender') }}" value="" selected disabled>Select Gender</option>
-													@if(old('gender')=='m')
-														<option selected value="m">Male</option>
-														<option value="f">Female</option>
-													@elseif(old('gender')=='f')
-														<option value="m">Male</option>
-														<option selected value="f">Female</option>
-													@else
-														<option value="m">Male</option>
-														<option  value="f">Female</option>
-													@endif
-
-													
-												</select>
-												<i></i>
-											</label>
+											 <label class="label">
+						                        {{ $layout->label->gender->title }} 
+						                        @if($errors->has('gender'))
+						                            <div class="error-badge" id="for-gender">
+						                             {!! Helper::alert('danger', $errors->first('gender')) !!}
+						                             </div>
+						                       @endif
+						                    </label>
+						                    <label class="select">
+						                       <select value="{{ old('gender') }}" name="gender" >
+						                           <option value="0" selected >{{$layout->label->please_select_below->title}}</option>
+						                              @foreach($genders as $gender)
+						                                   @if(old('gender') ==$gender->term_id)
+						                                      <option value="{{$gender->term_id}}" selected >{{$gender->title}}</option>
+						                                   @else
+						                                      <option value="{{$gender->term_id}}">{{$gender->title}}</option>
+						                                  @endif
+						                              @endforeach
+						                      </select>
+						                      <i></i>
+						                    </label>
 										</section>										
 									</div>
 									<div class="row">		
@@ -231,20 +226,20 @@
 										</section>										
 									</div>
 									<div class="row">											
-											<section class="col col-lg-12 flexibled-error">
+										<section class="col col-lg-6 flexibled-error">
 											<label class="label">
 																{{ $layout->label->province->title }}<code>*</code>
-																@if($errors->has('province'))
-																	<div class="error-badge" id="for-province">															
-																		{!! Helper::alert('danger', $errors->first('province')) !!}
+																@if($errors->has('province_id'))
+																	<div class="error-badge" id="for-province_id">															
+																		{!! Helper::alert('danger', $errors->first('province_id')) !!}
 																	</div>
 																@endif
 											</label>
 											<label class="select">
-												<select value="{{ old('province') }}" name="province" >
+												<select value="{{ old('province_id') }}" name="province_id" >
 													<option value="0" selected disabled>Select Below</option>
 													@foreach($provinces as $province)
-														@if(old('province') ==$province->term_id)
+														@if(old('province_id') ==$province->term_id)
 																	<option value="{{$province->term_id}}" selected >{{$province->title}}</option>
 														@else
 																	<option value="{{$province->term_id}}">{{$province->title}}</option>
@@ -254,7 +249,46 @@
 												</select>
 												<i></i>
 											</label>
-										</section>										
+										</section>	
+										<section class="col col-lg-6 flexibled-error">
+											<label class="label">
+																{{ $layout->label->language->title }}<code>*</code>
+																@if($errors->has('language_id'))
+																	<div class="error-badge" id="for-language_id">															
+																		{!! Helper::alert('danger', $errors->first('language_id')) !!}
+																	</div>
+																@endif
+											</label>
+											<label class="select">
+												<select value="{{ old('language_id') }}" name="language_id" >
+													<option value="0" selected disabled>Select Below</option>
+													@foreach($guide_languages as $guide_language)
+														@if(old('language_id') ==$guide_language->term_id)
+																	<option value="{{$guide_language->term_id}}" selected >{{$guide_language->title}}</option>
+														@else
+																	<option value="{{$guide_language->term_id}}">{{$guide_language->title}}</option>
+														@endif
+														
+													@endforeach
+												</select>
+												<i></i>
+											</label>
+										</section>											
+									</div>
+									<div class="row">		
+										<section class="col col-lg-12 col-md-12 flexibled-error">
+													<label class="label">
+																{{ $layout->label->guide_price->title }}<code>*</code>
+																@if($errors->has('guide_price'))
+																	<div class="error-badge" id="for-guide_price">															
+																		{!! Helper::alert('danger', $errors->first('guide_price')) !!}
+																	</div>
+																@endif
+													</label>
+													<label class="input">
+														<input type="text" value="{{ old('guide_price') }}" name="guide_price" placeholder="">
+													</label>
+										</section>					
 									</div>
 									
 									
@@ -705,15 +739,15 @@
 											<label class="label">
 												Profile
 
-												@if($errors->has('profile'))
-													<div class="error-badge" id="for-profile">
-														{!! Helper::alert('danger', $errors->first('profile')) !!}
+												@if($errors->has('photo'))
+													<div class="error-badge" id="for-photo">
+														{!! Helper::alert('danger', $errors->first('photo')) !!}
 													</div>
 												@endif
 											</label>
 											<div class="input input-file">
 												<span class="button">
-													<input type="file"  name="profile" accept="image/*" onchange="this.parentNode.nextSibling.value = this.value">
+													<input type="file"  name="photo" accept="image/*" onchange="this.parentNode.nextSibling.value = this.value">
 														Browse
 												</span><input type="text" class="border-0 border-bottom-1" placeholder="" readonly="">
 											</div>

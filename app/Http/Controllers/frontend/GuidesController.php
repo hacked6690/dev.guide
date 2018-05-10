@@ -35,7 +35,8 @@ class GuidesController extends Controller
     public function index()
     {
         //
-          $display = Input::has('display') ? Input::get('display') :7;
+         $display = Input::has('display') ? Input::get('display') :7;
+
          $privileges = DB::table('privileges as p1')
                         ->select('p1.*', 'p2.title as parent_title')
                         ->leftJoin('privileges as p2', 'p1.parent', '=', 'p2.id')
@@ -45,6 +46,7 @@ class GuidesController extends Controller
        $provinces= ContentTerms::terms_by(['taxonomy' => 'provinces']);
        $partner_types= ContentTerms::terms_by(['taxonomy' => 'partner_types']);
        $guide_types= ContentTerms::terms_by(['taxonomy' => 'guide_types']);
+       $genders= ContentTerms::terms_by(['taxonomy' => 'gender']);
        $guide_languages= ContentTerms::terms_by(['taxonomy' => 'languages']);
        $proficiencies= ContentTerms::terms_by(['taxonomy' => 'proficiencies']);
 
@@ -87,7 +89,7 @@ class GuidesController extends Controller
 
      
 
-        return view('frontend.guides.listing', compact(['users','privileges', 'display','nationalities','provinces','partner_types',
+        return view('frontend.guides.listing', compact(['users','privileges', 'display','nationalities','provinces','partner_types','genders',
             'guide_types','guide_languages','proficiencies','layout_items'])) ->with('filter', $filter->values());;
     }
     public static function get_user_meta($user_id=1)
@@ -121,13 +123,14 @@ class GuidesController extends Controller
        $provinces= ContentTerms::terms_by(['taxonomy' => 'provinces']);
        $partner_types= ContentTerms::terms_by(['taxonomy' => 'partner_types']);
        $guide_types= ContentTerms::terms_by(['taxonomy' => 'guide_types']);
-       $guide_languages= ContentTerms::terms_by(['taxonomy' => 'guide_languages']);
+       $guide_languages= ContentTerms::terms_by(['taxonomy' => 'languages']);
        $proficiencies= ContentTerms::terms_by(['taxonomy' => 'proficiencies']);
+       $genders= ContentTerms::terms_by(['taxonomy' => 'gender']);
       
 
      
 
-        return view('frontend.guides.index', compact(['privileges', 'display','nationalities','provinces','partner_types',
+        return view('frontend.guides.index', compact(['privileges', 'display','nationalities','provinces','partner_types','genders',
             'guide_types','guide_languages','proficiencies']));
 
     }
@@ -142,6 +145,7 @@ class GuidesController extends Controller
                         ->paginate($display);
        $nationalities= ContentTerms::terms_by(['taxonomy' => 'nationalities']);
        $provinces= ContentTerms::terms_by(['taxonomy' => 'provinces']);
+
        $partner_types= ContentTerms::terms_by(['taxonomy' => 'partner_types']);
        $guide_types= ContentTerms::terms_by(['taxonomy' => 'guide_types']);
        $guide_languages= ContentTerms::terms_by(['taxonomy' => 'languages']);
@@ -162,18 +166,18 @@ class GuidesController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function store(Request $request)
-    {
-            return redirect('login');
-    }
     public function store2(Request $request)
+    {
+            // return redirect('login');
+    }
+    public function store(Request $request)
     {
         //
          // dd(Helper::MyFormatDate($request->date_of_birth));
 
          $validator = Validator::make($request->all(), [
                  
-               
+                
                 'license_id' => 'required',
                 'fullname_kh' => 'required',
                 'fullname_en' => 'required',
@@ -183,7 +187,9 @@ class GuidesController extends Controller
                 'gender' => 'required',
                 'telephone' => 'required|numeric',
                 'nationality_id' => 'required',
-                'province' => 'required',
+                'province_id' => 'required',
+                'language_id' => 'required',
+                'guide_price' => 'required|numeric',
                 'password' => 'required|min:6|confirmed',
                 'generation' => 'required|numeric',
                 'guide_certified' => 'required',
@@ -198,7 +204,7 @@ class GuidesController extends Controller
                 'expired_date' => 'required',
                 'date_in_service' => 'required',
                 'agree' => 'required',
-                'profile' => 'image|mimes:jpg,jpeg,png,bmp|max:' . (1024 *16),
+                'photo' => 'image|mimes:jpg,jpeg,png,bmp|max:' . (1024 *16),
             ]);
         // dd($validator->errors());
     
@@ -209,9 +215,8 @@ class GuidesController extends Controller
         }             
         // decrypted role_id, cause encrypted at frontend
         $user = new User([
-                'role_id' => getRoleID('guide'),
                 'email' => $request->input('email'),
-                'password' => $request->input('password'),
+                'password' => Hash::make($request->input('password')),
             ]);
 
         $user->save(); 
@@ -234,12 +239,16 @@ class GuidesController extends Controller
          // store user meta if inputed ____
         $default = array('license_id','fullname_en', 'fullname_kh','address',
             'dob', 'gender','telephone',
-            'nationality', 'province','password',
+            'nationality_id', 
+             'province_id',
+            'language_id',
+            'guide_price',
+            'password',
             'generation', 'guide_certified','behavior_certified',
             'id_card', 'partner_id','cv_provided',
             'first_name', 'last_name','first_name_kh','guide_type_id',
             'domicile_certified','new_renew','issued_date','expired_date',
-            'date_in_service','profile'
+            'date_in_service','photo'
 
             );
 
@@ -249,10 +258,10 @@ class GuidesController extends Controller
             {
                 $valued = $value;
 
-                if($key =='profile')
+                if($key =='photo')
                 {
                     // store profile ;
-                    $request->profile->store($user->id, 'public');
+                    $request->photo->store($user->id, 'public');
 
                     $profile_dir = storage_path('app/public/'. $user->id .'/profile');
 
@@ -261,9 +270,9 @@ class GuidesController extends Controller
                         File::makeDirectory($profile_dir);
                     }
 
-                    Image::make($request->profile->getRealPath())->fit(120)->save($profile_dir .'/'. $request->profile->hashName());
+                    Image::make($request->photo->getRealPath())->fit(120)->save($profile_dir .'/'. $request->photo->hashName());
 
-                    $valued = $request->profile->hashName();
+                    $valued = $request->photo->hashName();
                 }
 
                 $user_meta = new UserMetas([
@@ -275,13 +284,12 @@ class GuidesController extends Controller
                 $user_meta->save();
             }           
             
-        }
-
-        
+        }       
 
         Session::flash('inserted', 'Guide profile is saved successfully...');
 
-        return redirect('login');
+
+        return redirect('guides');
 
 
         

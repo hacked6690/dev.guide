@@ -36,18 +36,22 @@ class DatabaseSeeder extends Seeder
 
             	});*/
         
-       $user=factory(App\User::class,4000)->create()
+       $user=factory(App\User::class,10000)->create()
              ->each(function ($u) {
                     $faker = Faker\Factory::create();
                     $default=[];
+                    $default[] = array('user_id' => $u->id,"meta_key"=>"role_id","meta_value"=>7);
                      $default[] = array('user_id' => $u->id,"meta_key"=>"license_id","meta_value"=>"TG".rand(1,9)."8".rand(2000,9999));
                      $default[] = array('user_id' => $u->id,"meta_key"=>"fullname_en","meta_value"=>$faker->name);
                      $default[] = array('user_id' => $u->id,"meta_key"=>"fullname_kh","meta_value"=>$faker->name);
                      $default[] = array('user_id' => $u->id,"meta_key"=>"address","meta_value"=>$faker->address);
                      $default[] = array('user_id' => $u->id,"meta_key"=>"dob","meta_value"=>$faker->date);
+                      $default[] = array('user_id' => $u->id,"meta_key"=>"gender","meta_value"=>rand(67,68));
                      $default[] = array('user_id' => $u->id,"meta_key"=>"telephone","meta_value"=>$faker->phoneNumber);
-                     $default[] = array('user_id' => $u->id,"meta_key"=>"nationality","meta_value"=> rand(56,57));
-                     $default[] = array('user_id' => $u->id,"meta_key"=>"province","meta_value"=>rand(100,200));
+                     $default[] = array('user_id' => $u->id,"meta_key"=>"nationality_id","meta_value"=> rand(56,57));
+                     $default[] = array('user_id' => $u->id,"meta_key"=>"province_id","meta_value"=>rand(58,59));
+                     $default[] = array('user_id' => $u->id,"meta_key"=>"language_id","meta_value"=>rand(65,66));
+                     $default[] = array('user_id' => $u->id,"meta_key"=>"guide_price","meta_value"=>rand(50,100));
                      $default[] = array('user_id' => $u->id,"meta_key"=>"password","meta_value"=>$faker->password);
                      $default[] = array('user_id' => $u->id,"meta_key"=>"generation","meta_value"=>rand(1,10));
                      $default[] = array('user_id' => $u->id,"meta_key"=>"guide_certified","meta_value"=>rand(0,1));
@@ -64,7 +68,7 @@ class DatabaseSeeder extends Seeder
                      $default[] = array('user_id' => $u->id,"meta_key"=>"issued_date","meta_value"=>$faker->date);
                      $default[] = array('user_id' => $u->id,"meta_key"=>"expired_date","meta_value"=>$faker->date);
                      $default[] = array('user_id' => $u->id,"meta_key"=>"date_in_service","meta_value"=>$faker->date);
-                    $default[] = array('user_id' => $u->id,"meta_key"=>"profile","meta_value"=>rand(1,10).".jpg");
+                    $default[] = array('user_id' => $u->id,"meta_key"=>"photo","meta_value"=>rand(1,10).".jpg");
 
                      
                         for($i=0;$i<sizeof($default);$i++){

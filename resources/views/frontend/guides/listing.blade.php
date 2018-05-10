@@ -41,10 +41,10 @@
 
 
 	<div id="content" class="mycontent">
-		<div class="row mycarousel" style="width:80%;margin:10px auto">
+		<div class="row mycarousel" style="width:90%;margin:10px auto">
 				@include('frontend.home.slide')
 		</div>
-		<div class="row" style="width:80%;margin:10px auto">
+		<div class="row" style="width:90%;margin:10px auto">
 			<div class="col-lg-3 col-md-3" style="padding-left:0px">
 				@include('frontend.home.leftsidebar')
 			</div>
