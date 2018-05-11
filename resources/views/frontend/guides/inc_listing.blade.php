@@ -128,26 +128,37 @@ use Illuminate\Support\Facades\Storage;
 foreach ($users as $user) {
   $uid=$user->id;
   $uemail=$user->email;  
-  // $user_metas=User::find($uid)->user_metas;
 
-    $user_meta=Helper::metas('user_meta',['user_id' => $uid] );
+$user_meta=Helper::metas('user_meta',['user_id' => $uid] );
 $photo_path='';
-$photo_path=Storage::url('guide_profile_test/' . $user_meta->photo->value);
-/*if($uid>7027){
-$photo_path=Storage::url($uid.'/profile/' . $user_meta->photo->value);
-}*/
+$file=Storage::url('guide_profile_test/' . $user_meta->photo->value);
+if(!file_exists($file)){
+    $photo_path=Storage::url('guide_profile_test/' . $user_meta->photo->value);
+}
+
+
+ $photo_path;
+$date1=new DateTime($user_meta->dob->value);
+$date_2 = new DateTime( date( 'Y-m-d' ) );
+$difference = $date_2->diff( $date1);
+$age= $difference->y;
+$profileID=Helper::encodeString($uid,Helper::encryptKey());
+// $profileID=$uid;
+
  
 echo '
   <div class="row" >
             <div class="well well-sm" style="margin-bottom:10px">
                 <div class="row" >
                     <div class="col-xs-12 col-md-2 text-center">
+                        <a href="/guides/detail/'.$profileID.'">
                         <img src="'. $photo_path .'" alt="Guide"
                             class="img-rounded img-responsive guideprofile" />
+                        </a>
                     </div>
                     <div class="col-xs-12 col-md-8 section-box">
                         <h2 class="text text-info">
-                             '.$user_meta->fullname_en->value.'
+                             <a href="/guides/detail/'.$profileID.'">'.$user_meta->fullname_en->value.'</a>
                                 <span style="font-size:14px">
                                     <span class="glyphicon glyphicon-star-empty"></span><span class="glyphicon glyphicon-star-empty">
                                     </span><span class="glyphicon glyphicon-star-empty"></span><span class="glyphicon glyphicon-star-empty">

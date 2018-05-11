@@ -16,6 +16,10 @@ use Illuminate\Support\Facades\Route;
 class Helper
 {
 	// __________________________________ Here ↓ are custom functions ;
+	
+	public static function encryptKey(){
+		return "GOBS_GIGB";
+	}
 
 	public static function filesize($bytes, $dec = 2)
 	{
@@ -436,6 +440,57 @@ class Helper
 									</div>
 								</div>');
 	}
+
+
+
+	public static function encodeString($string, $key) {
+
+	if(is_numeric($string)){$string = $string*120119898;}
+
+		$key = sha1($key);
+		$strLen = strlen($string);
+		$keyLen = strlen($key);
+		$j = 0;
+		$hash ="";
+
+		for ($i = 0; $i < $strLen; $i++) {
+
+			$ordStr = ord(substr($string,$i,1));
+			if ($j == $keyLen) { $j = 0; }
+			$ordKey = ord(substr($key,$j,1));
+			$j++;
+			$hash .= strrev(base_convert(dechex($ordStr + $ordKey),16,36));
+		}
+
+		return $hash;
+	}
+
+
+	public static function decodeString($string, $key) {
+
+		$key = sha1($key);
+		$strLen = strlen($string);
+		$keyLen = strlen($key);
+		$j = 0;
+		$hash = "";
+
+		for ($i = 0; $i < $strLen; $i+=2) {
+
+			$ordStr = hexdec(base_convert(strrev(substr($string,$i,2)),36,16));
+			if ($j == $keyLen) { $j = 0; }
+			$ordKey = ord(substr($key,$j,1));
+			$j++;
+			$hash .= chr($ordStr - $ordKey);
+		}
+
+		if(is_numeric($hash)){
+			$hash = $hash/120119898;
+		}
+
+		return $hash;
+	}
+
+
 	public static function MyFormatDate($date)
 	{
 		$date=date_create($date);

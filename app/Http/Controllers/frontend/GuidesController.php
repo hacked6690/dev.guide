@@ -134,29 +134,20 @@ class GuidesController extends Controller
             'guide_types','guide_languages','proficiencies']));
 
     }
-    public function detail($id)
+    public function detail($uid)
     {
        //
+        $uid=Helper::decodeString($uid,Helper::encryptKey());
         $display = Input::has('display') ? Input::get('display') :7;
         $privileges = DB::table('privileges as p1')
                         ->select('p1.*', 'p2.title as parent_title')
                         ->leftJoin('privileges as p2', 'p1.parent', '=', 'p2.id')
                         ->orderBy('p1.id', 'desc')
                         ->paginate($display);
-       $nationalities= ContentTerms::terms_by(['taxonomy' => 'nationalities']);
-       $provinces= ContentTerms::terms_by(['taxonomy' => 'provinces']);
 
-       $partner_types= ContentTerms::terms_by(['taxonomy' => 'partner_types']);
-       $guide_types= ContentTerms::terms_by(['taxonomy' => 'guide_types']);
-       $guide_languages= ContentTerms::terms_by(['taxonomy' => 'languages']);
-       $proficiencies= ContentTerms::terms_by(['taxonomy' => 'proficiencies']);
-
-       
-      
-
-     
-
-        return view('frontend.guides.detail');
+        $user_meta=Helper::metas('user_meta',['user_id' => $uid] );
+        $user=DB::table('users')->find($uid);
+        return view('frontend.guides.detail', compact(['user_meta','user']));
     }
 
     /**
@@ -222,6 +213,10 @@ class GuidesController extends Controller
         $user->save(); 
 
          $request->merge(['password' => Hash::make($request->input('password'))]);
+         $request->merge(['dob' => Helper::MyFormatDate($request->input('dob'))]);
+         $request->merge(['date_in_service' => Helper::MyFormatDate($request->input('date_in_service'))]);
+         $request->merge(['issued_date' => Helper::MyFormatDate($request->input('issued_date'))]);
+         $request->merge(['expired_date' => Helper::MyFormatDate($request->input('expired_date'))]);
 
         //Old Table Field on Guide table----Store User meta
                /* $old_fields=array('rate_one','rate_two','rate_three','rate_four','rate_five',
