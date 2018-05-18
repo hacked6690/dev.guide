@@ -1,7 +1,6 @@
 <?php
-
 namespace App\Http\Controllers\frontend;
-
+ini_set('max_execution_time', 300);
 use Illuminate\Http\Request;
 use Auth;
 use Session;
@@ -35,7 +34,11 @@ class GuidesController extends Controller
     public function index()
     {
         //
+        
+         
          $display = Input::has('display') ? Input::get('display') :7;
+
+         
 
          $privileges = DB::table('privileges as p1')
                         ->select('p1.*', 'p2.title as parent_title')
@@ -50,47 +53,150 @@ class GuidesController extends Controller
        $guide_languages= ContentTerms::terms_by(['taxonomy' => 'languages']);
        $proficiencies= ContentTerms::terms_by(['taxonomy' => 'proficiencies']);
 
-     
-       $users=DB::table('users')->paginate($display);
-       // $users = User::all()->user_metas;
-       /*foreach ($users as $user) {
-           echo $user->id."-----".$user->meta_key."---".$user->meta_value."---".$user->user_id."<br>";
-           echo "<span style='margin-left:25px;color:green'>".$user->user->id."---".$user->user->email."</span>";
-           echo "<hr/>";
-       }
-       exit;*/
-       
 
-       /* init filter collection ; */
-        $filter = collect([]);        
-        if(Input::has('filter')) 
-        {
-            $filter->put('layout_category', Input::get('filter'));
-        }
-       $layout_items = DB::table('layout_items as li')
-                            ->select(
-                                'li.*', 
-                                'lc.title as layout_category', 
-                                DB::raw("(GROUP_CONCAT(languages.slug ORDER BY languages.slug ASC SEPARATOR ',')) as 'translated'")
-                            )
-                            ->leftJoin('layout_categories as lc', 'li.category_id', '=', 'lc.id')
-                            ->leftJoin('layout_item_translates as lit', 'li.id', '=', 'lit.item_id')
-                            ->leftJoin('languages', 'lit.language_id', '=', 'languages.id')
-                            ->groupBy('li.id')
-                            ->where(function($qry) use ($filter) {
-                                if($filter->contains('layout_category')) {
-                                    // $qry->where('li.category_id', '=', $filter->pull('layout_category'));
-                                }
-                            })
-                            ->orderBy('li.id', 'desc')
-                            ->paginate($display);
+        
 
       
+
+        $fullname_en=Input::has('fullname_en')?Input::get('fullname_en'):'';
+        $guide_type_id=Input::has('guide_type_id')?intval(Input::get('guide_type_id')):0;
+        $gender=Input::has('gender')?intval(Input::get('gender')):0;
+        $nationality_id=Input::has('nationality_id')?intval(Input::get('nationality_id')):0;
+        $guide_language=Input::has('guide_language')?intval(Input::get('guide_language')):0;
+
+
+       
+         $search_criteria=array(
+            "fullname_en"=>$fullname_en,
+            "guide_type_id"=>$guide_type_id,
+            "gender"=>$gender,
+            "nationality_id"=>$nationality_id,
+            "guide_language"=>$guide_language
+            );
+
+      /*  $users = User::with('user_metas')->groupBy('id')->get();        
+        $users = $users->filter(function($value, $key) use ($search_criteria) {     
+        foreach ($search_criteria as $k => $v) {
+            foreach ($value->user_metas as $subkey => $subvalue) {
+                if($subvalue->meta_key =='fullname_en' && strpos($subvalue->meta_value, 'Prof') !== false) {
+                        return $value;
+                }                  
+            }            
+        }
+        echo json_encode($value);
+        echo "<hr>";                
+        });*/
+
+       $criteria=array(
+            "fullname_en"=>$fullname_en,
+            "guide_type_id"=>$guide_type_id,
+            "gender"=>$gender,
+            "nationality_id"=>$nationality_id,
+            "guide_language"=>$guide_language
+        );
+       $check=0;
+       foreach ($criteria as $key => $value) {
+           if(isset($key) && ($value!=0 || $value!="")){
+            $check++;
+           }
+       }
+      
+
+           $users = User::with('user_metas')->groupBy('id')->get(); 
+        
+       
+        if ($fullname_en!=="") 
+        {  
+              $users = $users->filter(function($user) use ($fullname_en)
+              {
+                $u=$user->user_metas;
+                
+                foreach ($u as $key => $value) {                    
+                     if($value->meta_key =='fullname_en' && strpos(strtolower($value->meta_value), strtolower($fullname_en)) !== false) {                        
+                     
+                        return $value;
+                     }   
+                }
+                 
+               });
+        }
+        if ($guide_type_id!=0) 
+        {  
+              $users = $users->filter(function($user) use ($guide_type_id)
+              {
+                $u=$user->user_metas;                
+                foreach ($u as $key => $value) {
+                     if($value->meta_key =='guide_type_id' && $value->meta_value==$guide_type_id) {
+                        return $value;
+                     }   
+                }                 
+               });
+        }
+        if ($gender!=0) 
+        {  
+              $users = $users->filter(function($user) use ($gender)
+              {
+                $u=$user->user_metas;                
+                foreach ($u as $key => $value) {
+                     if($value->meta_key =='gender' && $value->meta_value==$gender) {
+                        return $value;
+                     }   
+                }                 
+               });
+        }
+        if ($nationality_id!=0) 
+        {  
+              $users = $users->filter(function($user) use ($nationality_id)
+              {
+                $u=$user->user_metas;                
+                foreach ($u as $key => $value) {
+                     if($value->meta_key =='nationality_id' && $value->meta_value==$nationality_id) {
+                        return $value;
+                     }   
+                }                 
+               });
+        }
+        if ($guide_language!=0) 
+        {  
+              $users = $users->filter(function($user) use ($guide_language)
+              {
+                $u=$user->user_metas;                
+                foreach ($u as $key => $value) {
+                     if($value->meta_key =='language_id' && $value->meta_value==$guide_language) {
+                        return $value;
+                     }   
+                }                 
+               });
+        }
+      
+
+    $display=10;
+    $page = Input::has('page')?intval(Input::get('page')):1;
+    $perPage = $display;
+    $offset = ($page * $perPage) - $perPage;
+    $until=$offset+$perPage;
+    echo $totalRecord=sizeof($users);echo "Records <br>";
+    echo $totalPage=ceil($totalRecord/$perPage); echo "Page<br>";
+  
+
+    $new_users=[];
+    foreach ($users as $user) {
+
+        $new_users[]=$user;
+    }
+    $new_users = array_slice($new_users, $offset, $perPage);
+    $users=$new_users;
+
+
+
+
+
+
 
      
 
         return view('frontend.guides.listing', compact(['users','privileges', 'display','nationalities','provinces','partner_types','genders',
-            'guide_types','guide_languages','proficiencies','layout_items'])) ->with('filter', $filter->values());;
+            'guide_types','guide_languages','proficiencies']));
     }
     public static function get_user_meta($user_id=1)
     {

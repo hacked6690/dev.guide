@@ -125,9 +125,7 @@ use Illuminate\Support\Facades\Storage;
 
 
 <?php
-if(sizeof($users)==0){
-    echo "<h2 class='text text-center text-danger' style='padding:100px;font-size:66px'>NO DATA FOUND!!!</h2>";
-}
+
 foreach ($users as $user) {
   $uid=$user->id;
   $uemail=$user->email;  
@@ -204,7 +202,8 @@ echo '
 
 
 <div class="table-footer">
- 
+    {!! \Helper::paginator_fr(['route' => 'guides'], ['items' => $users], ['display' => $display]) !!}
 </div>
 
 
+                                    

@@ -36,7 +36,7 @@ class DatabaseSeeder extends Seeder
 
             	});*/
         
-       $user=factory(App\User::class,10000)->create()
+       $user=factory(App\User::class,100)->create()
              ->each(function ($u) {
                     $faker = Faker\Factory::create();
                     $default=[];

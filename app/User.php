@@ -45,7 +45,7 @@ class User extends Authenticatable
 
      // 
     public function user_metas() {
-        return $this->hasMany('App\UserMetas');
+        return $this->hasMany('App\UserMetas', 'user_id');
     }
 
 }
