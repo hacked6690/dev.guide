@@ -137,6 +137,10 @@ class Helper
 	{
 		return ($items->perPage() * ($items->currentPage() -1)) + ($key +1);
 	}
+	 public static function getContentTitle($id)
+    {
+        return $id;
+    }
 
 	// Need fixex : if meta_value is number ; ex: number of children,
 	// and this number matched term_id (content_terms)
@@ -382,6 +386,49 @@ class Helper
 
 		return $str_navigated;
 	}
+	public static function customPagination($page,$totalPage,$totalRecord,$display){
+		$str="<div class='row' style='padding:0px 20px'>";
+		$dropDown = array(7 => '7 default', 25 => '25', 50 => '50', 75 => '75', 125 => '125');
+		$str.='<div class="pull-left">';
+		$str.="<span style='padding-right:20px'>Total Records:<b>".$totalRecord."</b></span>";
+		$str.= '<select class="input-sm border-0 border-bottom-1" name="display" onchange="this.form.submit();">
+            <option value="">Please Select</option>';
+	           foreach ($dropDown as $key => $value) {	  
+		           if($display==$key)  {
+		           	$str.='<option selected value="'.$key.'">'.$value.'</option>';
+		           }else{
+		           	$str.='<option  value="'.$key.'">'.$value.'</option>';
+		           }	           
+	           }
+	        
+	    $str.=' </select><i></i>';
+	   $str.='</div>';
+	   $str.='<div class="pull-right">';
+       $str.= '<ul class="pagination">';
+            $before=$page-2;//before page number for ex after 3 is 1-2
+            $after=$page+2;//after page number for ex: after 3 is 4-5
+            if($after>$totalPage){$after=$totalPage;}
+            $none=($page>$before)?'display:none':'';
+            $none=($page<$after)?'display:none':'';
+            $disabledPre=($page<=1)?'disabled':'';
+            $disabledNext=($page>=$totalPage)?'disabled':'';
+            $str.='<button  class="btn btn-default" type="submit"  value="1" name="page">FIRST</button>';
+           $str.= '<button  class="btn btn-default" type="submit" '.$disabledPre.'  value="'.($page-1).'" name="page">PRE</button>';        
+            for($i=$before;$i<=$after;$i++){
+                if($i<=0 || $i>$totalPage) continue;
+                $background=($page==$i)?'background-color:#d9e6f2':'';
+                $str.= '<button type="submit"   class="btn btn-default" style="'.$background.'"  value="'.$i.'" name="page">'.$i.'</button>';            
+            }
+           $str.='<button  class="btn btn-default" type="submit" '.$disabledNext.' value="'.($page+1).'" name="page">NEXT</button>';
+           $str.= '<button  class="btn btn-default" type="submit"  value="'.$totalPage.'" name="page">LAST</button>';
+        $str.= '</ul>';
+        $str.= '</div>';
+        $str.= '</div>';
+        return $str;
+	}
+
+
+
 	public static function paginator_fr($route =['route' => 'posts'], $items =['items' => null], $display =['display' =>7])
 	{
 		$pages = array(7 => '7 default', 25 => '25', 50 => '50', 75 => '75', 125 => '125');

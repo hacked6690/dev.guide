@@ -18,7 +18,7 @@
 		}
 		.first_td{
 			border-bottom: 1px solid green;
-			width:50%;
+			width:40%;
 		}
 	</style>
 @endsection

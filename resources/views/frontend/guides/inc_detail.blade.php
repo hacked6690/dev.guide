@@ -1,9 +1,23 @@
 <?php
+
+$user=$users[0];
+foreach ($users as $key=>$value) {
+ $uid=$value->id;
+ $user_meta=Helper::metas('user_meta',['user_id' => $uid] );
+$guide_prices=$value->guide_price;
+}
+
 $photo_path="http://www.nurnberg.com/images/image_unavailable_lrg.png";
 if(($user_meta->photo->value)!=="")
 $photo_path=Storage::url('guide_profile_test/' . $user_meta->photo->value);
+$url='/guides/'.Helper::encodeString($user->id,Helper::encryptKey());
+//$gp is guide price
 
-
+foreach ($guide_prices as $key => $value) {
+    $gp_language=($value->default=='yes')?$value->language->title:"";
+    $gp_province=($value->default=='yes')?$value->province->title:"";   
+    $gp_price=($value->default=='yes')?$value->price:""; 
+}
 ?>
 <h1 class="text text-primary text-center">Guide Profile Information</h1>
 <div class="row">
@@ -23,6 +37,7 @@ $photo_path=Storage::url('guide_profile_test/' . $user_meta->photo->value);
                        			<td><b>{{$user_meta->expired_date->value}}</b></td>
                        		</tr>                       		
                        </table>
+                       <img src="data:image/png;base64,<?php echo base64_encode(QrCode::format('png')->size(200)->generate($url)); ?> ">
                     </div>
                     <div class="col-sm-6 col-md-9">
                         <h4>
@@ -62,11 +77,11 @@ $photo_path=Storage::url('guide_profile_test/' . $user_meta->photo->value);
                        		</tr>
                        		<tr>
                        			<td class="first_td">{{$layout->label->language->title}}:</td>
-                       			<td>  {{$user_meta->language_id->title}}</td>
+                       			<td>  {{$gp_language}}</td>
                        		</tr>
                        		<tr>
                        			<td class="first_td">{{$layout->label->province->title}}:</td>
-                       			<td>  {{$user_meta->province_id->title}}</td>
+                       			<td>  {{$gp_province}}</td>
                        		</tr>
                        		<tr>
                        			<td class="first_td">{{$layout->label->license_id->title}}:</td>
@@ -76,22 +91,34 @@ $photo_path=Storage::url('guide_profile_test/' . $user_meta->photo->value);
                        
                     </div>
                 </div>
-                <div class="row underreview">
+                <div class="row ">
                 	<h2 class="text text-center">Price according to Location & Languages</h2>
-                	<div class="col-lg-6">
+                	<div class="col-lg-12">
                 		<h4 class="text text-center text-primary">Price Depend on Languages</h4>
-                		<table class="table table-responsive tabledetail" >                          	
-                       		<tr>
-                       			<td class="first_td">ENGLISH:</td>
-                       			<td> <b>75 USD/day</b></td>
-                       		</tr>
-                       		<tr>
-                       			<td class="first_td">CHINESS:</td>
-                       			<td> <b>70 USD/day</b></td>
-                       		</tr>                     		
+                		<table class="table table-responsive tabledetail" >   
+                    <tr>
+                      <th>Language</th>
+                      <th>Province</th>
+                      <th>Price</th>
+                      <th>Default</th>
+                    </tr>
+                    <?php 
+                    foreach ($guide_prices as $key => $value) {
+                      echo '
+                           <tr>
+                            <td class="first_td">'.$value->language->title.'</td>
+                            <td class="first_td">'.$value->province->title.'</td>
+                            <td> <b>'.$value->price.' USD/day</b></td>
+                            <td class="">'.$value->default.'</td>
+                          </tr>
+                      ';
+                        
+                    } 
+                    ?>                      	
+                       		
                        </table>
                 	</div>
-                	<div class="col-lg-6">
+                	<!-- <div class="col-lg-6">
                 		<h4 class="text text-center text-primary">Price Depend on Location</h4>
                 		<table class="table table-responsive tabledetail" >                          	
                        		<tr>
@@ -103,7 +130,7 @@ $photo_path=Storage::url('guide_profile_test/' . $user_meta->photo->value);
                        			<td> <b>40 USD/day</b></td>
                        		</tr>                     		
                        </table>
-                	</div>
+                	</div> -->
                 </div>
             </div>
             <!--end class well-->

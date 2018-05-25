@@ -31,16 +31,22 @@ class GuidesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+    public static function getDefaultSetup($guide_id){
+       $guide_id=Helper::decodeString($guide_id,Helper::encryptKey());
+       $defaultSetup=DB::table('guide_price')
+              ->where('guide_id','=',$guide_id)
+              ->where('default','=','yes')
+              ->limit(1)
+              ->first();
+       return $defaultSetup;
+
+    }
     public function index()
     {
         //
-        
-         
-         $display = Input::has('display') ? Input::get('display') :7;
-
-         
-
-         $privileges = DB::table('privileges as p1')
+        $display = Input::has('display') ? Input::get('display') :7;
+        $privileges = DB::table('privileges as p1')
                         ->select('p1.*', 'p2.title as parent_title')
                         ->leftJoin('privileges as p2', 'p1.parent', '=', 'p2.id')
                         ->orderBy('p1.id', 'desc')
@@ -51,73 +57,37 @@ class GuidesController extends Controller
        $guide_types= ContentTerms::terms_by(['taxonomy' => 'guide_types']);
        $genders= ContentTerms::terms_by(['taxonomy' => 'gender']);
        $guide_languages= ContentTerms::terms_by(['taxonomy' => 'languages']);
-       $proficiencies= ContentTerms::terms_by(['taxonomy' => 'proficiencies']);
-
-
-        
+       $proficiencies= ContentTerms::terms_by(['taxonomy' => 'proficiencies']);      
 
       
-
+        //Getting from url form when searching
         $fullname_en=Input::has('fullname_en')?Input::get('fullname_en'):'';
         $guide_type_id=Input::has('guide_type_id')?intval(Input::get('guide_type_id')):0;
         $gender=Input::has('gender')?intval(Input::get('gender')):0;
         $nationality_id=Input::has('nationality_id')?intval(Input::get('nationality_id')):0;
         $guide_language=Input::has('guide_language')?intval(Input::get('guide_language')):0;
+        $province_id=Input::has('province_id')?intval(Input::get('province_id')):0;
+        $searchField=array(
+                "fullname_en"=>$fullname_en,
+                "guide_type_id"=>$guide_type_id,
+                "gender"=>$gender,
+                "nationality_id"=>$nationality_id,
+                "guide_language"=>$guide_language
+                );
+        $searchField=(object) $searchField;
 
 
-       
-         $search_criteria=array(
-            "fullname_en"=>$fullname_en,
-            "guide_type_id"=>$guide_type_id,
-            "gender"=>$gender,
-            "nationality_id"=>$nationality_id,
-            "guide_language"=>$guide_language
-            );
-
-      /*  $users = User::with('user_metas')->groupBy('id')->get();        
-        $users = $users->filter(function($value, $key) use ($search_criteria) {     
-        foreach ($search_criteria as $k => $v) {
-            foreach ($value->user_metas as $subkey => $subvalue) {
-                if($subvalue->meta_key =='fullname_en' && strpos($subvalue->meta_value, 'Prof') !== false) {
-                        return $value;
-                }                  
-            }            
-        }
-        echo json_encode($value);
-        echo "<hr>";                
-        });*/
-
-       $criteria=array(
-            "fullname_en"=>$fullname_en,
-            "guide_type_id"=>$guide_type_id,
-            "gender"=>$gender,
-            "nationality_id"=>$nationality_id,
-            "guide_language"=>$guide_language
-        );
-       $check=0;
-       foreach ($criteria as $key => $value) {
-           if(isset($key) && ($value!=0 || $value!="")){
-            $check++;
-           }
-       }
-      
-
-           $users = User::with('user_metas')->groupBy('id')->get(); 
-        
-       
+        $users = User::with('user_metas','guide_price')->groupBy('id')->get();   
         if ($fullname_en!=="") 
         {  
               $users = $users->filter(function($user) use ($fullname_en)
               {
-                $u=$user->user_metas;
-                
+                $u=$user->user_metas; 
                 foreach ($u as $key => $value) {                    
                      if($value->meta_key =='fullname_en' && strpos(strtolower($value->meta_value), strtolower($fullname_en)) !== false) {                        
-                     
                         return $value;
                      }   
-                }
-                 
+                }                 
                });
         }
         if ($guide_type_id!=0) 
@@ -158,46 +128,45 @@ class GuidesController extends Controller
         }
         if ($guide_language!=0) 
         {  
-              $users = $users->filter(function($user) use ($guide_language)
+             $users = $users->filter(function($gp) use ($guide_language)
               {
-                $u=$user->user_metas;                
+                $u=$gp->guide_price;               
                 foreach ($u as $key => $value) {
-                     if($value->meta_key =='language_id' && $value->meta_value==$guide_language) {
-                        return $value;
-                     }   
+                     if($value->language_id==$guide_language){return $value;} 
                 }                 
                });
         }
-      
+         if ($province_id!=0) 
+        {  
+              $users = $users->filter(function($gp) use ($province_id)
+              {
+                $u=$gp->guide_price;               
+                foreach ($u as $key => $value) {
+                     if($value->province_id==$province_id){return $value;} 
+                }                 
+               });
+        }
+   
 
-    $display=10;
-    $page = Input::has('page')?intval(Input::get('page')):1;
-    $perPage = $display;
-    $offset = ($page * $perPage) - $perPage;
-    $until=$offset+$perPage;
-    echo $totalRecord=sizeof($users);echo "Records <br>";
-    echo $totalPage=ceil($totalRecord/$perPage); echo "Page<br>";
-  
-
-    $new_users=[];
-    foreach ($users as $user) {
-
-        $new_users[]=$user;
-    }
-    $new_users = array_slice($new_users, $offset, $perPage);
-    $users=$new_users;
-
-
-
-
-
-
-
+        $page = Input::has('page')?intval(Input::get('page')):1;
+        $perPage = $display;
+        $offset = ($page * $perPage) - $perPage;
+        $until=$offset+$perPage;
+        $totalRecord=sizeof($users);
+        $totalPage=ceil($totalRecord/$perPage);
+        if($page<=0){$page=1;}
+        if($page>$totalPage){$page=$totalPage;} 
+        $new_users=[];
+        foreach ($users as $user) {
+            $new_users[]=$user;
+        }
+        $new_users = array_slice($new_users, $offset, $perPage);
+        $users=$new_users;
      
-
         return view('frontend.guides.listing', compact(['users','privileges', 'display','nationalities','provinces','partner_types','genders',
-            'guide_types','guide_languages','proficiencies']));
+            'guide_types','guide_languages','proficiencies','totalPage','page','totalRecord','searchField']));
     }
+
     public static function get_user_meta($user_id=1)
     {
          return $users=User::find($user_id)->user_metas;
@@ -218,8 +187,7 @@ class GuidesController extends Controller
       /* if(!Auth::user()->authorized('posts')) {
             abort(403, 'Unauthorized action.');
         }*/
-         $display = Input::has('display') ? Input::get('display') :7;
-
+        $display = Input::has('display') ? Input::get('display') :7;
         $privileges = DB::table('privileges as p1')
                         ->select('p1.*', 'p2.title as parent_title')
                         ->leftJoin('privileges as p2', 'p1.parent', '=', 'p2.id')
@@ -232,28 +200,44 @@ class GuidesController extends Controller
        $guide_languages= ContentTerms::terms_by(['taxonomy' => 'languages']);
        $proficiencies= ContentTerms::terms_by(['taxonomy' => 'proficiencies']);
        $genders= ContentTerms::terms_by(['taxonomy' => 'gender']);
-      
-
-     
-
-        return view('frontend.guides.index', compact(['privileges', 'display','nationalities','provinces','partner_types','genders',
+       return view('frontend.guides.index', compact(['privileges', 'display','nationalities','provinces','partner_types','genders',
             'guide_types','guide_languages','proficiencies']));
+    }
+    public static function countGuideByProvince($provinceID)
+    {
+        $users = User::with('user_metas')->groupBy('id')->get(); 
+        if ($provinceID!=0) 
+        {  
+              $users = $users->filter(function($user) use ($provinceID)
+              {
+                $u=$user->user_metas;                
+                foreach ($u as $key => $value) {
+                     if($value->meta_key =='province_id' && $value->meta_value==$provinceID) {
+                        return $value;
+                     }   
+                }                 
+               });
+        }
+        return $users->count();
 
     }
+  
     public function detail($uid)
     {
        //
         $uid=Helper::decodeString($uid,Helper::encryptKey());
-        $display = Input::has('display') ? Input::get('display') :7;
-        $privileges = DB::table('privileges as p1')
-                        ->select('p1.*', 'p2.title as parent_title')
-                        ->leftJoin('privileges as p2', 'p1.parent', '=', 'p2.id')
-                        ->orderBy('p1.id', 'desc')
-                        ->paginate($display);
-
-        $user_meta=Helper::metas('user_meta',['user_id' => $uid] );
-        $user=DB::table('users')->find($uid);
-        return view('frontend.guides.detail', compact(['user_meta','user']));
+        $users = User::with('user_metas','guide_price')->groupBy('id')->get();   
+        $users = $users->filter(function($user) use ($uid)
+              {
+                $u=$user->user_metas;                
+                foreach ($u as $key => $value) {
+                     if($value->user_id==$uid) {
+                        return $value;
+                     }   
+                }                 
+               });
+      
+        return view('frontend.guides.detail', compact(['users']));
     }
 
     /**

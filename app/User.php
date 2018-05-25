@@ -48,4 +48,8 @@ class User extends Authenticatable
         return $this->hasMany('App\UserMetas', 'user_id');
     }
 
+    public function guide_price(){
+        return $this->hasMany('App\GuidePrice', 'guide_id');
+    }
+
 }

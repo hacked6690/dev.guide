@@ -163,10 +163,12 @@ return [
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
 
+
         /*
          * Package Service Providers...
          */
         Laravel\Tinker\TinkerServiceProvider::class,
+        SimpleSoftwareIO\QrCode\QrCodeServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -181,6 +183,7 @@ return [
         Intervention\Image\ImageServiceProvider::class,
         Barryvdh\Elfinder\ElfinderServiceProvider::class,  
         hisorange\BrowserDetect\ServiceProvider::class,
+        
 
     ],
 
@@ -235,6 +238,7 @@ return [
         'Layout' => App\Helpers\Layout::class,
         'Image' => Intervention\Image\Facades\Image::class,
         'Browser' => hisorange\BrowserDetect\Facade::class,
+        'QrCode' => SimpleSoftwareIO\QrCode\Facades\QrCode::class
 
     ],
 

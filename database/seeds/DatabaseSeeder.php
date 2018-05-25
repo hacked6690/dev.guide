@@ -2,6 +2,8 @@
 
 use Illuminate\Database\Seeder;
 use App\UserMetas;
+use App\GuidePrice;
+use Illuminate\Support\Facades\Storage;
 class DatabaseSeeder extends Seeder
 {
     /**
@@ -36,11 +38,27 @@ class DatabaseSeeder extends Seeder
 
             	});*/
         
-       $user=factory(App\User::class,100)->create()
+       $user=factory(App\User::class,8)->create()
              ->each(function ($u) {
                     $faker = Faker\Factory::create();
+                   /* $profile_dir = storage_path('app/public/'. $u->id .'/profile');
+                    if(!File::exists($profile_dir))
+                    {
+                        File::makeDirectory($profile_dir);
+                    }*/
+                     $guide_priceDefault=[];
+                     $a=array("active","deactivate","suspense");
+                     $random_keys=array_rand($a,2);
+                     $guide_priceDefault[0]=array('guide_id' => $u->id,"language_id"=>rand(65,66),
+                            "province_id"=>rand(58,59),"price"=>rand(45,100),
+                            "default"=>"yes","active" => $a[$random_keys[0]]);
+                     $guide_price=new GuidePrice($guide_priceDefault[0]);
+                     $guide_price->save();
+
                     $default=[];
-                    $default[] = array('user_id' => $u->id,"meta_key"=>"role_id","meta_value"=>7);
+                 
+
+                     $default[] = array('user_id' => $u->id,"meta_key"=>"role_id","meta_value"=>7);
                      $default[] = array('user_id' => $u->id,"meta_key"=>"license_id","meta_value"=>"TG".rand(1,9)."8".rand(2000,9999));
                      $default[] = array('user_id' => $u->id,"meta_key"=>"fullname_en","meta_value"=>$faker->name);
                      $default[] = array('user_id' => $u->id,"meta_key"=>"fullname_kh","meta_value"=>$faker->name);
@@ -68,8 +86,7 @@ class DatabaseSeeder extends Seeder
                      $default[] = array('user_id' => $u->id,"meta_key"=>"issued_date","meta_value"=>$faker->date);
                      $default[] = array('user_id' => $u->id,"meta_key"=>"expired_date","meta_value"=>$faker->date);
                      $default[] = array('user_id' => $u->id,"meta_key"=>"date_in_service","meta_value"=>$faker->date);
-                    $default[] = array('user_id' => $u->id,"meta_key"=>"photo","meta_value"=>rand(1,10).".jpg");
-
+                     $default[] = array('user_id' => $u->id,"meta_key"=>"photo","meta_value"=>rand(1,10).".jpg");                    
                      
                         for($i=0;$i<sizeof($default);$i++){
                             $user_meta = new UserMetas($default[$i]);

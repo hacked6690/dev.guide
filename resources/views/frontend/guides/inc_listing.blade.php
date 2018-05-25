@@ -3,9 +3,8 @@ use App\Http\Controllers\frontend\GuidesController;
 use App\User; 
 use Illuminate\Support\Facades\Storage;
 ?>
-<div class="row" style="border:1px dashed green;margin-bottom:5px;background:#c2d6d6">
-    <form action="{{ route('guides.index') }}" id="sky-form4" class="sky-form" class="smart-form" method="GET"  >
-    <!-- {{csrf_field()}} -->
+ <form action="{{ route('guides.index') }}" id="sky-form4" class="sky-form" class="smart-form" method="GET"  >
+<div class="row" style="border:1px dashed green;margin-bottom:5px;background:#c2d6d6">       
         <div class="col-lg-2 col-md-2 col-xs-12">
                 <section class="flexibled-error">
                     <label class="label">
@@ -17,11 +16,10 @@ use Illuminate\Support\Facades\Storage;
                        @endif
                     </label>
                     <label class="input">
-                        <input type="text" value="{{isset($_GET['fullname_en'])?$_GET['fullname_en']:''}}" name="fullname_en" placeholder="Guide name">
+                        <input type="text" value="{{$searchField->fullname_en}}" name="fullname_en" placeholder="Guide name">
                     </label>
                 </section>
-        </div>
-    
+        </div>    
         <section class="col col-lg-2 col-md-2 col-xs-12 flexibled-error">
                     <label class="label">
                         {{ $layout->label->gender->title }} 
@@ -35,7 +33,7 @@ use Illuminate\Support\Facades\Storage;
                        <select value="{{ old('gender') }}" name="gender" >
                            <option value="0" selected >{{$layout->label->please_select_below->title}}</option>
                               @foreach($genders as $gender)
-                                   @if((isset($_GET["gender"])) && $_GET["gender"]==$gender->term_id)
+                                   @if($searchField->gender==$gender->term_id)
                                       <option value="{{$gender->term_id}}" selected >{{$gender->title}}</option>
                                    @else
                                       <option value="{{$gender->term_id}}">{{$gender->title}}</option>
@@ -58,7 +56,7 @@ use Illuminate\Support\Facades\Storage;
                      <select value="{{ old('guide_type_id') }}" name="guide_type_id" >
                          <option value="0" selected >{{$layout->label->please_select_below->title}}</option>
                             @foreach($guide_types as $guide_type)
-                                 @if((isset($_GET["guide_type_id"])) && $_GET["guide_type_id"]==$guide_type->term_id)
+                                 @if($searchField->guide_type_id==$guide_type->term_id)
                                     <option value="{{$guide_type->term_id}}" selected >{{$guide_type->title}}</option>
                                  @else
                                     <option value="{{$guide_type->term_id}}">{{$guide_type->title}}</option>
@@ -81,7 +79,7 @@ use Illuminate\Support\Facades\Storage;
                      <select value="{{ old('nationality_id') }}" name="nationality_id" >
                          <option value="0" selected >{{$layout->label->please_select_below->title}}</option>
                             @foreach($nationalities as $nationality)
-                                 @if((isset($_GET["nationality_id"])) && $_GET["nationality_id"]==$nationality->term_id)
+                                 @if($searchField->nationality_id==$nationality->term_id)
                                     <option value="{{$nationality->term_id}}" selected >{{$nationality->title}}</option>
                                  @else
                                     <option value="{{$nationality->term_id}}">{{$nationality->title}}</option>
@@ -104,7 +102,7 @@ use Illuminate\Support\Facades\Storage;
                      <select value="{{ old('guide_language') }}" name="guide_language" >
                          <option value="0" selected >{{$layout->label->please_select_below->title}}</option>
                             @foreach($guide_languages as $guide_language)
-                                 @if((isset($_GET["guide_language"])) && $_GET["guide_language"]==$guide_language->term_id)
+                                 @if($searchField->guide_language==$guide_language->term_id)
                                     <option value="{{$guide_language->term_id}}" selected >{{$guide_language->title}}</option>
                                  @else
                                     <option value="{{$guide_language->term_id}}">{{$guide_language->title}}</option>
@@ -119,20 +117,33 @@ use Illuminate\Support\Facades\Storage;
                     <span class="button_search"><i class="fa fa-search"></i></span>
                  </button>   
         </section>    
-    </form>                                 
+                                  
                                             
 </div>
 
 
 <?php
+
+
 if(sizeof($users)==0){
     echo "<h2 class='text text-center text-danger' style='padding:100px;font-size:66px'>NO DATA FOUND!!!</h2>";
 }
-foreach ($users as $user) {
-  $uid=$user->id;
-  $uemail=$user->email;  
+
+foreach ($users as $key=>$value) {
+    $uid=$value->id;
+  $url='/guides/'.Helper::encodeString($value->id,Helper::encryptKey());
+  $uemail=$value->email;  
 
 $user_meta=Helper::metas('user_meta',['user_id' => $uid] );
+$guide_prices=$value->guide_price;
+
+//$gp is guide price
+foreach ($guide_prices as $key => $value) {
+    $gp_language=($value->default=='yes')?$value->language->title:"";
+    $gp_province=($value->default=='yes')?$value->province->title:"";   
+    $gp_price=($value->default=='yes')?$value->price:""; 
+}
+
 $photo_path='';
 $file=Storage::url('guide_profile_test/' . $user_meta->photo->value);
 if(!file_exists($file)){
@@ -158,7 +169,7 @@ echo '
                             class="img-rounded img-responsive guideprofile" />
                         </a>
                     </div>
-                    <div class="col-xs-12 col-md-8 section-box">
+                    <div class="col-xs-12 col-md-6 section-box">
                         <h2 class="text text-info">
                              <a href="/guides/detail/'.$profileID.'">'.$user_meta->fullname_en->value.'</a>
                                 <span style="font-size:14px">
@@ -175,7 +186,7 @@ echo '
                             | '.$layout->label->guide_type->title.': '.$user_meta->guide_type_id->title.'  
                         </p>
                          <p>
-                            '.$layout->label->location->title.': '.$user_meta->province_id->title.' | '.$layout->label->language->title.': '.$user_meta->language_id->title.'  
+                            '.$layout->label->location->title.': '.$gp_province.' | '.$layout->label->language->title.': '.$gp_language.'  
                         </p>
                         <p>
                             '.$layout->label->number_of_booking->title.': <b>34</b> BOOKINGS
@@ -184,8 +195,12 @@ echo '
                        
                     </div>
                      <div class="col-xs-12 col-md-2 text-center">
-                        <h3 class="price"><b>'.$user_meta->guide_price->value.'</b> '.$layout->label->usd->title.'</h3>
+                        <h3 class="price"><b>'.$gp_price.'</b> '.$layout->label->usd->title.'</h3>
                         <em class="perday">'.$layout->label->per_day->title.'</em>
+                       
+                    </div>
+                    <div class="col-xs-12 col-md-2 text-center">
+                         <img src="data:image/png;base64,'.base64_encode(QrCode::format("png")->size(140)->generate($url)).' ">
                     </div>
                 </div>
             </div>
@@ -204,7 +219,9 @@ echo '
 
 
 <div class="table-footer">
- 
+{!! Helper::customPagination($page,$totalPage,$totalRecord,$display) !!}
+
 </div>
 
 
+ </form>  

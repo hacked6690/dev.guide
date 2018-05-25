@@ -12,6 +12,7 @@
 */
 
 Auth::routes();
+Route::get('test','frontend\GuidesController@test');
 
 Route::get('dashboard', ['uses' => 'DashboardController@index']);
 
@@ -55,8 +56,8 @@ Route::prefix('ajax')->group(function () {
 
 
 Route::resource('guides', 'frontend\GuidesController');
+Route::resource('guideprice', 'backend\GuidePriceController');
 Route::get(' guides/detail/{id}','frontend\GuidesController@detail');
 Route::resource('homepage', 'frontend\HomeController');
-
 
 
