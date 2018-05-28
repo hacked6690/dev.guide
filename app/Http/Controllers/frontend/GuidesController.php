@@ -42,6 +42,7 @@ class GuidesController extends Controller
        return $defaultSetup;
 
     }
+
     public function index()
     {
         //

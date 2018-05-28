@@ -20,6 +20,9 @@ class GuidePrice extends Model
     public function user() {
         return $this->belongsTo('App\User');
     }
+     public function guideprice_detail(){
+        return $this->hasMany('App\Model\Backend\GuidePriceDetail', 'gp_id');
+    }
 
 
 

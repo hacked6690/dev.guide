@@ -45,7 +45,7 @@ class ContentTermsController extends Controller
                             })
                             ->orderBy('content_terms.term_id', 'desc')
                             ->paginate($display);
-                        dd($content_terms);
+                      
         return view('content_terms.index', compact(['content_terms', 'display']));
     }
 

@@ -11,6 +11,7 @@ use App\Languages;
 use App\ContentTerms;
 use App\ContentRelationships;
 use App\GuidePrice;
+use App\Model\Backend\GuidePriceDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
@@ -33,12 +34,13 @@ class GuidePriceController extends Controller
 
         $display = Input::has('display') ? Input::get('display') :7;
 
-     
-       $guideprices=GuidePrice::where('active','=','active')
+        $fees= ContentTerms::terms_by(['taxonomy' => 'fees']);
+       $guideprices=GuidePrice::with('guideprice_detail')
+            ->where('active','=','active')
             ->where('guide_id','=',Auth::user()->id)
             ->paginate($display);
 
-        return view('backend.guideprice.index', compact(['guideprices', 'display']));
+        return view('backend.guideprice.index', compact(['guideprices', 'display','fees']));
     }
 
     /**
@@ -70,6 +72,7 @@ class GuidePriceController extends Controller
                 'boolean_id' => 'required',
                 'price' => 'required|numeric',
             ]);
+
       
         // dd($validator->errors());
         $guide_id=$request->has('guide_id')?$request->input('guide_id'):Auth::user()->id;
@@ -89,6 +92,19 @@ class GuidePriceController extends Controller
              return redirect()->back()
                     ->withInput($request->input());
         }
+
+        $countDefault=DB::table('guide_price')
+            ->where('default','yes')
+            ->where('guide_id',$guide_id)
+            ->count();
+     
+        if($countDefault>0 && ($request->input('boolean_id')=='yes')){
+      
+             Session::flash('warning', 'Default already exist');
+             return redirect()->back()
+                    ->withInput($request->input());
+        }
+
         
 
         $gp = new GuidePrice([
@@ -106,6 +122,54 @@ class GuidePriceController extends Controller
         if($request->has('sane'))
             return redirect('guideprice/create');
         return redirect('guideprice');
+    }
+
+    public function ajx_store(Request $request)
+    {
+
+        $validator = Validator::make($request->all(), [
+            'price' => 'required|numeric',
+            'fee_id' => 'required',
+        ]);     
+        if($validator->fails()) {
+          return response()->json([
+                    'result' => false,
+                    'msg' => 'Add request before submit',
+                    'errors' => $validator->errors()
+                ]);
+        } 
+        //Check Data to verify distinct value
+        $count=DB::table('guideprice_detail')
+            ->where('gp_id',$request->input('guideprice_id'))
+            ->where('fee_id',$request->input('fee_id'))
+            ->count();
+        if($count>0){
+             Session::flash('warning', 'Duplicate setting...');
+              return response()->json([
+                    'result' => false,
+                    'msg' => 'Duplicate additional fee setting', 'warning', 'Duplicate setting...',
+                ]);      
+        }
+
+
+
+        // $gpd==$guideprice_detail
+            try{
+            $gpd = new GuidePriceDetail([
+                    'fee_id' => $request->input('fee_id'),
+                    'gp_price' => $request->input('price'),
+                    'gp_id' => $request->input('guideprice_id'),
+                ]);
+            $gpd->save();   
+            return response()->json([
+                    'result' => true,
+                    'msg' => 'inserted', 'Guide price has been set successfully...',
+                ]);       
+            }catch(Exception $ex){    
+
+            }
+      
+        
     }
 
     /**

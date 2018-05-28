@@ -9,8 +9,15 @@
 					{{ $layout->menu->gp->title }}
 				</h1>
 			</div>
-		</div>
 
+		</div>
+		<div class="row">
+				@if(Session::has('deleted'))
+					<section>
+						{!! Helper::alert('success', Session::get('deleted'), 'block font-15') !!}
+					</section>
+				@endif
+		</div>
 		<div class="row">
 			<div class="col-sm-12">
 
