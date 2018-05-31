@@ -28,7 +28,7 @@ class GuidePriceController extends Controller
     public function index()
     {
         //
-         if(!Auth::user()->authorized('posts')) {
+         if(!Auth::user()->authorized('read_guideprice')) {
             abort(403, 'Unauthorized action.');
         }
 
@@ -50,8 +50,12 @@ class GuidePriceController extends Controller
      */
     public function create()
     {
-          $languages= ContentTerms::terms_by(['taxonomy' => 'languages']);
-          $provinces= ContentTerms::terms_by(['taxonomy' => 'provinces']);
+         if(!Auth::user()->authorized('create_guideprice')) {
+            abort(403, 'Unauthorized action.');
+            }
+
+          $languages= GuidePrice::getLanguagesAPI();
+          $provinces= GuidePrice::getProvincesAPI();
           $booleans= ContentTerms::terms_by(['taxonomy' => 'booleans']);
           return view('backend.guideprice.create',compact(['languages','provinces','booleans']));
     }
@@ -62,6 +66,7 @@ class GuidePriceController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+    
     public function store(Request $request)
     {
 
@@ -82,22 +87,14 @@ class GuidePriceController extends Controller
                         ->withErrors($validator);
         } 
 
-        $count=DB::table('guide_price')
-            ->where('language_id',$request->language_id)
-            ->where('province_id',$request->province_id)
-            ->where('guide_id',$guide_id)
-            ->count();
+       
+        $count=GuidePrice::countGP($request->language_id,$request->province_id,$guide_id);
         if($count>0){
              Session::flash('warning', 'Duplicate setting...');
              return redirect()->back()
                     ->withInput($request->input());
         }
-
-        $countDefault=DB::table('guide_price')
-            ->where('default','yes')
-            ->where('guide_id',$guide_id)
-            ->count();
-     
+        $countDefault=GuidePrice::countGPDefault($guide_id);     
         if($countDefault>0 && ($request->input('boolean_id')=='yes')){
       
              Session::flash('warning', 'Default already exist');
@@ -191,7 +188,15 @@ class GuidePriceController extends Controller
      */
     public function edit($id)
     {
-        echo $id=Helper::decodeString($id,Helper::encryptKey());
+        if(!Auth::user()->authorized('update_guideprice')) {
+            abort(403, 'Unauthorized action.');
+        }
+          $id=Helper::decodeString($id,Helper::encryptKey());
+          $languages= GuidePrice::getLanguagesAPI();
+          $provinces= GuidePrice::getProvincesAPI();
+          $booleans= ContentTerms::terms_by(['taxonomy' => 'booleans']);
+          $guideprice=DB::table('guide_price')->where('id',$id)->first();
+          return view('backend.guideprice.edit',compact(['languages','provinces','booleans','guideprice']));
     }
 
     /**
@@ -203,7 +208,51 @@ class GuidePriceController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+         if(!Auth::user()->authorized('update_guideprice')) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $id=decrypt($id);
+        $validator = Validator::make($request->all(), [
+                'language_id' => 'required',
+                'province_id' => 'required',
+                'boolean_id' => 'required',
+                'price' => 'required|numeric',
+        ]);
+        $guide_id=$request->has('guide_id')?$request->input('guide_id'):Auth::user()->id;
+        if($validator->fails()) {
+            return redirect()->back()
+                        ->withInput()
+                        ->withErrors($validator);
+        } 
+        $count=GuidePrice::countGP($request->language_id,$request->province_id,$guide_id);
+        if($count>1){
+             Session::flash('warning', 'Duplicate setting, Already exist...');
+             return redirect()->back()
+                    ->withInput($request->input());
+        }
+        $countDefault=GuidePrice::countGPDefault($guide_id);  
+
+        
+        if($countDefault>0 && ($request->input('boolean_id')=='yes')){  
+            $isDefault=GuidePrice::find($id) ;
+            if($isDefault->default=='yes'){                
+            }else{
+                Session::flash('warning', 'Default already exist');
+                 return redirect()->back()
+                    ->withInput($request->input());
+            }              
+        }
+        GuidePrice::where('id', $id)->update(
+                ['language_id' => $request->language_id,
+                 'province_id' => $request->province_id,
+                 'default' => $request->boolean_id,
+                 'price' => $request->price
+
+                ]);
+         Session::flash('updated', 'Guide price has been updated successfully...');
+            return redirect('guideprice');
+       
     }
 
     /**
@@ -215,5 +264,16 @@ class GuidePriceController extends Controller
     public function destroy($id)
     {
         //
+        if(!Auth::user()->authorized('delete_guideprice')) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $decrypted_id = decrypt($id);
+        $gp = GuidePrice::where('id', $decrypted_id)->limit(1);
+        $gp->delete();      
+
+        Session::flash('deleted', "Guide Price is deleted");
+
+        return redirect('guideprice');
     }
 }

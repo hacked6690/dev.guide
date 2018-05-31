@@ -1,6 +1,7 @@
 @extends('layouts.admin.master')
 
 @section('content')
+
 	<div id="content">
 
 		<div class="row">
@@ -83,7 +84,7 @@
 														@endif
 													</label>
 													<label class="input">
-														<input type="text" name="name" value="{{ old('name') ? old('name') :$user_meta->name->value }}" class="input-sm border-0 border-bottom-1">
+														<input type="text" name="name" value="{{ old('name') ? old('name') :$user_meta->fullname_en->value }}" class="input-sm border-0 border-bottom-1">
 													</label>
 												</section>
 											</div>
@@ -99,7 +100,7 @@
 														@endif
 													</label>
 													<label class="input">
-														<input type="text" name="phone" value="{{ old('phone') ? old('phone') :$user_meta->phone->value }}" class="input-sm border-0 border-bottom-1">
+														<input type="text" name="phone" value="{{ old('phone') ? old('phone') :$user_meta->telephone->value }}" class="input-sm border-0 border-bottom-1">
 													</label>
 													<div class="note">
 														{!! $layout->label->phone_note->title !!}

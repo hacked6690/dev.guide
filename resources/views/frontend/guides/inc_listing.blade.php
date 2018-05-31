@@ -137,11 +137,16 @@ foreach ($users as $key=>$value) {
 $user_meta=Helper::metas('user_meta',['user_id' => $uid] );
 $guide_prices=$value->guide_price;
 
+$gp_language="";
+$gp_province="";
+$gp_price="";
 //$gp is guide price
-foreach ($guide_prices as $key => $value) {
-    $gp_language=($value->default=='yes')?$value->language->title:"";
-    $gp_province=($value->default=='yes')?$value->province->title:"";   
-    $gp_price=($value->default=='yes')?$value->price:""; 
+foreach ($guide_prices as $key => $value) {    
+   if($value->default=='yes'){
+        $gp_language=($value->default=='yes')?$value->language->title:"";
+        $gp_province=($value->default=='yes')?$value->province->title:"";   
+        $gp_price=($value->default=='yes')?$value->price:""; 
+   }
 }
 
 $photo_path='';

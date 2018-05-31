@@ -78,6 +78,12 @@ class LayoutItemsController extends Controller
         $layout_categories = LayoutCategories::all();
 
         $parents = LayoutItems::orderBy('layout_items.slug', 'asc')->get();
+        $parents = DB::table('layout_items')
+                  ->select('layout_items.*')
+                  ->join('layout_categories', 'layout_items.category_id', '=', 'layout_categories.id')
+                  ->where('layout_categories.slug','=','menu')
+                  ->get();
+        // dd($parents);
 
         return view('layout_items.create', compact(['layout_categories', 'parents']));
     }
@@ -146,7 +152,13 @@ class LayoutItemsController extends Controller
 
         $layout_item = LayoutItems::where('id', $decrypted_id)->first();
 
-        $parents = LayoutItems::orderBy('layout_items.slug', 'asc')->get();
+        // $parents = LayoutItems::orderBy('layout_items.slug', 'asc')->get();
+         $parents = DB::table('layout_items')
+                  ->select('layout_items.*')
+                  ->join('layout_categories', 'layout_items.category_id', '=', 'layout_categories.id')
+                  ->where('layout_categories.slug','=','menu')
+                  ->orderBy('layout_categories.slug','asc')
+                  ->get();
 
         return view('layout_items.edit', compact(['layout_categories', 'layout_item', 'parents']));
     }

@@ -41,7 +41,6 @@ class ProfilesController extends Controller
         $profile = isset($user_meta->profile) ? Storage::url($decrypted_id .'/profile/'. $user_meta->profile->value) : '/assets/admin/img/avatars/male.png';
 
         $user = \App\User::select('id', 'role_id', 'email', 'created_at')->where('id', $decrypted_id)->first();
-
         return view('profiles.edit', compact(['user', 'user_meta', 'profile']));
     }
 
@@ -74,8 +73,8 @@ class ProfilesController extends Controller
 
         // update metas +
         $meta = array(
-                'name' => $request->input('name'),
-                'phone' => $request->input('phone')
+                'fullname_en' => $request->input('name'),
+                'telephone' => $request->input('phone')
             );
         $excepts = ['profile'];
 

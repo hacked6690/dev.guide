@@ -29,6 +29,11 @@
 									{!! Helper::alert('warning', Session::get('warning'), 'block font-15') !!}
 								</section>
 							@endif
+							@if(Session::has('updated'))
+								<section class="col col-6">
+									{!! Helper::alert('success', Session::get('updated'), 'block font-15') !!}
+								</section>
+							@endif
 
 							<div class="table-responsive">
 
@@ -120,9 +125,9 @@
 										        	<div class="btn-action">
 										        		<button onclick="mypopup({{ $guideprice->id }})" 
 										        			data-backdrop="static" data-keyboard="false"
-										        			data-toggle="modal" data-target="#myModal"  class="detail btn btn-primary btn-xs">detail</button>
+										        			data-toggle="modal" data-target="#myModal"  class="detail btn btn-primary btn-xs">{{$layout->label->fee_additional->title}}</button>
 											        	<a href="{{ route('guideprice.edit', Helper::encodeString($guideprice->id,Helper::encryptKey())) }}" class="btn btn-primary btn-xs">edit</a>
-											        	<form action="{{ route('posts.destroy', encrypt($guideprice->id)) }}" method="post" class="inline-block">
+											        	<form action="{{ route('guideprice.destroy', encrypt($guideprice->id)) }}" method="post" class="inline-block">
 															{{ method_field('delete') }}
 															{{ csrf_field() }}
 															<button type="button" class="btn btn-danger btn-xs jscfm">Delete</button>
@@ -167,7 +172,7 @@
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h4 class="modal-title">Modal Header</h4>
+          <h4 class="modal-title">{{$layout->label->fee_additional->title}}</h4>
         </div>
         <div class="modal-body">
           	<form id="new_term-frm" class="ajxfrm smart-form" data-validate="true" data-reload="true" method="post">

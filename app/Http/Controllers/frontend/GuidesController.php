@@ -11,6 +11,7 @@ use App\Languages;
 use App\ContentRelationships;
 use App\Posts;
 use App\User;
+use App\GuidePrice;
 use App\UserMetas;
 use App\UserAccounts;
 use Illuminate\Support\Facades\Storage;
@@ -237,8 +238,11 @@ class GuidesController extends Controller
                      }   
                 }                 
                });
-      
-        return view('frontend.guides.detail', compact(['users']));
+        $guideprices=GuidePrice::with('guideprice_detail')
+            ->where('active','=','active')
+            ->where('guide_id','=',$uid)
+            ->paginate(30);
+        return view('frontend.guides.detail', compact(['users','guideprices']));
     }
 
     /**

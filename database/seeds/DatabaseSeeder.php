@@ -38,7 +38,7 @@ class DatabaseSeeder extends Seeder
 
             	});*/
         
-       $user=factory(App\User::class,8)->create()
+       $user=factory(App\User::class,100)->create()
              ->each(function ($u) {
                     $faker = Faker\Factory::create();
                    /* $profile_dir = storage_path('app/public/'. $u->id .'/profile');

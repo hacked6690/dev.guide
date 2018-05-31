@@ -41,3 +41,4 @@
 <link rel="apple-touch-startup-image" href="{{ asset('assets/admin/img/splash/ipad-portrait.png') }}" media="screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:portrait)">
 <link rel="apple-touch-startup-image" href="{{ asset('assets/admin/img/splash/iphone.png') }}" media="screen and (max-device-width: 320px)">
 
+

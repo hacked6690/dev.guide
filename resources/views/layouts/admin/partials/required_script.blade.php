@@ -1,3 +1,4 @@
+
 <script src="{{ asset('assets/admin/js/app.config.seed.js') }}"></script>
 
 <!-- BOOTSTRAP JS -->

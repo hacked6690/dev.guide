@@ -1,21 +1,23 @@
 <?php
-$user=$users;
-$uid=null;
-$uemail=null;
-foreach ($users as $key=>$value) {
+$user=$users[0];
+/*foreach ($users as $key=>$value) {
   $uid=$value->id;
-  $uemail=$value->email;
   $user_meta=Helper::metas('user_meta',['user_id' => $uid] );
   $guide_prices=$value->guide_price;
-}
+
+}*/
+$uid=$user->user_metas[0]->user_id;
+$user_meta=Helper::metas('user_meta',['user_id' => $uid] );
+$guide_prices=$user->guide_price;
 $photo_path="http://www.nurnberg.com/images/image_unavailable_lrg.png";
 if(($user_meta->photo->value)!=="")
 $photo_path=Storage::url('guide_profile_test/' . $user_meta->photo->value);
-$url='/guides/'.Helper::encodeString($uid,Helper::encryptKey());
+$url='/guides/'.Helper::encodeString($user->id,Helper::encryptKey());
 //$gp is guide price
 $gp_language="";
 $gp_province="";
 $gp_price="";
+
 foreach ($guide_prices as $key => $value) {
     $gp_language=($value->default=='yes')?$value->language->title:"";
     $gp_province=($value->default=='yes')?$value->province->title:"";   
@@ -29,16 +31,16 @@ foreach ($guide_prices as $key => $value) {
                     <div class="col-sm-6 col-md-3">
                         <img src="{{$photo_path}}" alt="" class="img-rounded img-responsive" />
                         <br/>
-                          <h4 class="text text-center">ID: <b>{{$uid}}</b></h4>
-                        <table class="table table-responsive tabledetail" >                           
-                          <tr>
-                            <td class="first_td">{{$layout->label->issued_date->title}}:</td>
-                            <td> <b>{{$user_meta->issued_date->value}}</b></td>
-                          </tr>
-                          <tr>
-                            <td class="first_td">{{$layout->label->expired_date->title}}:</td>
-                            <td><b>{{$user_meta->expired_date->value}}</b></td>
-                          </tr>                           
+                        	<h4 class="text text-center">ID: <b>{{$user->id}}</b></h4>
+                        <table class="table table-responsive tabledetail" >                          	
+                       		<tr>
+                       			<td class="first_td">{{$layout->label->issued_date->title}}:</td>
+                       			<td> <b>{{$user_meta->issued_date->value}}</b></td>
+                       		</tr>
+                       		<tr>
+                       			<td class="first_td">{{$layout->label->expired_date->title}}:</td>
+                       			<td><b>{{$user_meta->expired_date->value}}</b></td>
+                       		</tr>                       		
                        </table>
                        <img src="data:image/png;base64,<?php echo base64_encode(QrCode::format('png')->size(200)->generate($url)); ?> ">
                     </div>
@@ -54,7 +56,7 @@ foreach ($guide_prices as $key => $value) {
                          </h4>
                         
                         <p>
-                            <i class="glyphicon glyphicon-envelope"></i>{{$layout->label->email->title}}: <a href="#">{{$uemail}}</a>
+                            <i class="glyphicon glyphicon-envelope"></i>{{$layout->label->email->title}}: <a href="#">{{$user->email}}</a>
                             <br />
                             <i class="glyphicon glyphicon-phone"></i>{{$layout->label->telephone->title}}: <a href="#">{{$user_meta->telephone->value}}</a>
                             <br />
@@ -62,43 +64,43 @@ foreach ($guide_prices as $key => $value) {
                             <br/>                            
                         </p>
                        <table class="table table-responsive tabledetail" >
-                          <tr class="underreview">
-                            <td class="first_td " >Number of Bookings:</td>
-                            <td> <b>4</b>bookings</td>
-                          </tr>
-                          <tr>
-                            <td class="first_td">{{$layout->label->gender->title}}:</td>
-                            <td> {{$user_meta->gender->title}}</td>
-                          </tr>
-                          <tr>
-                            <td class="first_td">{{$layout->label->nationality->title}}:</td>
-                            <td> {{$user_meta->nationality_id->title}}</td>
-                          </tr>
-                          <tr>
-                            <td class="first_td">{{$layout->label->guide_type->title}}:</td>
-                            <td> {{$user_meta->guide_type_id->title}}</td>
-                          </tr>
-                          <tr>
-                            <td class="first_td">{{$layout->label->language->title}}:</td>
-                            <td>  {{$gp_language}}</td>
-                          </tr>
-                          <tr>
-                            <td class="first_td">{{$layout->label->province->title}}:</td>
-                            <td>  {{$gp_province}}</td>
-                          </tr>
-                          <tr>
-                            <td class="first_td">{{$layout->label->license_id->title}}:</td>
-                            <td>  {{$user_meta->license_id->value}}</td>
-                          </tr>
+                       		<tr class="underreview">
+                       			<td class="first_td " >Number of Bookings:</td>
+                       			<td> <b>4</b>bookings</td>
+                       		</tr>
+                       		<tr>
+                       			<td class="first_td">{{$layout->label->gender->title}}:</td>
+                       			<td> {{$user_meta->gender->title}}</td>
+                       		</tr>
+                       		<tr>
+                       			<td class="first_td">{{$layout->label->nationality->title}}:</td>
+                       			<td> {{$user_meta->nationality_id->title}}</td>
+                       		</tr>
+                       		<tr>
+                       			<td class="first_td">{{$layout->label->guide_type->title}}:</td>
+                       			<td> {{$user_meta->guide_type_id->title}}</td>
+                       		</tr>
+                       		<tr>
+                       			<td class="first_td">{{$layout->label->language->title}}:</td>
+                       			<td>  {{$gp_language}}</td>
+                       		</tr>
+                       		<tr>
+                       			<td class="first_td">{{$layout->label->province->title}}:</td>
+                       			<td>  {{$gp_province}}</td>
+                       		</tr>
+                       		<tr>
+                       			<td class="first_td">{{$layout->label->license_id->title}}:</td>
+                       			<td>  {{$user_meta->license_id->value}}</td>
+                       		</tr>
                        </table>
                        
                     </div>
                 </div>
                 <div class="row ">
-                  <h2 class="text text-center">Price according to Location & Languages</h2>
-                  <div class="col-lg-12">
-                    <h4 class="text text-center text-primary">Price Depend on Languages</h4>
-                    <table class="table table-responsive tabledetail" >   
+                	<h2 class="text text-center">Price according to Location & Languages</h2>
+                	<div class="col-lg-12">
+                		<h4 class="text text-center text-primary">Price Depend on Languages</h4>
+                		<table class="table table-responsive tabledetail" >   
                     <tr>
                       <th>Language</th>
                       <th>Province</th>
@@ -117,10 +119,10 @@ foreach ($guide_prices as $key => $value) {
                       ';
                         
                     } 
-                    @endphp                       
-                          
+                    @endphp                     	
+                       		
                        </table>
-                  </div>                  
+                	</div>                	
                 </div><!--end class row-->
                 <div class="table-responsive">
 
