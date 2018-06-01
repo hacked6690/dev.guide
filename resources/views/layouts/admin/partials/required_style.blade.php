@@ -3,8 +3,13 @@
 <link rel="stylesheet" type="text/css" media="screen" href="{{ asset('assets/admin/css/font-awesome.min.css') }}">
 
 <!-- SmartAdmin Styles : Caution! DO NOT change the order -->
+
 <link rel="stylesheet" type="text/css" media="screen" href="{{ asset('assets/admin/css/smartadmin-production.min.css') }}">
 <link rel="stylesheet" type="text/css" media="screen" href="{{ asset('assets/admin/css/smartadmin-skins.min.css') }}">
+
+	
+
+
 
 <!-- Additional style Css libraries -->
 <link rel="stylesheet" type="text/css" media="screen" href="{{ asset('assets/admin/js/libs/jquery-confirm-v3.0.1/jquery-confirm.min.css') }}">
@@ -40,5 +45,6 @@
 <link rel="apple-touch-startup-image" href="{{ asset('assets/admin/img/splash/ipad-landscape.png') }}" media="screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:landscape)">
 <link rel="apple-touch-startup-image" href="{{ asset('assets/admin/img/splash/ipad-portrait.png') }}" media="screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:portrait)">
 <link rel="apple-touch-startup-image" href="{{ asset('assets/admin/img/splash/iphone.png') }}" media="screen and (max-device-width: 320px)">
+
 
 

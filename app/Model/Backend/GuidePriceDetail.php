@@ -22,4 +22,6 @@ class GuidePriceDetail extends Model
      public function getFeeAttribute(){    
         return \App\ContentTerms::where('term_id', $this->fee_id)->first();
     }
+
+    
 }
