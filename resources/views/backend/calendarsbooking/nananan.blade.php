@@ -12,15 +12,6 @@
 		.disabled{
 			background-color: orange;
 		}
-		.btn-select-tick .active i{
-			line-height: 30px;
-			height: 30px;
-		}
-		.btn_save{
-			height: 45px;
-			margin-top:10px;
-			width:100%;
-		}
 	</style>
 @endsection
 @section('content')
@@ -44,7 +35,134 @@
 
 			<!-- MAIN CONTENT -->
 			<div id="content">
-				<div class="row">	
+				<div class="row">				
+					<div class="col-sm-12 col-md-12 col-lg-3 " style="display:none">
+						<!-- new widget -->
+						<div class="jarviswidget jarviswidget-color-blueDark">
+							<header>
+								<h2> Add Events </h2>
+							</header>
+				
+							<!-- widget div-->
+							<div>
+				
+								<div class="widget-body">
+									<!-- content goes here -->
+				
+									<form id="add-event-form">
+										<fieldset>
+				
+											<div class="form-group">
+												<label>Select Event Icon</label>
+												<div class="btn-group btn-group-sm btn-group-justified" data-toggle="buttons">
+													<label class="btn btn-default active">
+														<input type="radio" name="iconselect" id="icon-1" value="fa-info" checked>
+														<i class="fa fa-info text-muted"></i> </label>
+													<label class="btn btn-default">
+														<input type="radio" name="iconselect" id="icon-2" value="fa-warning">
+														<i class="fa fa-warning text-muted"></i> </label>
+													<label class="btn btn-default">
+														<input type="radio" name="iconselect" id="icon-3" value="fa-check">
+														<i class="fa fa-check text-muted"></i> </label>
+													<label class="btn btn-default">
+														<input type="radio" name="iconselect" id="icon-4" value="fa-user">
+														<i class="fa fa-user text-muted"></i> </label>
+													<label class="btn btn-default">
+														<input type="radio" name="iconselect" id="icon-5" value="fa-lock">
+														<i class="fa fa-lock text-muted"></i> </label>
+													<label class="btn btn-default">
+														<input type="radio" name="iconselect" id="icon-6" value="fa-clock-o">
+														<i class="fa fa-clock-o text-muted"></i> </label>
+												</div>
+											</div>
+											
+											<div class="form-group">
+												<label>Event ID</label>
+												<input class="form-control"  id="myid" name="myid" maxlength="40" type="text" placeholder="Event ID">
+											</div>
+
+											<div class="form-group">
+												<label>Event Title</label>
+												<input class="form-control"  id="title" name="title" maxlength="40" type="text" placeholder="Event Title">
+											</div>
+											<div class="form-group">
+												<label>Event Description</label>
+												<textarea class="form-control" placeholder="Please be brief" rows="3" maxlength="40" id="description"></textarea>
+												<p class="note">Maxlength is set to 40 characters</p>
+											</div>
+				
+											<div class="form-group">
+												<label>Select Event Color</label>
+												<div class="btn-group btn-group-justified btn-select-tick" data-toggle="buttons">
+													<label class="btn bg-color-darken active">
+														<input type="radio" name="priority" id="option1" value="bg-color-darken txt-color-white" checked>
+														<i class="fa fa-check txt-color-white"></i> </label>
+													<label class="btn bg-color-blue">
+														<input type="radio" name="priority" id="option2" value="bg-color-blue txt-color-white">
+														<i class="fa fa-check txt-color-white"></i> </label>
+													<label class="btn bg-color-orange">
+														<input type="radio" name="priority" id="option3" value="bg-color-orange txt-color-white">
+														<i class="fa fa-check txt-color-white"></i> </label>
+													<label class="btn bg-color-greenLight">
+														<input type="radio" name="priority" id="option4" value="bg-color-greenLight txt-color-white">
+														<i class="fa fa-check txt-color-white"></i> </label>
+													<label class="btn bg-color-blueLight">
+														<input type="radio" name="priority" id="option5" value="bg-color-blueLight txt-color-white">
+														<i class="fa fa-check txt-color-white"></i> </label>
+													<label class="btn bg-color-red">
+														<input type="radio" name="priority" id="option6" value="bg-color-red txt-color-white">
+														<i class="fa fa-check txt-color-white"></i> </label>
+												</div>
+											</div>
+				
+										</fieldset>
+										<div class="form-actions">
+											<div class="row">
+												<div class="col-md-12">
+													<button class="btn btn-default" type="button" id="add-event" >
+														Add Event
+													</button>
+												</div>
+											</div>
+										</div>
+									</form>
+				
+									<!-- end content -->
+								</div>
+				
+							</div>
+							<!-- end widget div -->
+						</div>
+						<!-- end widget -->
+				
+						<div class="well well-sm" id="event-container">
+							<form>
+								<fieldset>
+									<legend>
+										Draggable Events
+									</legend>
+									<ul id='external-events' class="list-unstyled">
+										<li>
+											<span class="bg-color-darken txt-color-white" data-description="Currently busy" data-icon="fa-time">Office Meeting</span>
+										</li>
+										<li>
+											<span class="bg-color-blue txt-color-white" data-description="No Description" data-icon="fa-pie">Lunch Break</span>
+										</li>
+										<li>
+											<span class="bg-color-red txt-color-white" data-description="Urgent Tasks" data-icon="fa-alert">URGENT</span>
+										</li>
+									</ul>
+									<div class="checkbox">
+										<label>
+											<input type="checkbox" id="drop-remove" class="checkbox style-0" checked="checked">
+											<span>remove after drop</span> </label>
+					
+									</div>
+								</fieldset>
+							</form>
+				
+						</div>
+					</div>
 					<div class="col-sm-12 col-md-12 col-lg-9">
 				
 						<!-- new widget -->
@@ -138,7 +256,33 @@
 
 
 
+<div class="container">
+  <h2>Modal Example</h2>
+  <!-- Trigger the modal with a button -->
+  <button type="button" data-backdrop="static" data-keyboard="false" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Open Modal</button>
 
+  <!-- Modal -->
+  <div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Modal Header</h4>
+        </div>
+        <div class="modal-body">
+          	<p>Some text in the modal.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+  
+</div>
 
 
 @endsection
@@ -148,7 +292,12 @@
 
 		
 
-		
+		<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+		<script>
+			if (!window.jQuery.ui) {
+				document.write('<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"><\/script>');
+			}
+		</script>
 
 		<!-- JQUERY UI + Bootstrap Slider -->
 		<script src="{{URL::asset('assets/admin/js/plugin/bootstrap-slider/bootstrap-slider.min.js')}}"></script>
@@ -164,9 +313,7 @@
 		<script src="{{URL::asset('assets/admin/js/bootstrap/bootstrap.min.js')}}"></script>
 
 		<!-- MAIN APP JS FILE -->
-		<!--
 		<script src="{{URL::asset('assets/admin/js/app.min.js')}}"></script>
-		-->
 		<!-- PAGE RELATED PLUGIN(S) -->
 		<script src="{{URL::asset('assets/admin/js/plugin/moment/moment.min.js')}}"></script>
 		<script src="{{URL::asset('assets/admin/js/plugin/fullcalendar/jquery.fullcalendar.min.js')}}"></script>
@@ -299,15 +446,10 @@
 			            console.log('selected ' + sta + ' to ' + end);
 			            end.setDate(end.getDate()+1);//for storing on database
 			            var days = Math.ceil((end.getTime() - sta.getTime()) / oneDay);
-			            console.log(days);	
-			            $('#myModal').modal(
-				            {
-							    backdrop: 'static',
-							    keyboard: false
-							}
-						);
-						$('#myModal').modal('show');
-						$(".fc-highlight").css("background", "red");
+			            console.log(days);
+			            $(".fc-highlight").css("background", "red");
+
+
 			            
 			        },
 			
@@ -435,150 +577,5 @@
 		</script>
 
 
-
-
-  
-
 @endsection
 
-
- <div style="margin-left:300px">
- 
-<!-- Modal -->
-  <div class="modal fade" id="myModal" role="dialog">
-    <div class="modal-dialog">
-    	
-      <!-- Modal content-->
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h4 class="modal-title">{{$layout->label->calendar_setting->title}}</h4>
-        </div>
-        <div class="modal-body">
-          	<div class="col-sm-12 col-md-12 col-lg-12 " style="">
-						<!-- new widget -->
-						<div class="jarviswidget jarviswidget-color-blueDark">
-							<header>
-								<h2> Add Events </h2>
-							</header>				
-							<!-- widget div-->
-							<div>				
-								<div class="widget-body">
-									<!-- content goes here -->				
-									<form id="bookings-frm" class="ajxfrm smart-form" data-validate="true" data-reload="true" method="post">
-										<input type="hidden"  name="cmd" value="bookings">
-										{{csrf_field()}}
-										<fieldset>				
-											
-										
-											<div class="row">
-												<section class="col col-12 flexibled-error">
-													<label class="label">
-														{{$layout->label->select_icon->title}} <code>*</code>
-														@if($errors->has('iconselect'))
-															<div class="error-badge" id="for-iconselect">
-																{!! Helper::alert('danger', $errors->first('iconselect')) !!}
-															</div>
-														@endif
-													</label>
-													<div class="btn-group btn-group-sm btn-group-justified " data-toggle="buttons">
-															<label class="btn btn-default">
-																<input class="flexibled" type="radio" name="iconselect"  >
-																<i class="fa fa-calendar text-muted"></i> 
-															</label>
-															<label class="btn btn-default">
-																<input class="flexibled" type="radio" name="iconselect"  >
-																<i class="fa fa-check text-muted"></i> 
-															</label>															
-															<label class="btn btn-default">
-																<input class="flexibled"  type="radio" name="iconselect"  >
-																<i class="fa fa-clock-o text-muted"></i> 
-															</label>
-													</div>												
-													
-												</section>
-											</div>
-
-
-											<div class="row">
-												<section class="col col-8 flexibled-error">
-													<label class="label">
-														{{$layout->label->booking_title->title}} <code>*</code>
-
-														@if($errors->has('title'))
-															<div class="error-badge" id="for-title">
-																{!! Helper::alert('danger', $errors->first('title')) !!}
-															</div>
-														@endif
-													</label>
-													<label class="input">
-														<input type="text" name="title" value="{{ old('title') }}" class="input-sm border-0 border-bottom-1">
-													</label>													
-													
-												</section>
-											</div>
-											<div class="row">
-												<section class="col col-8 flexibled-error">
-													<label class="label">
-														{{$layout->label->booking_description->title}} <code>*</code>
-
-														@if($errors->has('description'))
-															<div class="error-badge" id="for-description">
-																{!! Helper::alert('danger', $errors->first('description')) !!}
-															</div>
-														@endif
-													</label>
-													<label class="input">
-														<textarea rows="5" class="form-control" name="description" id="description"></textarea>
-													</label>													
-													
-												</section>
-											</div>	
-											<div class="form-group">
-												<label>Select Event Color</label>
-												<div class="btn-group btn-group-justified btn-select-tick" data-toggle="buttons">
-													<label class="btn bg-color-darken active">
-														<input type="radio" name="priority" id="option1" value="bg-color-darken txt-color-white" checked>
-														<i class="fa fa-check txt-color-white"></i> </label>
-													<label class="btn bg-color-blue">
-														<input type="radio" name="priority" id="option2" value="bg-color-blue txt-color-white">
-														<i class="fa fa-check txt-color-white"></i> </label>
-													
-												</div>
-											</div>
-											<div class="form-group">
-												
-												<div class="col-md-12">
-													<button value="true" type="submit" class="btn_save btn btn-primary"   >
-														Save
-													</button>
-
-												</div>
-											</div>
-										</fieldset>
-										
-									</form>
-				
-									<!-- end content -->
-								</div>
-				
-							</div>
-							<!-- end widget div -->
-						</div>
-						<!-- end widget -->
-				
-						
-					</div>
-        </div>
-        <!--end modal-body-->
-        <div class="modal-footer">
-          <!-- <button type="button" class="btn btn-default" data-dismiss="modal">Close</button> -->
-        </div>
-      </div>
-      
-    </div>
-  </div>
-
-
-
-</div>

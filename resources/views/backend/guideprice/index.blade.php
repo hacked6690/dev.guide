@@ -65,7 +65,8 @@
 										        	</code>
 											        <a id="{{ $guideprice->id }}" class="hyper"></a>
 											        <br>
-											        {{$user_meta->fullname_en->value}}
+
+											       <?php  //{{$user_meta->fullname_en->value}} ?>
 											        
 											     
 										        </td>
