@@ -1,15 +1,13 @@
-@extends('layouts.admin.master')
-
-@section('style')
-	<link rel="stylesheet" type="text/css" media="screen" href="{{ asset('assets/admin/css/smartadmin-production-plugins.min.css') }}">
+<?php $__env->startSection('style'); ?>
+	<link rel="stylesheet" type="text/css" media="screen" href="<?php echo e(asset('assets/admin/css/smartadmin-production-plugins.min.css')); ?>">
 	<style type="text/css">
 		@font-face {
 		    font-family: writehand;
-		    src: url("{{ asset('assets/admin/fonts/writehand.ttf') }}");
+		    src: url("<?php echo e(asset('assets/admin/fonts/writehand.ttf')); ?>");
 		}
 		@font-face {
 		    font-family: preyveng;
-		    src: url("{{ asset('assets/admin/fonts/preyveng.ttf') }}");
+		    src: url("<?php echo e(asset('assets/admin/fonts/preyveng.ttf')); ?>");
 		}
 		.widget-toolbar{
 			color:green;
@@ -29,7 +27,7 @@
 			margin-top:10px;
 			width:100%;
 		}
-		@import url('//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css');        
+		@import  url('//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css');        
 		.custom-bullet li {
 		    display: block;
 		    margin-top:10px;
@@ -78,8 +76,8 @@
 
 	</style>
 
-@endsection
-@section('content')
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('content'); ?>
 <div id="content">
 			<!-- RIBBON -->
 			<div id="ribbon">
@@ -102,21 +100,24 @@
 			<div id="content">
 				<div class="row">	
 					<div class="col-sm-12 col-md-12 col-lg-9">
-						@if(Session::has('inserted'))
+						<?php if(Session::has('inserted')): ?>
 							<section>
-								{!! Helper::alert('success', Session::get('inserted'), 'block font-15') !!}
+								<?php echo Helper::alert('success', Session::get('inserted'), 'block font-15'); ?>
+
 							</section>
-						@endif
-						@if(Session::has('updated'))
+						<?php endif; ?>
+						<?php if(Session::has('updated')): ?>
 							<section>
-								{!! Helper::alert('success', Session::get('updated'), 'block font-15') !!}
+								<?php echo Helper::alert('success', Session::get('updated'), 'block font-15'); ?>
+
 							</section>
-						@endif
-						@if(Session::has('deleted'))
+						<?php endif; ?>
+						<?php if(Session::has('deleted')): ?>
 							<section>
-								{!! Helper::alert('danger', Session::get('deleted'), 'block font-15') !!}
+								<?php echo Helper::alert('danger', Session::get('deleted'), 'block font-15'); ?>
+
 							</section>
-						@endif
+						<?php endif; ?>
 						<!-- new widget -->
 						<div class="jarviswidget jarviswidget-color-blueDark">				
 							<header>
@@ -170,17 +171,17 @@
 							<!-- widget div-->
 							<div>				
 								<ul class="custom-bullet">
-								@php $i=0; @endphp
-								@foreach($list_bookings as $booking)
-								@php
+								<?php  $i=0;  ?>
+								<?php $__currentLoopData = $list_bookings; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $booking): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+								<?php 
 								 $i++;
 								 if($i>10) break;
-								@endphp
+								 ?>
 									<li>
-										<a href="javascript:void(0)" class="fc-content"><span class="event_id">{{$booking["id"]}}</span> {{$booking["title"]}}</a><br>
-										<span class="description">{{$booking["description"]}}</span>
+										<a href="javascript:void(0)" class="fc-content"><span class="event_id"><?php echo e($booking["id"]); ?></span> <?php echo e($booking["title"]); ?></a><br>
+										<span class="description"><?php echo e($booking["description"]); ?></span>
 									</li>
-								@endforeach
+								<?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 								    
 								    
 								</ul>
@@ -229,7 +230,7 @@
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h4 class="modal-title">{{$layout->label->calendar_setting->title}}</h4>
+          <h4 class="modal-title"><?php echo e($layout->label->calendar_setting->title); ?></h4>
         </div>
         <div class="modal-body">
           	<div class="col-sm-12 col-md-12 col-lg-12 " style="">
@@ -244,20 +245,21 @@
 									<!-- content goes here -->				
 									<form id="bookings-frm" class="ajxfrm smart-form" data-validate="true" data-reload="true" method="post">
 										<input type="hidden"  name="cmd" value="bookings">
-										{{csrf_field()}}
+										<?php echo e(csrf_field()); ?>
+
 										<fieldset>				
 											<div class="row">
 												<section class="col col-8 flexibled-error">
 													<label class="label">
-														{{$layout->label->starting_fromto->title}} <code>*</code>
+														<?php echo e($layout->label->starting_fromto->title); ?> <code>*</code>
 													</label>
 													<label class="input">
 														<div class="col-lg-5">
-															<input type="text" id="starting" name="starting" value="{{ old('starting') }}"  class="input-sm border-0 border-bottom-1">
+															<input type="text" id="starting" name="starting" value="<?php echo e(old('starting')); ?>"  class="input-sm border-0 border-bottom-1">
 														</div>
 														<div class="col-lg-2"></div>
 														<div class="col-lg-5">															
-															<input type="text" id="ending" name="ending" value="{{ old('ending') }}"  class="input-sm border-0 border-bottom-1">
+															<input type="text" id="ending" name="ending" value="<?php echo e(old('ending')); ?>"  class="input-sm border-0 border-bottom-1">
 														</div>
 														
 													
@@ -269,10 +271,11 @@
 											<div class="row">
 												<section class="col col-12 flexibled-error">
 													<label class="label">
-														{{$layout->label->select_icon->title}} <code>*</code>
+														<?php echo e($layout->label->select_icon->title); ?> <code>*</code>
 														
 															<div class="error-badge" id="for-iconselect">
-																{!! Helper::alert('danger', $errors->first('iconselect')) !!}
+																<?php echo Helper::alert('danger', $errors->first('iconselect')); ?>
+
 															</div>
 													
 													</label>
@@ -295,17 +298,18 @@
 											<div class="row">
 												<section class="col col-8 flexibled-error">
 													<label class="label">
-														{{$layout->label->booking_title->title}} <code>*</code>
+														<?php echo e($layout->label->booking_title->title); ?> <code>*</code>
 
-														@if($errors->has('title'))
+														<?php if($errors->has('title')): ?>
 															<div class="error-badge" id="for-title">
-																{!! Helper::alert('danger', $errors->first('title')) !!}
+																<?php echo Helper::alert('danger', $errors->first('title')); ?>
+
 															</div>
-														@endif
+														<?php endif; ?>
 													</label>
 													<label class="input">
 														<input type="hidden" name="booking_id" id="booking_id" value="" class="input-sm border-0 border-bottom-1">
-														<input type="text" name="title" value="{{ old('title') }}" class="input-sm border-0 border-bottom-1">
+														<input type="text" name="title" value="<?php echo e(old('title')); ?>" class="input-sm border-0 border-bottom-1">
 													</label>													
 													
 												</section>
@@ -313,13 +317,14 @@
 											<div class="row">
 												<section class="col col-8 flexibled-error">
 													<label class="label">
-														{{$layout->label->booking_description->title}} <code>*</code>
+														<?php echo e($layout->label->booking_description->title); ?> <code>*</code>
 
-														@if($errors->has('description'))
+														<?php if($errors->has('description')): ?>
 															<div class="error-badge" id="for-description">
-																{!! Helper::alert('danger', $errors->first('description')) !!}
+																<?php echo Helper::alert('danger', $errors->first('description')); ?>
+
 															</div>
-														@endif
+														<?php endif; ?>
 													</label>
 													<label class="input">
 														<textarea rows="5" class="form-control" name="description" id="description"></textarea>
@@ -353,7 +358,8 @@
 									<div id="delete_form">
 										<form id="delete_bookings-frm" class="ajxfrm smart-form" data-validate="true" data-reload="true" method="post" >
 									
-											{{ csrf_field() }}
+											<?php echo e(csrf_field()); ?>
+
 											<input type="hidden"  name="cmd" value="dbooking">
 											<div class="form-group">
 												<div class="col-md-12">
@@ -397,35 +403,35 @@ $events=$list_bookings;
 
 ?>
 
-@endsection
+<?php $__env->stopSection(); ?>
 
 
-@section('script')
+<?php $__env->startSection('script'); ?>
 
 		
 
 		
 
 		<!-- JQUERY UI + Bootstrap Slider -->
-		<script src="{{URL::asset('assets/admin/js/plugin/bootstrap-slider/bootstrap-slider.min.js')}}"></script>
+		<script src="<?php echo e(URL::asset('assets/admin/js/plugin/bootstrap-slider/bootstrap-slider.min.js')); ?>"></script>
 
 
 		<!-- IMPORTANT: APP CONFIG -->
-		<script src="{{URL::asset('assets/admin/js/app.config.js')}}"></script>
+		<script src="<?php echo e(URL::asset('assets/admin/js/app.config.js')); ?>"></script>
 
 		<!-- JS TOUCH : include this plugin for mobile drag / drop touch events-->
-		<script src="{{URL::asset('assets/admin/js/plugin/jquery-touch/jquery.ui.touch-punch.min.js')}}"></script> 
+		<script src="<?php echo e(URL::asset('assets/admin/js/plugin/jquery-touch/jquery.ui.touch-punch.min.js')); ?>"></script> 
 
 		<!-- BOOTSTRAP JS -->
-		<script src="{{URL::asset('assets/admin/js/bootstrap/bootstrap.min.js')}}"></script>
+		<script src="<?php echo e(URL::asset('assets/admin/js/bootstrap/bootstrap.min.js')); ?>"></script>
 
 		<!-- MAIN APP JS FILE -->
 		<!--
-		<script src="{{URL::asset('assets/admin/js/app.min.js')}}"></script>
+		<script src="<?php echo e(URL::asset('assets/admin/js/app.min.js')); ?>"></script>
 		-->
 		<!-- PAGE RELATED PLUGIN(S) -->
-		<script src="{{URL::asset('assets/admin/js/plugin/moment/moment.min.js')}}"></script>
-		<script src="{{URL::asset('assets/admin/js/plugin/fullcalendar/jquery.fullcalendar.min.js')}}"></script>
+		<script src="<?php echo e(URL::asset('assets/admin/js/plugin/moment/moment.min.js')); ?>"></script>
+		<script src="<?php echo e(URL::asset('assets/admin/js/plugin/fullcalendar/jquery.fullcalendar.min.js')); ?>"></script>
 
 		
 
@@ -769,7 +775,8 @@ $events=$list_bookings;
 
   
 
-@endsection
+<?php $__env->stopSection(); ?>
 
 
  
+<?php echo $__env->make('layouts.admin.master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

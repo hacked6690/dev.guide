@@ -59,6 +59,8 @@ Route::resource('guides', 'frontend\GuidesController');
 Route::resource('guideprice', 'backend\GuidePriceController');
 Route::resource('bookings', 'backend\CalendarsBooking');
 Route::post('ajax/bookings', 'backend\CalendarsBooking@ajx_store');
+Route::post('ajax/dbooking', 'backend\CalendarsBooking@ajx_delete');//dbooking is delete booking
+Route::post('ajax/edit_booking', 'backend\CalendarsBooking@ajx_edit');
 Route::resource('guidepricedetail', 'backend\GuidePriceDetailController');
 Route::post('ajax/guideprice', 'backend\GuidePriceController@ajx_store');
 Route::get(' guides/detail/{id}','frontend\GuidesController@detail');

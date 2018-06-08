@@ -222,7 +222,7 @@
 											<input type="hidden"  class="guideprice_id" name="guideprice_id" />
 											
 										</section>
-									</div>
+				</div>
           	
         </div>
         <div class="modal-footer">        

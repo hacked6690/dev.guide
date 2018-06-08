@@ -20,11 +20,13 @@ class BookingMigrations extends Migration
             $table->integer('guide_id');
             $table->integer('creator_id');
              $table->integer('lang_id');
-            $table->integer('active');
+            $table->string('active',30);
+            $table->string('icon',30);
+            $table->string('color',30);
             $table->string('title', 100);
             $table->string('description', 255);
-            $table->date('start_date');
-            $table->date('end_date');
+            $table->date('start');
+            $table->date('end');
             $table->timestamps();           
         });
     }
