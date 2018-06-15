@@ -385,6 +385,66 @@ class Helper
 
 		return $str_navigated;
 	}
+
+
+	public static function monthDropdown($display){
+		$str="";
+		$dropDown = array(1 => 'Jan', 2 => 'Feb', 3 => 'Mar', 4 => 'Apr', 5 => 'May',
+					6 => 'Jun', 7 => 'Jul', 8 => 'Aug', 9 => 'Sep', 10 => 'Oct',11 =>'Nov',12=>'Dec'
+					);
+		$str.= '<select class="form-control" name="month" onchange="this.form.submit();">
+             <option value="">Please Select</option>';
+	           foreach ($dropDown as $key => $value) {	  
+		           if($display==$key)  {
+		           	$str.='<option selected value="'.$key.'">'.$value.'</option>';
+		           }else{
+		           	$str.='<option  value="'.$key.'">'.$value.'</option>';
+		           }	           
+	           }	        
+	    $str.=' </select><i></i>';
+	   echo $str;
+	}
+	public static function yearDropdown($display){
+		$str="";
+		$dropDown = array();
+		for($i=0;$i<10;$i++){
+			$dropDown[$i]=2018+$i;
+		}
+		$str.= '<select class="form-control" name="year" onchange="this.form.submit();">
+             <option value="">Please Select</option>';
+	           foreach ($dropDown as $k) {	  
+		           if($display==$k)  {
+		           	$str.='<option selected value="'.$k.'">'.$k.'</option>';
+		           }else{
+		           	$str.='<option  value="'.$k.'">'.$k.'</option>';
+		           }	           
+	           }	        
+	    $str.=' </select><i></i>';
+	   echo $str;
+	}
+
+
+
+	public static function filterDisplay($display){
+		$str="<div class='row' style='padding:0px 20px'>";
+		$dropDown = array(5 => '5 default', 25 => '25', 50 => '50', 75 => '75', 125 => '125');
+		$str.='<div class="pull-left">';
+		
+		$str.= '<select class="input-sm border-0 border-bottom-1" name="display" onchange="this.form.submit();">
+             <option value="">Please Select</option>';
+	           foreach ($dropDown as $key => $value) {	  
+		           if($display==$key)  {
+		           	$str.='<option selected value="'.$key.'">'.$value.'</option>';
+		           }else{
+		           	$str.='<option  value="'.$key.'">'.$value.'</option>';
+		           }	           
+	           }
+	        
+	    $str.=' </select><i></i>';
+	   $str.='</div>';
+	   $str.='</div>';
+	   echo $str;
+	}
 	public static function customPagination($page,$totalPage,$totalRecord,$display){
 		$str="<div class='row' style='padding:0px 20px'>";
 		$dropDown = array(7 => '7 default', 25 => '25', 50 => '50', 75 => '75', 125 => '125');

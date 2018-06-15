@@ -24,6 +24,7 @@ class BookingMigrations extends Migration
             $table->string('icon',30);
             $table->string('color',30);
             $table->string('title', 100);
+            $table->integer('booking_status');
             $table->string('description', 255);
             $table->date('start');
             $table->date('end');

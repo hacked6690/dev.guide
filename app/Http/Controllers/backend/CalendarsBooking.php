@@ -2,11 +2,18 @@
 
 namespace App\Http\Controllers\backend;
 use Auth;
+use App\Helpers\Helper;
 use Session;
+use App\User;
+use App\ContentTerms;
 use App\Model\Backend\Bookings;
+use App\UserMetas;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
+use DB;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Input;
 class CalendarsBooking extends Controller
 {
     /**
@@ -14,33 +21,115 @@ class CalendarsBooking extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+    public function events(){
+          return Bookings::events(Auth::user()->id);
+    }
+       public function event_history($booking_status="event"){
+        $now = Carbon::now();
+        $guide_id=Auth::user()->id;
+
+        //$month=$now->month;
+         $display = Input::has('display') ? Input::get('display') :5;
+         $search = Input::has('search') ? Input::get('search') :'';
+         $month = Input::has('month') ? Input::get('month') :'';
+         $year = Input::has('year') ? Input::get('year') :'';
+
+         $listings=Bookings::where('guide_id',$guide_id)
+                     ->where('active','=','active')
+                     ->where('booking_status','=',Bookings::statusID($booking_status))
+                     ->when($search!="", function($query) use ($search) {
+                             $query->where('title', '=', $search); 
+                        })
+                     ->when($month!="", function($query) use ($month) {
+                             $query->whereMonth('start', '=', $month); 
+                        })
+                     ->when($year!="", function($query) use ($year) {
+                             $query->whereYear('start', '=', $year); 
+                        })
+                    ->orderBy('start','asc')
+                    ->paginate($display);
+
+         $filter = (object)array(
+                        "month"=>$month,
+                        "year"=>$year,
+                        "search" => $search
+                    );
+        return view('backend.calendarsbooking.event_history',compact(['listings','booking_status','display','filter']));
+    }
+
+
+    public function booking_history($booking_status="booking"){
+        $now = Carbon::now();
+        $guide_id=Auth::user()->id;
+        //$month=$now->month;
+         $display = Input::has('display') ? Input::get('display') :5;
+         $search = Input::has('search') ? Input::get('search') :'';
+         $month = Input::has('month') ? Input::get('month') :'';
+         $year = Input::has('year') ? Input::get('year') :'';
+
+         $listings=Bookings::where('guide_id',$guide_id)
+                     ->where('active','=','active')
+                     ->where('booking_status','=',Bookings::statusID($booking_status))
+                     ->when($search!="", function($query) use ($search) {
+                             $query->where('title', '=', $search); 
+                        })
+                     ->when($month!="", function($query) use ($month) {
+                             $query->whereMonth('start', '=', $month); 
+                        })
+                     ->when($year!="", function($query) use ($year) {
+                             $query->whereYear('start', '=', $year); 
+                        })
+                    ->orderBy('start','desc')
+                    ->paginate($display);
+         $filter = (object)array(
+                        "month"=>$month,
+                        "year"=>$year,
+                        "search" => $search
+                    );
+        return view('backend.calendarsbooking.history',compact(['listings','booking_status','display','filter']));
+    }
     public function index()
     {
-        //
+        $booking_status= ContentTerms::terms_by(['taxonomy' => 'booking_status']);
         $list_bookings=Bookings::list_bookings(Auth::user()->id);
         $booking_custom=[];
-        foreach ($list_bookings as $lb) {
-            // echo $lb->end."------>".$lb->end."-----";
-
+        foreach ($list_bookings as $lb) {          
                 $enddate = date_create($lb->end); // For today/now, don't pass an arg.
                 // $enddate->modify("-1 day");
                $enddate=$enddate->format("Y-m-d");
-
+            if($lb->booking_status==$booking_status[0]->term_id){
+                $bg="red";
+            }else{
+                $bg="gray";
+            }
             $booking_custom[]=array(
                         'id'=>encrypt($lb->id),
                         'title'=>$lb->title,
                         'active'=>$lb->active,
                         'description'=>$lb->description,
                         'icon'=>$lb->icon,
+                        'backgroundColor' => $bg,
+                        'booking_status' => $lb->booking_status,
                         'start'=>$lb->start,
                         'end'=>$enddate
                         );
         }
-        // dd('x');
         $list_bookings=$booking_custom;
-        // echo json_encode($list_bookings);
-        // dd($list_bookings);
-        return view('backend.calendarsbooking.index',compact(['list_bookings']));
+        return view('backend.calendarsbooking.index',compact(['list_bookings','booking_status']));
+    }
+
+    public static function detail($id){
+      $id=decrypt($id);
+      $booking=Bookings::find($id);
+      $guide_id=($booking->guide_id);
+      $user=User::find($guide_id);
+      $guide_meta=Helper::metas('user_meta',['user_id' => $guide_id] );
+      $inputer_meta=Helper::metas('user_meta',['user_id' => $booking->creator_id] );
+      // dd($user);
+      // dd($guide_meta);
+      // dd($inputer_meta);
+      return view('backend.calendarsbooking.detail',compact(['user','booking','guide_meta','inputer_meta']));
     }
 
     /**
@@ -84,7 +173,8 @@ class CalendarsBooking extends Controller
      */
     public function edit($id)
     {
-        //
+
+
     }
 
     /**
@@ -113,13 +203,14 @@ class CalendarsBooking extends Controller
     public function ajx_delete(Request $request)
     {
         $decrypted_id=$request->input('cmd_id');
-        // $decrypted_id = decrypt($id);
+        $decrypted_id = decrypt($decrypted_id);
         $gpDetail = Bookings::where('id', $decrypted_id)->limit(1);
         $gpDetail->delete();
-        Session::flash('deleted', "Booking is deleted");
+        // Session::flash('deleted', "Booking is deleted");
          return response()->json([
                         'result' => true,
                         'msg' => 'deleted', 'Deleted successfully...',
+                         'callback' => 'abc',
                     ]);  
     }
       public function ajx_store(Request $request)
@@ -131,7 +222,7 @@ class CalendarsBooking extends Controller
         if($request->input('cmd_submit')=="Save"){
             try{
                 $validator = Validator::make($request->all(), [
-                    'iconselect' => 'required',
+                    'booking_status' => 'required',
                     'title' => 'required',
                     'description' => 'required',
                 ]);  
@@ -152,17 +243,20 @@ class CalendarsBooking extends Controller
                         // 'lang_id' => ,
                         'active' => 'active',
                         'title' => $request->input('title'),
-                        'icon' => $request->input('iconselect'),
+                        // 'icon' => $request->input('iconselect'),
+                        'icon' => 'fa-calendar',
+                        'booking_status' => $request->input('booking_status'),
                         'description' => $request->input('description'),
                         'start' => $request->input('starting'),
                         'end' => $enddate,
                     ]);
                 $booking->save(); 
-                Session::flash('inserted', 'Booked successfully...');
+                // Session::flash('inserted', 'Booked successfully...');
                 // return redirect('bookings');  
                 return response()->json([
                         'result' => true,
                         'msg' => 'inserted', 'Booked successfully...',
+                        'callback' => 'abc'
                     ]);       
             }catch(Exception $ex){    
 
@@ -171,7 +265,7 @@ class CalendarsBooking extends Controller
       
         if($request->input('cmd_submit')=="Update"){
             $validator = Validator::make($request->all(), [
-                'iconselect' => 'required',
+                'booking_status' => 'required',
                 'title' => 'required',
                 'description' => 'required',
             ]);  
@@ -192,15 +286,17 @@ class CalendarsBooking extends Controller
                         // 'lang_id' => ,
                         'active' => 'active',
                         'title' => $request->input('title'),
-                        'icon' => $request->input('iconselect'),
+                        'booking_status' => $request->input('booking_status'),
+                        // 'icon' => $request->input('iconselect'),
                         'description' => $request->input('description'),
                         'start' => $request->input('starting'),
                         'end' => $enddate,
                     ]);
-                Session::flash('updated', 'Updated successfully...');  
+                // Session::flash('updated', 'Updated successfully...');  
                 return response()->json([
                         'result' => true,
-                        'msg' => 'updated', 'Booked successfully...',
+                        'msg' => 'updated', 'Updated successfully...',
+                         'callback' => 'abc',
                     ]);       
             }catch(Exception $ex){    
 
@@ -212,6 +308,13 @@ class CalendarsBooking extends Controller
     }
      public function ajx_edit(Request $request)
     {
+         /*$booking_status= ContentTerms::terms_by(['taxonomy' => 'booking_status']);
+            if($lb->booking_status==$booking_status[0]->term_id){
+                $bg="red";
+            }else{
+                $bg="gray";
+            }*/
+
         try{
             $id=decrypt($request->id);
             $booking=Bookings::find($id) ;
@@ -220,8 +323,10 @@ class CalendarsBooking extends Controller
                                     'title'=>$booking->title,
                                     'active'=>$booking->active,
                                     'description'=>$booking->description,
+                                    'booking_status'=>$booking->booking_status,
                                     'icon'=>$booking->icon,
                                     'start'=>$booking->start,
+                                    // 'backgroundColor' => $bg,
                                     'end'=>$booking->end
                             );
             return response()->json([

@@ -2,7 +2,13 @@
 <link rel="stylesheet" type="text/css" media="screen" href="{{ asset('assets/admin/css/bootstrap.min.css') }}">
 <link rel="stylesheet" type="text/css" media="screen" href="{{ asset('assets/admin/css/font-awesome.min.css') }}">
 
+<!--Custom Calendar CSS-->
+<link rel="stylesheet" type="text/css" media="screen" href="{{ asset('assets/admin/css/mycalendar.css') }}">
+
+
 <!-- SmartAdmin Styles : Caution! DO NOT change the order -->
+
+
 
 <link rel="stylesheet" type="text/css" media="screen" href="{{ asset('assets/admin/css/smartadmin-production.min.css') }}">
 <link rel="stylesheet" type="text/css" media="screen" href="{{ asset('assets/admin/css/smartadmin-skins.min.css') }}">

@@ -1,0 +1,73 @@
+@font-face {
+		    font-family: writehand;
+		    src: url("/assets/admin/fonts/writehand.ttf");
+		}
+		@font-face {
+		    font-family: preyveng;
+		    /*src :"/assets/admin/fonts/preyveng.ttf";*/
+		    src: url("/assets/admin/fonts/preyveng.ttf");
+		   
+		}
+		.widget-toolbar{
+			color:green;
+		}
+		.jarviswidget tbody tr:last-child td{
+			max-height:40px;
+		}
+		.disabled{
+			background-color: orange;
+		}
+		.btn-select-tick .active i{
+			line-height: 30px;
+			height: 30px;
+		}
+		.btn_save,.btn_delete{
+			height: 45px;
+			margin-top:10px;
+			width:100%;
+		}
+		@import url('//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css');        
+		.custom-bullet li {
+		    display: block;
+		    margin-top:10px;
+		    border-bottom:1px solid green;
+		}
+		.custom-bullet li:hover{
+			background-color: #f0f5f5;
+		}
+		.custom-bullet li:before
+		{
+		    /*Using a Bootstrap glyphicon as the bullet point*/
+		    content: "\e080";
+		    font-family: 'Glyphicons Halflings';
+		    font-size: 9px;
+		    float: left;
+		    margin-top: 4px;
+		    margin-left: -17px;
+		    color: #CCCCCC;
+		}
+		.custom-bullet li a{
+			font-size: 16px;
+			font-family: "writehand";
+		}
+		.custom-bullet li  .description{
+			font-family: "preyveng";
+			padding-left: 10px;
+		}
+		.fc-title{
+			font-family: 'preyveng';
+			font-size: 13px;
+			margin-top:5px;
+			padding:5px;
+
+		}
+		.fc-title .ultra-light{
+			font-size:11px;
+
+		}
+		 .event_id{
+			display: none;
+		}
+		#bookings-frm,.smart-form .input input, .smart-form .select select, .smart-form .textarea textarea{
+			font-family: "preyveng";
+		}

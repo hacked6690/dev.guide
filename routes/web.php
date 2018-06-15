@@ -58,8 +58,13 @@ Route::prefix('ajax')->group(function () {
 Route::resource('guides', 'frontend\GuidesController');
 Route::resource('guideprice', 'backend\GuidePriceController');
 Route::resource('bookings', 'backend\CalendarsBooking');
+Route::get('booking_history', 'backend\CalendarsBooking@booking_history');
+Route::get('event_history', 'backend\CalendarsBooking@event_history');
+Route::get('calendardetail/{id}', 'backend\CalendarsBooking@detail');
 Route::post('ajax/bookings', 'backend\CalendarsBooking@ajx_store');
 Route::post('ajax/dbooking', 'backend\CalendarsBooking@ajx_delete');//dbooking is delete booking
+Route::get('events','backend\CalendarsBooking@events');
+	
 Route::post('ajax/edit_booking', 'backend\CalendarsBooking@ajx_edit');
 Route::resource('guidepricedetail', 'backend\GuidePriceDetailController');
 Route::post('ajax/guideprice', 'backend\GuidePriceController@ajx_store');
