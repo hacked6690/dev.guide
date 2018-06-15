@@ -4,20 +4,7 @@
 
 <?php $__env->stopSection(); ?>
 <?php $__env->startSection('content'); ?>
-<div id="content">
-			<!-- RIBBON -->
-			<!-- <div id="ribbon">
-				<span class="ribbon-button-alignment"> 
-					<span id="refresh" class="btn btn-ribbon" data-action="resetWidgets" data-title="refresh"  rel="tooltip" data-placement="bottom" data-original-title="<i class='text-warning fa fa-warning'></i> Warning! This will reset all your widget settings." data-html="true">
-						<i class="fa fa-refresh"></i>
-					</span> 
-				</span>
-				<ol class="breadcrumb">
-					<li>Home</li><li>Cool Features!</li><li>3 Calendar</li>
-				</ol>
-				
-			</div> -->
-			<!-- END RIBBON -->
+<div id="content">			
 
 			<!-- MAIN CONTENT -->
 			<div id="content">
@@ -224,7 +211,7 @@
         </div>
         <!--end modal-body-->
         <div class="modal-footer">
-          
+          <!-- <button type="button" class="btn btn-default" data-dismiss="modal">Close</button> -->
         </div>
       </div>
       
@@ -237,6 +224,7 @@
 	 ?>
 <?php $__env->stopSection(); ?>
 <?php $__env->startSection('script'); ?>
+		
 		<!-- JQUERY UI + Bootstrap Slider -->
 		<script src="<?php echo e(URL::asset('assets/admin/js/plugin/bootstrap-slider/bootstrap-slider.min.js')); ?>"></script>
 		<!-- IMPORTANT: APP CONFIG -->
@@ -244,7 +232,7 @@
 		<!-- JS TOUCH : include this plugin for mobile drag / drop touch events-->
 		<script src="<?php echo e(URL::asset('assets/admin/js/plugin/jquery-touch/jquery.ui.touch-punch.min.js')); ?>"></script> 
 		<!-- BOOTSTRAP JS -->
-		<script src="<?php echo e(URL::asset('assets/admin/js/bootstrap/bootstrap.min.js')); ?>"></script>
+		<!--<script src="<?php echo e(URL::asset('assets/admin/js/bootstrap/bootstrap.min.js')); ?>"></script>-->
 		<!-- MAIN APP JS FILE -->
 		<!-- PAGE RELATED PLUGIN(S) -->
 		<script src="<?php echo e(URL::asset('assets/admin/js/plugin/moment/moment.min.js')); ?>"></script>
@@ -256,26 +244,32 @@
 		        month = '' + (d.getMonth() + 1),
 		        day = '' + (d.getDate()),
 		        year = d.getFullYear();
+
 		    if (month.length < 2) month = '0' + month;
 		    if (day.length < 2) day = '0' + day;
+
 		    return [year, month, day].join('-');
 		}
 		// DO NOT REMOVE : GLOBAL FUNCTIONS!		
 		$(document).ready(function() {			
 			pageSetUp();
-			    "use strict";			
+			    "use strict";
+			
 			    var date = new Date();
 			    var d = date.getDate();
 			    var m = date.getMonth();
-			    var y = date.getFullYear();			
+			    var y = date.getFullYear();
+			
 			    var hdr = {
 			        left: 'title',
 			        center: 'month,agendaWeek,agendaDay',
 			        right: 'prev,today,next'
-			    };			
+			    };
+			
 			    var initDrag = function (e) {
 			        // create an Event Object (http://arshaw.com/fullcalendar/docs/event_data/Event_Object/)
-			        // it doesn't need to have a start or end			
+			        // it doesn't need to have a start or end
+			
 			        var eventObject = {
 			        	 id: $.trim(e.children('span').attr('data-id')),
 			            title: $.trim(e.children().text()), // use the element's text as the event title
@@ -284,13 +278,15 @@
 			            className: $.trim(e.children('span').attr('class')) // use the element's children as the event class
 			        };
 			        // store the Event Object in the DOM element so we can get to it later
-			        e.data('eventObject', eventObject);			
+			        e.data('eventObject', eventObject);
+			
 			        // make the event draggable using jQuery UI
 			        e.draggable({
 			            zIndex: 999,
 			            revert: true, // will cause the event to go back to its
 			            revertDuration: 0 //  original position after the drag
 			        });
+
 			    };
 			
 			    var addEvent = function (id,title, priority, description, icon) {
@@ -403,7 +399,8 @@
 				$('#calendar-buttons #btn-next').click(function () {
 				    $('.fc-next-button').click();
 				    return false;
-				});				
+				});
+				
 				$('#calendar-buttons #btn-today').click(function () {
 				    $('.fc-today-button').click();
 				    return false;
@@ -476,6 +473,8 @@
 							 var end	= new Date(data.booking.end);
 	            			 end.setDate(end.getDate()-1);	//for showing on UI	
 	            			 end=formatDate(end);
+
+
 							 	$('#myModal').modal(
 						            {
 									    backdrop: 'static',
@@ -500,19 +499,10 @@
 						}
 					});
 		});
-
-
-				
 		
 		});//end ready
 
 		</script>
-
-
-
-
-  
-
 <?php $__env->stopSection(); ?>
 
 
