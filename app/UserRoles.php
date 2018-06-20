@@ -24,4 +24,13 @@ class UserRoles extends Model
     {
     	return $this->belongsToMany('App\Privileges', 'user_privileges', 'role_id', 'privilege_id');
     }
+    public static function getRoleName($role_id){
+        $role=UserRoles::where('id','=',$role_id)->first();
+       return $role->slug;
+
+    }
+    public static function getRoleID($role_name){
+         $role=UserRoles::where('slug','=',$role_name)->first();
+       return $role->id;
+    }
 }

@@ -1,6 +1,8 @@
 @extends('layouts.frontend.master')
 @section('style')
 
+			
+	
 	<link rel="stylesheet" href="{{asset('assets/frontend/plugins/sky-forms-pro/skyforms/css/sky-forms.css')}}">
 	<link rel="stylesheet" href="{{asset('assets/frontend/css/homepage.css')}}">
 	<link rel="stylesheet" href="{{asset('assets/frontend/plugins/sky-forms-pro/skyforms/custom/custom-sky-forms.css')}}">
@@ -21,25 +23,31 @@
 			width:40%;
 		}
 	</style>
+	<!--Custom Calendar CSS-->
+	<link rel="stylesheet" type="text/css" media="screen" href="{{ asset('assets/admin/css/smartadmin-production-plugins.min.css') }}">
+	<link rel="stylesheet" type="text/css" media="screen" href="{{ asset('assets/admin/css/mycalendar.css') }}">
+
 @endsection
 @section('content')
 	<div id="content" class="mycontent">
-		<div class="row mycarousel" style="width:80%;margin:10px auto">
-				@include('frontend.home.slide')
-		</div>
+		<!-- <div class="row mycarousel" style="width:80%;margin:10px auto">
+				<?php //include('frontend.home.slide') ?>
+		</div> -->
 		<div class="row" style="width:80%;margin:10px auto">
-			<div class="col-lg-0 col-md-0" style="padding-left:0px">
-				<?php //@include('frontend.home.leftsidebar') ?>
-			</div>
-			<div class="col-lg-10 col-md-10 detail col-lg-offset-1">
+			
+			<div class="col-lg-12 col-md-12 detail ">
+				@php
+					$events=$list_bookings;
+					//dd($user_login);
+					//echo json_encode($events,JSON_NUMERIC_CHECK);
+				@endphp
 				@include('frontend.guides.inc_detail')
 			</div>
 		</div>
 	</div><!-- END MAIN CONTENT -->
-	
+
 
 @endsection
-@section('script')
 
-@endsection
+
 

@@ -27,24 +27,24 @@ foreach ($guide_prices as $key => $value) {
             <div class="well well-sm">
                 <div class="row">
                     <div class="col-sm-6 col-md-3">
-                        <img src="{{$photo_path}}" alt="" class="img-rounded img-responsive" />
+                        <img src="<?php echo e($photo_path); ?>" alt="" class="img-rounded img-responsive" />
                         <br/>
-                          <h4 class="text text-center">ID: <b>{{$uid}}</b></h4>
+                          <h4 class="text text-center">ID: <b><?php echo e($uid); ?></b></h4>
                         <table class="table table-responsive tabledetail" >                           
                           <tr>
-                            <td class="first_td">{{$layout->label->issued_date->title}}:</td>
-                            <td> <b>{{$user_meta->issued_date->value}}</b></td>
+                            <td class="first_td"><?php echo e($layout->label->issued_date->title); ?>:</td>
+                            <td> <b><?php echo e($user_meta->issued_date->value); ?></b></td>
                           </tr>
                           <tr>
-                            <td class="first_td">{{$layout->label->expired_date->title}}:</td>
-                            <td><b>{{$user_meta->expired_date->value}}</b></td>
+                            <td class="first_td"><?php echo e($layout->label->expired_date->title); ?>:</td>
+                            <td><b><?php echo e($user_meta->expired_date->value); ?></b></td>
                           </tr>                           
                        </table>
                        
                     </div>
                     <div class="col-sm-6 col-md-6">
                         <h4>
-                            <b>{{$user_meta->fullname_en->value}}</b>
+                            <b><?php echo e($user_meta->fullname_en->value); ?></b>
                                 <span style="font-size:14px">
                                     <span class="glyphicon glyphicon-star-empty"></span><span class="glyphicon glyphicon-star-empty">
                                     </span><span class="glyphicon glyphicon-star-empty"></span><span class="glyphicon glyphicon-star-empty">
@@ -54,11 +54,12 @@ foreach ($guide_prices as $key => $value) {
                          </h4>
                         
                         <p>
-                            <i class="glyphicon glyphicon-envelope"></i>{{$layout->label->email->title}}: <a href="#">{{$uemail}}</a>
+                            <i class="glyphicon glyphicon-envelope"></i><?php echo e($layout->label->email->title); ?>: <a href="#"><?php echo e($uemail); ?></a>
                             <br />
-                            <i class="glyphicon glyphicon-phone"></i>{{$layout->label->telephone->title}}: <a href="#">{{$user_meta->telephone->value}}</a>
+                            <i class="glyphicon glyphicon-phone"></i><?php echo e($layout->label->telephone->title); ?>: <a href="#"><?php echo e($user_meta->telephone->value); ?></a>
                             <br />
-                            <i class="glyphicon glyphicon-gift"></i>{{$layout->label->date_of_birth->title}}: {{$user_meta->dob->value}}
+                            <i class="glyphicon glyphicon-gift"></i><?php echo e($layout->label->date_of_birth->title); ?>: <?php echo e($user_meta->dob->value); ?>
+
                             <br/>                            
                         </p>
                        <table class="table table-responsive tabledetail" >
@@ -67,28 +68,28 @@ foreach ($guide_prices as $key => $value) {
                             <td> <b>4</b>bookings</td>
                           </tr>
                           <tr>
-                            <td class="first_td">{{$layout->label->gender->title}}:</td>
-                            <td> {{$user_meta->gender->title}}</td>
+                            <td class="first_td"><?php echo e($layout->label->gender->title); ?>:</td>
+                            <td> <?php echo e($user_meta->gender->title); ?></td>
                           </tr>
                           <tr>
-                            <td class="first_td">{{$layout->label->nationality->title}}:</td>
-                            <td> {{$user_meta->nationality_id->title}}</td>
+                            <td class="first_td"><?php echo e($layout->label->nationality->title); ?>:</td>
+                            <td> <?php echo e($user_meta->nationality_id->title); ?></td>
                           </tr>
                           <tr>
-                            <td class="first_td">{{$layout->label->guide_type->title}}:</td>
-                            <td> {{$user_meta->guide_type_id->title}}</td>
+                            <td class="first_td"><?php echo e($layout->label->guide_type->title); ?>:</td>
+                            <td> <?php echo e($user_meta->guide_type_id->title); ?></td>
                           </tr>
                           <tr>
-                            <td class="first_td">{{$layout->label->language->title}}:</td>
-                            <td>  {{$gp_language}}</td>
+                            <td class="first_td"><?php echo e($layout->label->language->title); ?>:</td>
+                            <td>  <?php echo e($gp_language); ?></td>
                           </tr>
                           <tr>
-                            <td class="first_td">{{$layout->label->province->title}}:</td>
-                            <td>  {{$gp_province}}</td>
+                            <td class="first_td"><?php echo e($layout->label->province->title); ?>:</td>
+                            <td>  <?php echo e($gp_province); ?></td>
                           </tr>
                           <tr>
-                            <td class="first_td">{{$layout->label->license_id->title}}:</td>
-                            <td>  {{$user_meta->license_id->value}}</td>
+                            <td class="first_td"><?php echo e($layout->label->license_id->title); ?>:</td>
+                            <td>  <?php echo e($user_meta->license_id->value); ?></td>
                           </tr>
                        </table>
                        
@@ -103,67 +104,72 @@ foreach ($guide_prices as $key => $value) {
                   <thead>
                     <tr class="bg bg-primary">
                       <th>ID</th>          
-                      <th>{{$layout->label->language->title}}</th>
-                      <th>{{$layout->label->location->title}}</th>
-                      <th>{{$layout->label->guide_price->title}}</th>
-                      <th>{{$layout->label->fee_additional->title}}</th>
+                      <th><?php echo e($layout->label->language->title); ?></th>
+                      <th><?php echo e($layout->label->location->title); ?></th>
+                      <th><?php echo e($layout->label->guide_price->title); ?></th>
+                      <th><?php echo e($layout->label->fee_additional->title); ?></th>
                                        
                     </tr>
                   </thead>
                   <tbody>
-                    @if(count($guideprices) ==0)
-                      {!! Helper::empty_table(10) !!}
-                    @endif
-                    @foreach($guideprices as $key => $guideprice)
+                    <?php if(count($guideprices) ==0): ?>
+                      <?php echo Helper::empty_table(10); ?>
+
+                    <?php endif; ?>
+                    <?php $__currentLoopData = $guideprices; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $guideprice): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                       <?php $user_meta=Helper::metas('user_meta',['user_id' => $guideprice->guide_id] );?>
                           <tr>
-                            <td>{{ \Helper::indexed($guideprices, $key) }}</td>
+                            <td><?php echo e(\Helper::indexed($guideprices, $key)); ?></td>
                            <!--  <td>
                               <code>
-                                {{ $guideprice->guide_id }}
+                                <?php echo e($guideprice->guide_id); ?>
+
                               </code>
-                              <a id="{{ $guideprice->id }}" class="hyper"></a>
+                              <a id="<?php echo e($guideprice->id); ?>" class="hyper"></a>
                               <br>
-                              {{$user_meta->fullname_en->value}}
+                              <?php echo e($user_meta->fullname_en->value); ?>
+
                               
                            
                             </td> -->
                             <td>
-                              <a href="{{ $guideprice->content_parent }}">
-                                {{ $guideprice->language->title }}
+                              <a href="<?php echo e($guideprice->content_parent); ?>">
+                                <?php echo e($guideprice->language->title); ?>
+
                               </a>
                             </td>
                             <td>
-                              <a href="#p{{ $guideprice->translate_of }}">
+                              <a href="#p<?php echo e($guideprice->translate_of); ?>">
                                 <span class="font-12 txt-color-blue">
-                                  {{ $guideprice->province->title }}
+                                  <?php echo e($guideprice->province->title); ?>
+
                                 </span>
                               </a>
                             </td>
                             <td>
                               <code>
-                                {{ $guideprice->price }} <code>USD</code>
+                                <?php echo e($guideprice->price); ?> <code>USD</code>
                               </code>
                             </td>
                            
                             <td>  
-                              <div class="truncate-275" title="{{ $guideprice->title }}">                           
-                              @php
+                              <div class="truncate-275" title="<?php echo e($guideprice->title); ?>">                           
+                              <?php 
                                 $details=$guideprice->guideprice_detail;
-                              @endphp
+                               ?>
                               <table  class="table table-responsive table-hover" 
                               style="background-color:#f0f0f5;font-size:12px">
-                                @php
+                                <?php 
                                   $n=1;
-                                @endphp
-                                @foreach($details as $detail)
+                                 ?>
+                                <?php $__currentLoopData = $details; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $detail): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                 <tr>
-                                  <td>{{$n++}}</td>
-                                  <td>{{$detail->fee->title}}</td>
-                                  <td>{{$detail->gp_price}}<code>USD</code></td>
+                                  <td><?php echo e($n++); ?></td>
+                                  <td><?php echo e($detail->fee->title); ?></td>
+                                  <td><?php echo e($detail->gp_price); ?><code>USD</code></td>
                                   
                                 </tr>
-                                @endforeach
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
                             
                               </table>
@@ -172,7 +178,7 @@ foreach ($guide_prices as $key => $value) {
                           
                            
                           </tr>
-                    @endforeach
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                   </tbody>
                 </table>
               </div>
@@ -232,7 +238,7 @@ foreach ($guide_prices as $key => $value) {
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <!-- <h4 class="modal-title">{{$layout->label->calendar_setting->title}}</h4> -->
+          <!-- <h4 class="modal-title"><?php echo e($layout->label->calendar_setting->title); ?></h4> -->
         </div>
         <div class="modal-body">
             <div class="col-sm-12 col-md-12 col-lg-12 " style="">
@@ -247,20 +253,21 @@ foreach ($guide_prices as $key => $value) {
                   <!-- content goes here -->        
                   <form id="bookings-frm" class="ajxfrm smart-form" data-validate="true" data-reload="false" method="post">
                     <input type="hidden"  name="cmd" value="bookings">
-                    {{csrf_field()}}
+                    <?php echo e(csrf_field()); ?>
+
                     <fieldset>        
                       <div class="row">
                         <section class="col col-12 col-lg-12 flexibled-error">
                           <label class="label">
-                            {{$layout->label->starting_fromto->title}} <code>*</code>
+                            <?php echo e($layout->label->starting_fromto->title); ?> <code>*</code>
                           </label>
                           <label class="input">
                             <div class="col-lg-5">
-                              <input type="text" id="starting" name="starting" value="{{ old('starting') }}"  class="input-sm border-0 border-bottom-1">
+                              <input type="text" id="starting" name="starting" value="<?php echo e(old('starting')); ?>"  class="input-sm border-0 border-bottom-1">
                             </div>
                             <div class="col-lg-2"></div>
                             <div class="col-lg-5">                              
-                              <input type="text" id="ending" name="ending" value="{{ old('ending') }}"  class="input-sm border-0 border-bottom-1">
+                              <input type="text" id="ending" name="ending" value="<?php echo e(old('ending')); ?>"  class="input-sm border-0 border-bottom-1">
                             </div>
                             
                           
@@ -272,21 +279,22 @@ foreach ($guide_prices as $key => $value) {
                       <div class="row">
                         <section class="col col-lg-12 col-6 flexibled-error">
                            <label class="label">
-                                        {{ $layout->label->booking_status->title }} 
-                                        @if($errors->has('booking_status'))
+                                        <?php echo e($layout->label->booking_status->title); ?> 
+                                        <?php if($errors->has('booking_status')): ?>
                                             <div class="error-badge" id="for-booking_status">
-                                             {!! Helper::alert('danger', $errors->first('booking_status')) !!}
+                                             <?php echo Helper::alert('danger', $errors->first('booking_status')); ?>
+
                                              </div>
-                                       @endif
+                                       <?php endif; ?>
                                     </label>
                                     <label class="select" >
-                                       <select value="{{ old('booking_status') }}" name="booking_status" id="booking_status" >
-                                           <option value=""  >{{$layout->label->please_select_below->title}}</option>
-                                              @foreach($booking_status as $bs)
+                                       <select value="<?php echo e(old('booking_status')); ?>" name="booking_status" id="booking_status" >
+                                           <option value=""  ><?php echo e($layout->label->please_select_below->title); ?></option>
+                                              <?php $__currentLoopData = $booking_status; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $bs): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                                   
-                                                      <option value="{{$bs->term_id}}"  >{{$bs->title}}</option>
+                                                      <option value="<?php echo e($bs->term_id); ?>"  ><?php echo e($bs->title); ?></option>
                                                 
-                                              @endforeach
+                                              <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                       </select>
                                       <i></i>
                                     </label>
@@ -295,28 +303,30 @@ foreach ($guide_prices as $key => $value) {
                       <div class="row">
                         <section class="col col-12 col-lg-12 flexibled-error">
                           <label class="label">
-                            {{$layout->label->booking_title->title}} <code>*</code>
-                            @if($errors->has('title'))
+                            <?php echo e($layout->label->booking_title->title); ?> <code>*</code>
+                            <?php if($errors->has('title')): ?>
                               <div class="error-badge" id="for-title">
-                                {!! Helper::alert('danger', $errors->first('title')) !!}
+                                <?php echo Helper::alert('danger', $errors->first('title')); ?>
+
                               </div>
-                            @endif
+                            <?php endif; ?>
                           </label>
                           <label class="input">
                             <input type="hidden" name="booking_id" id="booking_id" value="" class="input-sm border-0 border-bottom-1">
-                            <input type="text" style="font-family:preyveng"  name="title" value="{{ old('title') }}" class="input-sm border-0 border-bottom-1">
+                            <input type="text" style="font-family:preyveng"  name="title" value="<?php echo e(old('title')); ?>" class="input-sm border-0 border-bottom-1">
                           </label>  
                         </section>
                       </div>
                       <div class="row">
                         <section class="col col-12 col-lg-12 flexibled-error">
                           <label class="label">
-                            {{$layout->label->booking_description->title}} <code>*</code>
-                            @if($errors->has('description'))
+                            <?php echo e($layout->label->booking_description->title); ?> <code>*</code>
+                            <?php if($errors->has('description')): ?>
                               <div class="error-badge" id="for-description">
-                                {!! Helper::alert('danger', $errors->first('description')) !!}
+                                <?php echo Helper::alert('danger', $errors->first('description')); ?>
+
                               </div>
-                            @endif
+                            <?php endif; ?>
                           </label>
                           <label class="input">
                             <textarea rows="5" class="form-control" name="description" id="description"></textarea>
@@ -334,7 +344,8 @@ foreach ($guide_prices as $key => $value) {
                   </form>
                   <div id="delete_form">
                     <form id="delete_bookings-frm" class="ajxfrm smart-form" data-validate="true" data-reload="false" method="post" >                 
-                      {{ csrf_field() }}
+                      <?php echo e(csrf_field()); ?>
+
                       <input type="hidden"  name="cmd" value="dbooking">
                       <div class="form-group">
                         <div class="col-md-12">
@@ -367,7 +378,7 @@ foreach ($guide_prices as $key => $value) {
 
 
 
-@section('script')
+<?php $__env->startSection('script'); ?>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script>
@@ -379,17 +390,17 @@ foreach ($guide_prices as $key => $value) {
 
     
     <!-- JQUERY UI + Bootstrap Slider -->
-    <script src="{{URL::asset('assets/admin/js/plugin/bootstrap-slider/bootstrap-slider.min.js')}}"></script>
+    <script src="<?php echo e(URL::asset('assets/admin/js/plugin/bootstrap-slider/bootstrap-slider.min.js')); ?>"></script>
     <!-- IMPORTANT: APP CONFIG -->
-    <script src="{{URL::asset('assets/admin/js/app.config.js')}}"></script>
+    <script src="<?php echo e(URL::asset('assets/admin/js/app.config.js')); ?>"></script>
     <!-- JS TOUCH : include this plugin for mobile drag / drop touch events-->
-    <script src="{{URL::asset('assets/admin/js/plugin/jquery-touch/jquery.ui.touch-punch.min.js')}}"></script> 
+    <script src="<?php echo e(URL::asset('assets/admin/js/plugin/jquery-touch/jquery.ui.touch-punch.min.js')); ?>"></script> 
     <!-- BOOTSTRAP JS -->
-    <script src="{{URL::asset('assets/admin/js/bootstrap/bootstrap.min.js')}}"></script>
+    <script src="<?php echo e(URL::asset('assets/admin/js/bootstrap/bootstrap.min.js')); ?>"></script>
     <!-- MAIN APP JS FILE -->
     <!-- PAGE RELATED PLUGIN(S) -->
-    <script src="{{URL::asset('assets/admin/js/plugin/moment/moment.min.js')}}"></script>
-    <script src="{{URL::asset('assets/admin/js/plugin/fullcalendar/jquery.fullcalendar.min.js')}}"></script>
+    <script src="<?php echo e(URL::asset('assets/admin/js/plugin/moment/moment.min.js')); ?>"></script>
+    <script src="<?php echo e(URL::asset('assets/admin/js/plugin/fullcalendar/jquery.fullcalendar.min.js')); ?>"></script>
 
     <script type="text/javascript">
     function formatDate(date) {
@@ -732,7 +743,7 @@ foreach ($guide_prices as $key => $value) {
     });//end ready
 
     </script>
-@endsection
+<?php $__env->stopSection(); ?>
 
 
 

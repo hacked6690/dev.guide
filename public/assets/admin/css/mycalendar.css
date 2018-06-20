@@ -71,3 +71,9 @@
 		#bookings-frm,.smart-form .input input, .smart-form .select select, .smart-form .textarea textarea{
 			font-family: "preyveng";
 		}
+		.font-preveng{
+			font-family: 'preyveng';
+		}
+		.popup_header{
+			color: white;
+		}

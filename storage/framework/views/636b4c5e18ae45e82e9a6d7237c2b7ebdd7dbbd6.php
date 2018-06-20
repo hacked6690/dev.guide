@@ -19,7 +19,7 @@
 		                    </div><!-- /header-text -->
 					    </div>
 					    <div class="item">
-					    	<img src="http://www.iato.in/uploads/packagebanner/ladakhandkashmir.jpg" alt="Second slide">
+					    	<img src="http://www.destinationsbeyondindia.com/cambodia/images/angkor-wat-temple-banner.jpg" alt="Second slide">
 					    	<!-- Static Header -->
 		                    <div class="header-text hidden-xs">
 		                        <div class="col-md-12 text-center">

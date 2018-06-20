@@ -41,7 +41,7 @@ class ProfilesController extends Controller
         $profile = isset($user_meta->profile) ? Storage::url($decrypted_id .'/profile/'. $user_meta->profile->value) : '/assets/admin/img/avatars/male.png';
 
         $user = \App\User::select('id', 'role_id', 'email', 'created_at')->where('id', $decrypted_id)->first();
-        dd($user_meta);
+        // dd($user_meta);
         return view('profiles.edit', compact(['user', 'user_meta', 'profile']));
     }
 

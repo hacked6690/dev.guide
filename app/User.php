@@ -1,10 +1,10 @@
 <?php
 
 namespace App;
-
+use Auth;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-
+use App\UserRoles;
 class User extends Authenticatable
 {
     use Notifiable;
@@ -16,7 +16,7 @@ class User extends Authenticatable
      */
     public  $table='users';
     protected $fillable = [
-        'role_id', 'email', 'password',
+        'role_id', 'email', 'password','remember_token',
     ];
 
     /**
@@ -51,5 +51,13 @@ class User extends Authenticatable
     public function guide_price(){
         return $this->hasMany('App\GuidePrice', 'guide_id');
     }
-
+    public static function getUserLogin(){
+        $user_login='visitor';
+        if(Auth::check()){
+            if(Auth::user()->id!=null){
+                $user_login=UserRoles::getRoleName(Auth::user()->role_id);
+            }
+        }
+        return $user_login;
+    }
 }

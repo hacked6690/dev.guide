@@ -6,12 +6,12 @@ use Auth;
 use Session;
 use File;
 use Image;
-
 use App\Languages;
 use App\ContentRelationships;
 use App\Posts;
 use App\User;
 use App\GuidePrice;
+use App\Model\Backend\Bookings;
 use App\UserMetas;
 use App\UserAccounts;
 use Illuminate\Support\Facades\Storage;
@@ -79,7 +79,9 @@ class GuidesController extends Controller
         $searchField=(object) $searchField;
 
 
-        $users = User::with('user_metas','guide_price')->groupBy('id')->get();   
+        $users = User::with('user_metas','guide_price')
+                    ->where('role_id','=',UserRoles::getRoleID('guide'))
+                    ->groupBy('id')->get();   
         if ($fullname_en!=="") 
         {  
               $users = $users->filter(function($user) use ($fullname_en)
@@ -227,6 +229,8 @@ class GuidesController extends Controller
     public function detail($uid)
     {
        //
+
+
         $uid=Helper::decodeString($uid,Helper::encryptKey());
         $users = User::with('user_metas','guide_price')->groupBy('id')->get();   
         $users = $users->filter(function($user) use ($uid)
@@ -242,7 +246,37 @@ class GuidesController extends Controller
             ->where('active','=','active')
             ->where('guide_id','=',$uid)
             ->paginate(30);
-        return view('frontend.guides.detail', compact(['users','guideprices']));
+
+        //Get User Login
+            $user_login = User::getUserLogin();
+        //for calendar showing--------------------------------
+        $booking_status= ContentTerms::terms_by(['taxonomy' => 'booking_status']);
+        $list_bookings=Bookings::list_bookings($uid);
+        $booking_custom=[];
+        foreach ($list_bookings as $lb) {          
+                $enddate = date_create($lb->end); // For today/now, don't pass an arg.
+                // $enddate->modify("-1 day");
+               $enddate=$enddate->format("Y-m-d");
+            if($lb->booking_status==$booking_status[0]->term_id){
+                $bg="red";
+            }else{
+                $bg="gray";
+            }
+            $booking_custom[]=array(
+                        'id'=>encrypt($lb->id),
+                        'title'=>$lb->title,
+                        'active'=>$lb->active,
+                        'description'=>$lb->description,
+                        'icon'=>$lb->icon,
+                        'backgroundColor' => $bg,
+                        'booking_status' => $lb->booking_status,
+                        'start'=>$lb->start,
+                        'end'=>$enddate
+                        );
+        }
+        $list_bookings=$booking_custom;
+        // dd($list_bookings);
+        return view('frontend.guides.detail', compact(['users','guideprices','list_bookings','booking_status','user_login']));
     }
 
     /**

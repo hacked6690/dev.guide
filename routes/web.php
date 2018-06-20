@@ -56,6 +56,7 @@ Route::prefix('ajax')->group(function () {
 
 
 Route::resource('guides', 'frontend\GuidesController');
+Route::resource('travellers', 'frontend\TravellersController');
 Route::resource('guideprice', 'backend\GuidePriceController');
 Route::resource('bookings', 'backend\CalendarsBooking');
 Route::get('booking_history', 'backend\CalendarsBooking@booking_history');

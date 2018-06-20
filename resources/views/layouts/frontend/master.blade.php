@@ -8,7 +8,7 @@
 
 		<!-- #CSS Links -->
 		@include('layouts.frontend.partials.required_style')
-
+		
 	</head>
 
 	<body class="smart-style-0">

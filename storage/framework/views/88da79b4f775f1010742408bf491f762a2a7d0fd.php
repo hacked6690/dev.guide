@@ -11,8 +11,17 @@
 	<!-- yield optional script on page[s] -->
 	<?php echo $__env->yieldContent('script'); ?>
 
+	<!-- MAIN APP JS FILE -->
+	<script src="<?php echo e(asset('assets/admin/js/app.seed.js')); ?>"></script>
+
+
 	<!-- JS Customization -->
-	<script type="text/javascript" src="<?php echo e(asset('assets/frontend/js/custom.js?t='. time())); ?>"></script>
+	<!--<script type="text/javascript" src="<?php echo e(asset('assets/frontend/js/custom.js?t='. time())); ?>"></script>-->
+
+	<!-- custom Js -->
+<script src="<?php echo e(asset('assets/admin/js/custom.js?t='. time())); ?>"></script>
+
+
 	<!-- JS Page Level -->
 	<script type="text/javascript" src="<?php echo e(asset('assets/frontend/js/app.js')); ?>"></script>
 	<script type="text/javascript" src="<?php echo e(asset('assets/frontend/js/plugins/owl-carousel.js')); ?>"></script>
@@ -28,14 +37,14 @@
 	
 
 	<script type="text/javascript">
-		jQuery(document).ready(function() {
+		/*jQuery(document).ready(function() {
 			App.init();
 			Masking.initMasking();
 			Datepicker.initDatepicker();
 			OwlCarousel.initOwlCarousel();
 			StyleSwitcher.initStyleSwitcher();
 			ParallaxSlider.initParallaxSlider();
-		});
+		});*/
 	</script>
 
 	

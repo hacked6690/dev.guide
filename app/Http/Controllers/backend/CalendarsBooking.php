@@ -5,6 +5,7 @@ use Auth;
 use App\Helpers\Helper;
 use Session;
 use App\User;
+use App\UserRoles;
 use App\ContentTerms;
 use App\Model\Backend\Bookings;
 use App\UserMetas;
@@ -308,13 +309,12 @@ class CalendarsBooking extends Controller
     }
      public function ajx_edit(Request $request)
     {
-         /*$booking_status= ContentTerms::terms_by(['taxonomy' => 'booking_status']);
-            if($lb->booking_status==$booking_status[0]->term_id){
-                $bg="red";
-            }else{
-                $bg="gray";
-            }*/
 
+        // if(!Auth::user()->authorized('content_terms')) {
+        //     abort(403, 'Unauthorized action.');
+        // }
+     
+         
         try{
             $id=decrypt($request->id);
             $booking=Bookings::find($id) ;
@@ -326,6 +326,7 @@ class CalendarsBooking extends Controller
                                     'booking_status'=>$booking->booking_status,
                                     'icon'=>$booking->icon,
                                     'start'=>$booking->start,
+                                    'user_login' => User::getUserLogin(),
                                     // 'backgroundColor' => $bg,
                                     'end'=>$booking->end
                             );

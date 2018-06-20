@@ -8,7 +8,7 @@
 
 		<!-- #CSS Links -->
 		<?php echo $__env->make('layouts.frontend.partials.required_style', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
-
+		
 	</head>
 
 	<body class="smart-style-0">
