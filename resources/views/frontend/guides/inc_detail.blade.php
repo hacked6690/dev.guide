@@ -183,7 +183,7 @@ foreach ($guide_prices as $key => $value) {
             <div class="jarviswidget jarviswidget-color-blueDark">        
               <header>              
                 <span class="widget-icon"> <i class="fa fa-calendar"></i> </span>
-                <h2> My Events </h2>
+                <h2 class="text text-info" style="color:white"> My Events </h2>
                 <div class="widget-toolbar">
                   <!-- add: non-hidden - to disable auto hide -->
                   <div class="btn-group">                   
@@ -249,6 +249,9 @@ foreach ($guide_prices as $key => $value) {
                     <input type="hidden"  name="cmd" value="bookings">
                     {{csrf_field()}}
                     <fieldset>        
+                      <div class="row">
+                          <input type="hidden" name="guide_id" value="{{encrypt($uid)}}">
+                      </div>
                       <div class="row">
                         <section class="col col-12 col-lg-12 flexibled-error">
                           <label class="label">
@@ -413,7 +416,7 @@ foreach ($guide_prices as $key => $value) {
 
     }
     function moduleForTraveller(sta,end){
-     /* $('#myModal').modal(
+      $('#myModal').modal(
           {
               backdrop: 'static',
               keyboard: false
@@ -429,8 +432,8 @@ foreach ($guide_prices as $key => $value) {
         $('input[name="btn_submit"]').show();
         $('input[name="cmd_submit"]').show(); 
         $('input[name="btn_submit"]').val('Save');
-        $('input[name="cmd_submit"]').val('Save');   */
-
+        $('input[name="cmd_submit"]').val('Save');   
+        console.log(sta+"----"+end);
 
     }
 
@@ -439,6 +442,8 @@ foreach ($guide_prices as $key => $value) {
        $('input[name="btn_submit"]').hide();
        $('input[name="cmd_submit"]').hide();
        $('#delete_form').hide();
+       $("#bookings-frm :input").prop("disabled", true);
+
     }
 
     function fcContentTraveller(sta,end){
@@ -557,7 +562,8 @@ foreach ($guide_prices as $key => $value) {
                      end=formatDate(end);
                      /*console.log(sta);
                      console.log(end);       */ 
-                   var user_login = <?php echo json_encode($user_login,JSON_NUMERIC_CHECK); ?> ;                   
+                   var user_login = <?php echo json_encode($user_login,JSON_NUMERIC_CHECK); ?> ;  
+                              ;
                      switch (user_login) {
                       case "visitor":
                           moduleForVisitor();
@@ -566,7 +572,7 @@ foreach ($guide_prices as $key => $value) {
                           moduleForTraveller(sta,end);
                           break;                      
                       default:
-                          moduleForVisitor();                   
+                          //moduleForVisitor();                   
                           break;
                      }                  
                                
@@ -654,8 +660,11 @@ foreach ($guide_prices as $key => $value) {
                      fcContentVisitor();
                       break;
                   case "admin":
+                      fcContentAdmin(sta,end);
+                      break; 
+                  case "traveller":
                       fcContentTraveller(sta,end);
-                      break;                      
+                      break;                       
                   default:
                       fcContentVisitor();                   
                       break;
@@ -680,6 +689,7 @@ foreach ($guide_prices as $key => $value) {
                 }else{//visitor
                  
                 }*/
+          
                
                 $('input[name="cmd_id"]').val(data.booking.id);
             },

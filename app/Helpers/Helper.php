@@ -88,7 +88,12 @@ class Helper
 					{
 						$next->url = route('profiles.edit', encrypt(Auth::user()->id));
 					}
+					if($next->url =='/travellers_edit')
+					{
+						$next->url = route('travellers.edit', encrypt(Auth::user()->id));
+					}
 
+					
 					$str_navigated .='<li '. ($current_uri == $next->url ? 'class="active"' :'') .'>
 	                                        <a href="'. $next->url .'" title="'. $next->title .'">
 	                                            '. $next->icon .' <span class="menu-item-parent">'. $next->title .'</span>

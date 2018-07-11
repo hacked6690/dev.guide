@@ -23,21 +23,32 @@ class CalendarsBooking extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function events(){
-          return Bookings::events(Auth::user()->id);
+    public function events($guide_id){
+            return Bookings::events($guide_id);
+          // return Bookings::events(Auth::user()->id);
     }
        public function event_history($booking_status="event"){
         $now = Carbon::now();
         $guide_id=Auth::user()->id;
+
+         $us=User::getUserLogin();
+        //$us return traveller or admin or mot 
+
 
         //$month=$now->month;
          $display = Input::has('display') ? Input::get('display') :5;
          $search = Input::has('search') ? Input::get('search') :'';
          $month = Input::has('month') ? Input::get('month') :'';
          $year = Input::has('year') ? Input::get('year') :'';
-
-         $listings=Bookings::where('guide_id',$guide_id)
-                     ->where('active','=','active')
+        if($us=='traveller'){
+            $listings=Bookings::where('creator_id',Auth::user()->id);
+        }else if($us=='guide'){
+            $listings=Bookings::where('guide_id',$guide_id);
+        }else{
+            $listings=Bookings::where('1','=','1');
+        }
+       
+                     $listings=$listings->where('active','=','active')
                      ->where('booking_status','=',Bookings::statusID($booking_status))
                      ->when($search!="", function($query) use ($search) {
                              $query->where('title', '=', $search); 
@@ -48,7 +59,7 @@ class CalendarsBooking extends Controller
                      ->when($year!="", function($query) use ($year) {
                              $query->whereYear('start', '=', $year); 
                         })
-                    ->orderBy('start','asc')
+                    ->orderBy('start','desc')
                     ->paginate($display);
 
          $filter = (object)array(
@@ -63,14 +74,23 @@ class CalendarsBooking extends Controller
     public function booking_history($booking_status="booking"){
         $now = Carbon::now();
         $guide_id=Auth::user()->id;
+        $us=User::getUserLogin();
+        //$us return traveller or admin or mot 
         //$month=$now->month;
          $display = Input::has('display') ? Input::get('display') :5;
          $search = Input::has('search') ? Input::get('search') :'';
          $month = Input::has('month') ? Input::get('month') :'';
          $year = Input::has('year') ? Input::get('year') :'';
+        if($us=='traveller'){
+            $listings=Bookings::where('creator_id',Auth::user()->id);
+        }else if($us=='guide'){
+            $listings=Bookings::where('guide_id',$guide_id);
+        }else{
+            $listings=Bookings::where('1','=','1');
+        }
 
-         $listings=Bookings::where('guide_id',$guide_id)
-                     ->where('active','=','active')
+         
+                     $listings=$listings->where('active','=','active')
                      ->where('booking_status','=',Bookings::statusID($booking_status))
                      ->when($search!="", function($query) use ($search) {
                              $query->where('title', '=', $search); 
@@ -216,7 +236,12 @@ class CalendarsBooking extends Controller
     }
       public function ajx_store(Request $request)
     {
-         $guide_id=Auth::user()->id;
+         if($request->has('guide_id')){
+            $guide_id=decrypt($request->guide_id);
+         }else{
+             $guide_id=Auth::user()->id;
+         }
+        
          $creator_id=Auth::user()->id;
          
         
@@ -257,6 +282,7 @@ class CalendarsBooking extends Controller
                 return response()->json([
                         'result' => true,
                         'msg' => 'inserted', 'Booked successfully...',
+                        'guide_id' => $guide_id,
                         'callback' => 'abc'
                     ]);       
             }catch(Exception $ex){    
@@ -297,6 +323,7 @@ class CalendarsBooking extends Controller
                 return response()->json([
                         'result' => true,
                         'msg' => 'updated', 'Updated successfully...',
+                        'guide_id' => $guide_id,
                          'callback' => 'abc',
                     ]);       
             }catch(Exception $ex){    

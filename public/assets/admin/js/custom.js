@@ -2048,12 +2048,13 @@ $(function (e) {
 		console.log(data);
 		$("#myModal").modal('hide');
 		$.ajax({
-				url: 'events',
+				url: '/events/'+data.guide_id,
 				type: "get",
 				success: function(events) {
 					  $('#calendar').fullCalendar('removeEvents');
 		              $('#calendar').fullCalendar('addEventSource', events);         
 		              $('#calendar').fullCalendar('rerenderEvents' );
+		            
 				},
 				error: function (responseData, textStatus, errorThrown) {
 					console.log('error');

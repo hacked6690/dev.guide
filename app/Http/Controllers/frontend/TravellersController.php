@@ -170,6 +170,20 @@ class TravellersController extends Controller
     public function edit($id)
     {
         //
+         $id=decrypt($id);
+         $user=User::find($id);
+         $user_meta = \Helper::metas('user_meta', ['user_id' => $id]);
+        //
+       $nationalities= ContentTerms::terms_by(['taxonomy' => 'nationalities']);
+       $provinces= ContentTerms::terms_by(['taxonomy' => 'provinces']);
+       $partner_types= ContentTerms::terms_by(['taxonomy' => 'partner_types']);
+       $guide_types= ContentTerms::terms_by(['taxonomy' => 'guide_types']);
+       $guide_languages= ContentTerms::terms_by(['taxonomy' => 'languages']);
+       $proficiencies= ContentTerms::terms_by(['taxonomy' => 'proficiencies']);
+       $genders= ContentTerms::terms_by(['taxonomy' => 'gender']);
+       return view('frontend.travellers.edit', compact([ 'display','nationalities','provinces','partner_types','genders',
+            'guide_types','guide_languages','proficiencies','user','user_meta']));
+
     }
 
     /**
@@ -182,6 +196,76 @@ class TravellersController extends Controller
     public function update(Request $request, $id)
     {
         //
+         if(!Auth::user()->authorized('traveler_edit')) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $validator = Validator::make($request->all(), [
+                 
+                'fullname_kh' => 'required',
+                'fullname_en' => 'required',
+               
+                // 'address' => 'required',
+                'dob' => 'required',
+                'gender' => 'required',
+                'telephone' => 'required|numeric',
+                'nationality_id' => 'required',                
+                            
+                // 'photo' => 'image|mimes:jpg,jpeg,png,bmp|max:' . (1024 *16),
+            ]);         
+        if($validator->fails()) {
+            return redirect()->back()
+                        ->withInput()
+                        ->withErrors($validator);
+        }   
+        $role_id=UserRoles::getRoleID('traveller');   
+        $id=decrypt($id);
+
+         // store user meta if inputed ____
+        $default = array('fullname_en', 'fullname_kh','address',
+            'dob', 'gender','telephone',
+            'nationality_id', 
+             'photo',
+            );
+
+        foreach ($request->all() as $key => $value)
+        {
+            if(in_array($key, $default))
+            {
+                $valued = $value;
+
+                if($key =='photo')
+                {
+                    // store profile ;
+                    $request->photo->store($id, 'public');
+
+                    $profile_dir = storage_path('app/public/'. $id .'/profile');
+
+                    if(!File::exists($profile_dir))
+                    {
+                        File::makeDirectory($profile_dir);
+                    }
+
+                    Image::make($request->photo->getRealPath())->fit(120)->save($profile_dir .'/'. $request->photo->hashName());
+
+                    $valued = $request->photo->hashName();
+                }
+
+              
+
+                  UserMetas::where('user_id', $id)->where('meta_key','=',$key)->update(
+                [       'user_id' => $id,
+                        'meta_key' => $key,
+                        'meta_value' => $valued
+                ]);
+
+
+            }           
+            
+        }   
+         Session::flash('updated', 'Traveller profile is updated successfully...');
+        return back();    
+
     }
 
     /**

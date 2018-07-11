@@ -37,6 +37,7 @@
 			<div class="col-lg-12 col-md-12 detail ">
 				<?php 
 					$events=$list_bookings;
+				
 					//dd($user_login);
 					//echo json_encode($events,JSON_NUMERIC_CHECK);
 				 ?>

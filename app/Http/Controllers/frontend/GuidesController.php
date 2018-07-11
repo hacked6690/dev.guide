@@ -326,7 +326,7 @@ class GuidesController extends Controller
                 'agree' => 'required',
                 'photo' => 'image|mimes:jpg,jpeg,png,bmp|max:' . (1024 *16),
             ]);
-        // dd($validator->errors());
+        dd($validator->errors());
     
         if($validator->fails()) {
             return redirect()->back()
