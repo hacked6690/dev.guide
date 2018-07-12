@@ -258,6 +258,7 @@ foreach ($guide_prices as $key => $value) {
                     <fieldset>        
                       <div class="row">
                           <input type="hidden" name="guide_id" value="<?php echo e(encrypt($uid)); ?>">
+
                       </div>
                       <div class="row">
                         <section class="col col-12 col-lg-12 flexibled-error">
@@ -350,8 +351,10 @@ foreach ($guide_prices as $key => $value) {
                       <?php echo e(csrf_field()); ?>
 
                       <input type="hidden"  name="cmd" value="dbooking">
+                      
                       <div class="form-group">
                         <div class="col-md-12">
+                          <input type="hidden" name="guide_id" value="<?php echo e(encrypt($uid)); ?>">
                           <input  name="cmd_id"  type="hidden" class="btn_save btn btn-primary"  />
                           <button type="button" class="btn btn_delete btn-danger btn-xs jscfm">Delete</button>
                         </div>
@@ -391,6 +394,8 @@ foreach ($guide_prices as $key => $value) {
     </script>
 
 
+
+
     
     <!-- JQUERY UI + Bootstrap Slider -->
     <script src="<?php echo e(URL::asset('assets/admin/js/plugin/bootstrap-slider/bootstrap-slider.min.js')); ?>"></script>
@@ -401,6 +406,11 @@ foreach ($guide_prices as $key => $value) {
     <!-- BOOTSTRAP JS -->
     <script src="<?php echo e(URL::asset('assets/admin/js/bootstrap/bootstrap.min.js')); ?>"></script>
     <!-- MAIN APP JS FILE -->
+
+   <!-- Additional libs -->
+  <script src="<?php echo e(asset('assets/admin/js/libs/jquery-confirm-v3.0.1/jquery-confirm.min.js')); ?>"></script>
+
+
     <!-- PAGE RELATED PLUGIN(S) -->
     <script src="<?php echo e(URL::asset('assets/admin/js/plugin/moment/moment.min.js')); ?>"></script>
     <script src="<?php echo e(URL::asset('assets/admin/js/plugin/fullcalendar/jquery.fullcalendar.min.js')); ?>"></script>
@@ -462,6 +472,10 @@ foreach ($guide_prices as $key => $value) {
        $('input[name="cmd_submit"]').show();
        $('input[name="btn_submit"]').val('Update');
        $('input[name="cmd_submit"]').val('Update');
+       $('#delete_form').show();
+
+
+        console.log("POPUP as Traveller");
     }
     // DO NOT REMOVE : GLOBAL FUNCTIONS!    
     $(document).ready(function() {      
@@ -671,7 +685,7 @@ foreach ($guide_prices as $key => $value) {
                      fcContentVisitor();
                       break;
                   case "admin":
-                      fcContentAdmin(sta,end);
+                      fcContentVisitor();  
                       break; 
                   case "traveller":
                       fcContentTraveller(sta,end);
@@ -681,6 +695,26 @@ foreach ($guide_prices as $key => $value) {
                       break;
                  }      
 
+                  //hide Update & Delete
+                  var isOwner=data.booking.isOwner;
+                   console.log(isOwner);
+                    if(isOwner==0){                  
+                              $('#delete_form').hide();
+                               $('input[name="btn_submit"]').val('Update');
+                               $('input[name="btn_submit"]').hide();
+                               $('input[name="cmd_submit"]').val('Update');                             
+                                $("#bookings-frm :input").prop("disabled", true);
+                             
+                               
+
+
+                    }else{
+                            $('#delete_form').show();
+                               $('input[name="btn_submit"]').val('Update');
+                               $('input[name="btn_submit"]').show();
+                               $('input[name="cmd_submit"]').val('Update');
+                               $("#bookings-frm :input").prop("disabled", false);
+                    }
 
                 $('#myModal').modal('show');            
                 $("#bookings-frm")[0].reset();
@@ -691,15 +725,7 @@ foreach ($guide_prices as $key => $value) {
                 $('#booking_id').val(data.booking.id);
                 $('input[name="title"]').val(data.booking.title);
                 $('#description').val(data.booking.description);
-                /*if(user_login=='admin'){
-                   $('input[name="btn_submit"]').val('Update');
-                   $('input[name="cmd_submit"]').val('Update');
-                }else if(user_login=='guide'){
-                   $('input[name="btn_submit"]').val('Update');
-                   $('input[name="cmd_submit"]').val('Update');
-                }else{//visitor
-                 
-                }*/
+               
           
                
                 $('input[name="cmd_id"]').val(data.booking.id);

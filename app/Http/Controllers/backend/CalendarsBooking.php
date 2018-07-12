@@ -137,7 +137,11 @@ class CalendarsBooking extends Controller
                         );
         }
         $list_bookings=$booking_custom;
-        return view('backend.calendarsbooking.index',compact(['list_bookings','booking_status']));
+
+        $guide_id=Auth::user()->id;
+        $upcoming_event=Bookings::upcoming('event',$guide_id);
+        $upcoming_booking=Bookings::upcoming('booking',$guide_id);
+        return view('backend.calendarsbooking.index',compact(['list_bookings','booking_status','upcoming_booking','upcoming_event']));
     }
 
     public static function detail($id){
@@ -223,15 +227,21 @@ class CalendarsBooking extends Controller
     }
     public function ajx_delete(Request $request)
     {
-        $decrypted_id=$request->input('cmd_id');
+       /* $decrypted_id=$request->input('cmd_id');
         $decrypted_id = decrypt($decrypted_id);
         $gpDetail = Bookings::where('id', $decrypted_id)->limit(1);
-        $gpDetail->delete();
-        // Session::flash('deleted', "Booking is deleted");
+        $gpDetail->delete();*/
+      
+        if($request->has('guide_id')){
+            $guide_id=decrypt($request->guide_id);
+         }else{
+             $guide_id=Auth::user()->id;
+         }
          return response()->json([
-                        'result' => true,
+                        'result' => false,
                         'msg' => 'deleted', 'Deleted successfully...',
-                         'callback' => 'abc',
+                        'guide_id' => $guide_id,
+                         'callback' => 'abc'
                     ]);  
     }
       public function ajx_store(Request $request)
@@ -345,6 +355,16 @@ class CalendarsBooking extends Controller
         try{
             $id=decrypt($request->id);
             $booking=Bookings::find($id) ;
+             // Check if owner or not
+            $isOwner=0;
+            if(isset(Auth::user()->id)){
+                if($booking->creator_id==Auth::user()->id){
+                    $isOwner=1;
+                }else{
+                    $isOwner=0;
+                }
+            }
+            
             $booking=array(
                             'id'=>encrypt($booking->id),
                                     'title'=>$booking->title,
@@ -355,8 +375,10 @@ class CalendarsBooking extends Controller
                                     'start'=>$booking->start,
                                     'user_login' => User::getUserLogin(),
                                     // 'backgroundColor' => $bg,
-                                    'end'=>$booking->end
+                                    'end'=>$booking->end,
+                                    'isOwner' => $isOwner
                             );
+
             return response()->json([
                     'result' => true,
                     'msg' => 'inserted', 'Booked successfully...',

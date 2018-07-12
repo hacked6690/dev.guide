@@ -262,6 +262,16 @@ class GuidesController extends Controller
             }else{
                 $bg="gray";
             }
+            // Check if owner or not
+            $isOwner=0;
+            if(isset(Auth::user()->id)){
+                if($lb->creator_id==Auth::user()->id){
+                    $isOwner=1;
+                }else{
+                    $isOwner=0;
+                }
+            }
+            
             $booking_custom[]=array(
                         'id'=>encrypt($lb->id),
                         'title'=>$lb->title,
@@ -271,9 +281,12 @@ class GuidesController extends Controller
                         'backgroundColor' => $bg,
                         'booking_status' => $lb->booking_status,
                         'start'=>$lb->start,
-                        'end'=>$enddate
+                        'end'=>$enddate,
+                        'isOwner' =>$isOwner
                         );
+
         }
+
         $list_bookings=$booking_custom;
         // dd($list_bookings);
         return view('frontend.guides.detail', compact(['users','guideprices','list_bookings','booking_status','user_login']));

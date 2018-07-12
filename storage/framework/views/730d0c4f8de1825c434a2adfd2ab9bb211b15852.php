@@ -3,6 +3,8 @@
 	<link rel='stylesheet' type='text/css' href='//fonts.googleapis.com/css?family=Open+Sans:400,300,600&amp;subset=cyrillic,latin'>
 
 
+<!-- Additional style Css libraries -->
+<link rel="stylesheet" type="text/css" media="screen" href="<?php echo e(asset('assets/admin/js/libs/jquery-confirm-v3.0.1/jquery-confirm.min.css')); ?>">
 
 
 

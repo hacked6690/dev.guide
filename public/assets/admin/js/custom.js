@@ -765,7 +765,7 @@ var js = function () {
 			    }
 			});
 		},
-		jscfm: function(e) {
+		jscfm: function(e) {	
 			if($('.jscfm').length) {
 				$('.jscfm').each(function(i, obj) {
 

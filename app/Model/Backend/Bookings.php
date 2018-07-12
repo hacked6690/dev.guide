@@ -49,6 +49,24 @@ class Bookings extends Model
                 }
               }
     }
+    public static function upcoming($status='booking',$guide_id){
+         $booking_status= ContentTerms::terms_by(['taxonomy' => 'booking_status']); 
+         $term_id=null; 
+         foreach ($booking_status as $bs) {
+             if($bs->slug==$status){
+                $term_id= $bs->term_id;
+                break;
+             }
+         }
+         $upcoming=Bookings::where('booking_status','=',$term_id)
+                     ->where('active','=','active')
+                     ->where('guide_id','=',$guide_id)
+                     ->whereDate('start', '>=', date('Y-m-d'))
+                     ->orderBy('start','asc')
+                     ->limit(5)
+                     ->get();
+          return $upcoming;
+    }
      public static function events($guide_id){     
        $booking_status= ContentTerms::terms_by(['taxonomy' => 'booking_status']);   
             

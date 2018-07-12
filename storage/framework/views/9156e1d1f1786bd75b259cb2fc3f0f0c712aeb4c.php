@@ -1,7 +1,20 @@
 <?php $__env->startSection('style'); ?>
 	<link rel="stylesheet" type="text/css" media="screen" href="<?php echo e(asset('assets/admin/css/smartadmin-production-plugins.min.css')); ?>">
 	<!-- <link rel="stylesheet" type="text/css" media="screen" href="<?php echo e(asset('assets/admin/css/mycalendar.css')); ?>"> -->
-
+	<style type="text/css">
+	li .event_date{
+		font-size:15px;
+		margin-right: 10px;
+	}
+	li .event_title{
+		font-size:13px;
+		margin-left:30px;
+		font-family: 'preyveng';
+	}
+	.text-transform{
+		text-transform: uppercase;
+	}
+	</style>
 <?php $__env->stopSection(); ?>
 <?php $__env->startSection('content'); ?>
 <div id="content">			
@@ -9,7 +22,45 @@
 			<!-- MAIN CONTENT -->
 			<div id="content">
 				<div class="row">	
-					<div class="col-sm-12 col-md-12 col-lg-12">
+					<div class="col-sm-12 col-md-3 col-lg-3">
+						<div class="panel panel-primary">
+						    <div class="panel-heading">
+						        <h4 class="text text-transform"><i class="far fa-bell"></i> Upcoming Events</h4>
+						    </div>
+						    <div class="panel-body">
+						        <div class="row">						            
+						                <ul class="list-group">
+						                	<?php $__currentLoopData = $upcoming_event; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $event): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+						                	<li class="list-group-item">
+						                		<span class="event_date"><i class="fas fa-calendar-alt"></i> <?php echo e($event->start); ?>=> <?php echo e($event->end); ?></span>
+						                		<br>
+						                		<span class="event_title"><?php echo e($event->title); ?></span>
+						                	</li>	
+						                	<?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>					                	
+						                </ul>				
+						        </div>
+						    </div>
+						</div>
+						<div class="panel panel-success">
+						    <div class="panel-heading">
+						        <h4 class="text text-transform"><i class="far fa-bell"></i> Upcoming Booking</h4>
+						    </div>
+						    <div class="panel-body">
+						        <div class="row">						            
+						                <ul class="list-group">
+						                	<?php $__currentLoopData = $upcoming_booking; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $booking): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+						                	<li class="list-group-item">
+						                		<span class="event_date"><i class="fas fa-calendar-alt"></i> <?php echo e($booking->start); ?>=> <?php echo e($booking->end); ?></span>
+						                		<br>
+						                		<span class="event_title"><?php echo e($booking->title); ?></span>
+						                	</li>	
+						                	<?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>					                	
+						                </ul>				
+						        </div>
+						    </div>
+						</div>
+					</div>
+					<div class="col-sm-12 col-md-9 col-lg-9">
 						<?php if(Session::has('inserted')): ?>
 							<section>
 								<?php echo Helper::alert('success', Session::get('inserted'), 'block font-15'); ?>
@@ -340,7 +391,15 @@
 					// dayClick: function(day) {
 					//   console.log('Day Click'+day);
 					// },
-			        select: function (startDate, endDate, allDay) {		
+			        select: function (startDate, endDate, allDay) {	
+
+			         //If previous date not available noted...
+		                if(startDate.isBefore(moment())) {
+		                    $('#calendar').fullCalendar('unselect');
+		                    return false;
+		                }
+
+
 			        	var oneDay = 1000 * 60 * 60 * 24; //Convert into millisec
 			        	var sta=startDate.format();
 			            sta = new Date(startDate);
@@ -349,8 +408,8 @@
 			            end.setDate(end.getDate()-1);	//for showing on UI				       
 			             sta=formatDate(sta);
 			             end=formatDate(end);
-			             console.log(sta);
-			             console.log(end);			           	
+			             /*console.log(sta);
+			             console.log(end);		*/	           	
 			            $('#myModal').modal(
 				            {
 							    backdrop: 'static',

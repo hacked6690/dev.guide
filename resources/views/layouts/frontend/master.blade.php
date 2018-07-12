@@ -6,6 +6,15 @@
 		<meta name="csrf-token" content="{{ csrf_token() }}">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
+
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+		<script>
+			if (!window.jQuery) {
+				document.write('<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"><\/script>');
+			}
+		</script>
+
+
 		<!-- #CSS Links -->
 		@include('layouts.frontend.partials.required_style')
 		
@@ -34,7 +43,7 @@
 		<!-- loaded footer page-->
 		@include('layouts.frontend.partials.footer')
 		<!-- Link to Google CDN's jQuery + jQueryUI; fall back to local -->
-		@include('layouts.frontend.partials.jquery')
+		<?php //@include('layouts.frontend.partials.jquery') ?>
 		<!-- laoded basic script -->
 		@include('layouts.frontend.partials.required_script')
 	</body>
