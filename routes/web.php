@@ -1,5 +1,5 @@
 <?php
-
+use App\Events\myEventTrigger;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -73,3 +73,12 @@ Route::get(' guides/detail/{id}','frontend\GuidesController@detail');
 Route::resource('homepage', 'frontend\HomeController');
 
 
+
+
+Route::get('/alertBox',function(){
+	return view('alertBox');
+});
+
+Route::get('/fireEvent',function(){
+	event(new myEventTrigger());
+});

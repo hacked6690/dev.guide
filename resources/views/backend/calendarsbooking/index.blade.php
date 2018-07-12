@@ -19,7 +19,7 @@
 @endsection
 @section('content')
 <div id="content">			
-
+<!-- https://pusher.com/tutorials/chat-laravel/ -->
 			<!-- MAIN CONTENT -->
 			<div id="content">
 				<div class="row">	
