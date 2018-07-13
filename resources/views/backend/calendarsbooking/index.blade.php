@@ -22,44 +22,56 @@
 <!-- https://pusher.com/tutorials/chat-laravel/ -->
 			<!-- MAIN CONTENT -->
 			<div id="content">
+				
 				<div class="row">	
 					<div class="col-sm-12 col-md-3 col-lg-3">
 						<div class="panel panel-primary">
 						    <div class="panel-heading">
 						        <h4 class="text text-transform"><i class="far fa-bell"></i> Upcoming Events</h4>
 						    </div>
+						    <div id="app">
+		                      <events></events>
+		                    </div>
 						    <div class="panel-body">
-						        <div class="row">						            
-						                <ul class="list-group">
-						                	@foreach($upcoming_event as $event)
+						    	<template id="event-template">
+						        <div class="row" style="margin:0px">						            
+						                <ul class="list-group" v-for="event in events">
+						                	
 						                	<li class="list-group-item">
-						                		<span class="event_date"><i class="fas fa-calendar-alt"></i> {{$event->start}}=> {{$event->end}}</span>
+						                		<span class="event_date"><i class="fas fa-calendar-alt"></i> @{{event.start}}=> @{{event.end}}</span>
 						                		<br>
-						                		<span class="event_title">{{$event->title}}</span>
+						                		<span class="event_title">@{{event.title}}</span>
 						                	</li>	
-						                	@endforeach					                	
+						                			                	
 						                </ul>				
 						        </div>
+						        </template>
 						    </div>
 						</div>
-						<div class="panel panel-success">
+						<div class="panel panel-primary">
 						    <div class="panel-heading">
-						        <h4 class="text text-transform"><i class="far fa-bell"></i> Upcoming Booking</h4>
+						        <h4 class="text text-transform"><i class="far fa-bell"></i> Upcoming Bookings</h4>
 						    </div>
+						    <div id="app2">
+		                      <bookings></bookings>
+		                    </div>
 						    <div class="panel-body">
-						        <div class="row">						            
-						                <ul class="list-group">
-						                	@foreach($upcoming_booking as $booking)
+						    	<template id="booking-template">
+						        <div class="row" style="margin:0px">						            
+						                <ul class="list-group" v-for="booking in bookings">
+						                	
 						                	<li class="list-group-item">
-						                		<span class="event_date"><i class="fas fa-calendar-alt"></i> {{$booking->start}}=> {{$booking->end}}</span>
+						                		<span class="event_date"><i class="fas fa-calendar-alt"></i> @{{booking.start}}=> @{{booking.end}}</span>
 						                		<br>
-						                		<span class="event_title">{{$booking->title}}</span>
+						                		<span class="event_title">@{{booking.title}}</span>
 						                	</li>	
-						                	@endforeach					                	
+						                			                	
 						                </ul>				
 						        </div>
+						        </template>
 						    </div>
 						</div>
+						
 					</div>
 					<div class="col-sm-12 col-md-9 col-lg-9">
 						@if(Session::has('inserted'))
@@ -281,6 +293,76 @@
 		<!-- PAGE RELATED PLUGIN(S) -->
 		<script src="{{URL::asset('assets/admin/js/plugin/moment/moment.min.js')}}"></script>
 		<script src="{{URL::asset('assets/admin/js/plugin/fullcalendar/jquery.fullcalendar.min.js')}}"></script>
+
+
+
+
+		    <!-- Vue js script -->  
+					    <script type="text/javascript" src="https://unpkg.com/vue/dist/vue.js"></script>
+					<!-- end vuejs script -->
+                  <script type="text/javascript">
+
+                    Vue.component('events',{
+                        template:'#event-template',
+                        data: function(){
+                            return {
+                                events:[]
+                            }
+                        },
+                        created: function(){
+                            this.getEvents();
+                            
+                        },
+                         methods: {
+					            getEvents: function(){
+					             $.getJSON("{{ route('api_upcoming_event') }}", function(events){
+					             this.events=events;					             
+					            }.bind(this));
+					             setTimeout(this.getEvents,1000);
+					            }
+					        }
+                       
+
+                    });
+
+                    new Vue({
+                      el:"#app",
+                    });
+
+                     Vue.component('bookings',{
+                        template:'#booking-template',
+                        data: function(){
+                            return {
+                                bookings:[]
+                            }
+                        },
+                        created: function(){
+                            this.getBookings();
+                            
+                        },
+                         methods: {
+					            getBookings: function(){
+					             $.getJSON("{{ route('api_upcoming_booking') }}", function(bookings){
+					             this.bookings=bookings;					             
+					            }.bind(this));
+					             setTimeout(this.getBookings,1000);
+					            }
+					        }
+                       
+
+                    });
+
+                    new Vue({
+                      el:"#app2",
+                    });
+                 </script>
+
+
+
+
+
+
+
 
 		<script type="text/javascript">
 		function formatDate(date) {

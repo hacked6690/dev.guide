@@ -14,6 +14,13 @@
 <!-- Additional libs -->
 <script src="{{ asset('assets/admin/js/libs/jquery-confirm-v3.0.1/jquery-confirm.min.js') }}"></script>
 
+
+
+
+
+
+
+
 <!-- yield optional script on page[s] -->
 @yield('script')
 

@@ -1,5 +1,6 @@
 <?php
 use App\Events\myEventTrigger;
+use App\Model\Backend\Bookings;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -72,7 +73,8 @@ Route::post('ajax/guideprice', 'backend\GuidePriceController@ajx_store');
 Route::get(' guides/detail/{id}','frontend\GuidesController@detail');
 Route::resource('homepage', 'frontend\HomeController');
 
-
+Route::get('api_upcoming_event','backend\CalendarsBooking@api_getEvents')->name('api_upcoming_event');
+Route::get('api_upcoming_booking','backend\CalendarsBooking@api_getBookings')->name('api_upcoming_booking');
 
 
 Route::get('/alertBox',function(){

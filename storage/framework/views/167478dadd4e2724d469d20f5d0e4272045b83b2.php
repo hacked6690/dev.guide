@@ -8,6 +8,7 @@
 <div id="app">
 <h1>Here is the Alert Box Page</h1>
 </div>
-<script src="/resources/assets/js/app.js"  charset="utf-8"></script>
+<!-- <script src="<?php echo e(resource_path()); ?>/assets/js/app.js"  charset="utf-8"></script> -->
+<script src="<?php echo e(asset('assets/js/app.js')); ?>"></script>
 </body>
 </html>

@@ -27,6 +27,15 @@ class CalendarsBooking extends Controller
             return Bookings::events($guide_id);
           // return Bookings::events(Auth::user()->id);
     }
+
+    public function api_getEvents(){
+        $events=Bookings::upcoming('event',Auth::user()->id);
+        return json_encode($events);
+    }
+     public function api_getBookings(){
+        $bookings=Bookings::upcoming('booking',Auth::user()->id);
+        return json_encode($bookings);
+    }
        public function event_history($booking_status="event"){
         $now = Carbon::now();
         $guide_id=Auth::user()->id;
@@ -227,10 +236,10 @@ class CalendarsBooking extends Controller
     }
     public function ajx_delete(Request $request)
     {
-       /* $decrypted_id=$request->input('cmd_id');
+        $decrypted_id=$request->input('cmd_id');
         $decrypted_id = decrypt($decrypted_id);
         $gpDetail = Bookings::where('id', $decrypted_id)->limit(1);
-        $gpDetail->delete();*/
+        $gpDetail->delete();
       
         if($request->has('guide_id')){
             $guide_id=decrypt($request->guide_id);
@@ -238,7 +247,7 @@ class CalendarsBooking extends Controller
              $guide_id=Auth::user()->id;
          }
          return response()->json([
-                        'result' => false,
+                        'result' => true,
                         'msg' => 'deleted', 'Deleted successfully...',
                         'guide_id' => $guide_id,
                          'callback' => 'abc'
