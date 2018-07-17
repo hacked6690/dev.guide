@@ -607,6 +607,11 @@ class Helper
 		$date=date_create($date);
        return $date=date_format($date,"Y-m-d");
 	}
+	public static function CalendarDate($date)
+	{
+		$date=date_create($date);
+       return $date=date_format($date,"m/d/Y");
+	}
 	public static function guide_profile_main($user_id=1)
 	{
 		$str="";
@@ -655,6 +660,16 @@ class Helper
 		';
 		return $str;
 	}
+
+	public static function show_status()
+	{
+		$option='';
+		$option.='<option value="1">Active</option>
+				  <option value="2">Suspense</option>
+				  <option value="0">Pending</option>';
+		return $option;
+	}
+
 
 
 }

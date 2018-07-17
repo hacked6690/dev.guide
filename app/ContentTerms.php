@@ -9,12 +9,17 @@ use Illuminate\Support\Facades\Schema;
 class ContentTerms extends Model
 {
 	public $timestamps = false;
-
+    
     protected $fillable = [
     	'slug',
     	'title',
     ];
 
+    public static function getTermTitle($id)
+    {
+        $term= ContentTerms::where('term_id','=',$id)->first();
+        return $term->title;
+    }
     public static function terms_by($where =['taxonomy' => 'label'])
     {
         $cols_terms = Schema::getColumnListing('content_terms');

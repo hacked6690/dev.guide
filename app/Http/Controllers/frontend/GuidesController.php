@@ -25,6 +25,7 @@ use Illuminate\Support\Facades\Input;
 use App\Http\Controllers\Controller;
 use App\Helpers\Helper;
 use App\Model\Frontend\Guides;
+use Carbon\Carbon;
 class GuidesController extends Controller
 {
     /**
@@ -307,10 +308,9 @@ class GuidesController extends Controller
     {
         //
          // dd(Helper::MyFormatDate($request->date_of_birth));
+         $now = Carbon::now();
 
-         $validator = Validator::make($request->all(), [
-                 
-                
+         $validator = Validator::make($request->all(), [   
                 'license_id' => 'required',
                 'fullname_kh' => 'required',
                 'fullname_en' => 'required',
@@ -339,7 +339,11 @@ class GuidesController extends Controller
                 'agree' => 'required',
                 'photo' => 'image|mimes:jpg,jpeg,png,bmp|max:' . (1024 *16),
             ]);
-        dd($validator->errors());
+        
+        if(Auth::check()){
+          Session::flash('info', 'Logout first, before you can register account...');
+          return back();
+        }
     
         if($validator->fails()) {
             return redirect()->back()
@@ -348,6 +352,7 @@ class GuidesController extends Controller
         }             
         // decrypted role_id, cause encrypted at frontend
         $user = new User([
+                'role_id' => UserRoles::getRoleID('guide'),
                 'email' => $request->input('email'),
                 'password' => Hash::make($request->input('password')),
             ]);
@@ -388,6 +393,7 @@ class GuidesController extends Controller
             'date_in_service','photo'
 
             );
+     
 
         foreach ($request->all() as $key => $value)
         {
@@ -421,7 +427,18 @@ class GuidesController extends Controller
                 $user_meta->save();
             }           
             
-        }       
+        }   
+       
+        $gp = new GuidePrice([
+                    'guide_id' => $user->id,
+                    'language_id' => $request->language_id,
+                    'province_id' => $request->province_id,
+                    'price' => $request->guide_price,
+                    'default' => 'yes',
+                    'active' => 'active',
+                    'created_at' => $now
+            ]);
+        $gp->save();
 
         Session::flash('inserted', 'Guide profile is saved successfully...');
 
@@ -468,6 +485,103 @@ class GuidesController extends Controller
     public function update(Request $request, $id)
     {
         //
+      $id=decrypt($id);
+      $validator = Validator::make($request->all(), [   
+                'license_id' => 'required',
+                'fullname_kh' => 'required',
+                'fullname_en' => 'required',
+                'email' => 'required|email',
+                'address' => 'required',
+                'dob' => 'required',
+                'gender' => 'required',
+                'telephone' => 'required',
+                'nationality_id' => 'required',
+                'province_id' => 'required',
+                'language_id' => 'required',
+                'guide_price' => 'required|numeric',
+                // 'password' => 'required|min:6|confirmed',
+                'generation' => 'required|numeric',
+                'guide_certified' => 'required',
+                'behavior_certified' => 'required',
+                'guide_type_id' => 'required',
+                'id_card' => 'required',
+                'partner_id' => 'required',
+                'cv_provided' => 'required',
+                'domicile_certified' => 'required',
+                'new_renew' => 'required',
+                'issued_date' => 'required',
+                'expired_date' => 'required',
+                'date_in_service' => 'required',
+                'agree' => 'required',
+                'photo' => 'image|mimes:jpg,jpeg,png,bmp|max:' . (1024 *16),
+            ]);
+            
+        if($validator->fails()) {
+            return redirect()->back()
+                        ->withInput()
+                        ->withErrors($validator);
+        }    
+         $request->merge(['password' => Hash::make($request->input('password'))]);
+         $request->merge(['dob' => Helper::MyFormatDate($request->input('dob'))]);
+         $request->merge(['date_in_service' => Helper::MyFormatDate($request->input('date_in_service'))]);
+         $request->merge(['issued_date' => Helper::MyFormatDate($request->input('issued_date'))]);
+         $request->merge(['expired_date' => Helper::MyFormatDate($request->input('expired_date'))]);
+
+             // store user meta if inputed ____
+        $default = array('license_id','fullname_en', 'fullname_kh','address',
+            'dob', 'gender','telephone',
+            'nationality_id', 
+             'province_id',
+            'language_id',
+            'guide_price',
+            'generation', 'guide_certified','behavior_certified',
+            'id_card', 'partner_id','cv_provided',
+            'first_name', 'last_name','first_name_kh','guide_type_id',
+            'domicile_certified','new_renew','issued_date','expired_date',
+            'date_in_service','photo'
+
+            );
+
+        foreach ($request->all() as $key => $value)
+        {
+            if(in_array($key, $default))
+            {
+                $valued = $value;
+
+                if($key =='photo')
+                {
+                    // store profile ;
+                    $request->photo->store($id, 'public');
+
+                    $profile_dir = storage_path('app/public/'. $id .'/profile');
+
+                    if(!File::exists($profile_dir))
+                    {
+                        File::makeDirectory($profile_dir);
+                    }
+
+                    Image::make($request->photo->getRealPath())->fit(120)->save($profile_dir .'/'. $request->photo->hashName());
+
+                    $valued = $request->photo->hashName();
+                }
+                 UserMetas::where('user_id', $id)
+                ->where('meta_key','=',$key)
+                 ->update(
+                    ['meta_value' => $valued
+                ]);
+
+            }  
+        } 
+
+      GuidePrice::where('guide_id', $id)
+                ->where('default','=','yes')
+                 ->update(
+                    ['language_id' => $request->language_id,
+                    'province_id' => $request->province_id,
+                    'price' => $request->guide_price
+                ]);
+      Session::flash('updated', 'Guide profile is updated successfully...');
+      return back();
     }
 
     /**
@@ -478,6 +592,16 @@ class GuidesController extends Controller
      */
     public function destroy($id)
     {
-        //
+         if(!Auth::user()->authorized('guide_delete')) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $decrypted_id = decrypt($id);
+        $u = User::where('id', $decrypted_id)->limit(1);
+        $u->delete();      
+
+        Session::flash('deleted', "Guide Profile was deleted");
+
+        return back();
     }
 }

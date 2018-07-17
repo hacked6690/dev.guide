@@ -84,3 +84,6 @@ Route::get('/alertBox',function(){
 Route::get('/fireEvent',function(){
 	event(new myEventTrigger());
 });
+
+Route::resource('authorize', 'backend\AuthorizeController');
+Route::post('ajax/authorize', 'backend\AuthorizeController@ajx_status');

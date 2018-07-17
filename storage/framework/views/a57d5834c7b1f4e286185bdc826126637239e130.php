@@ -25,6 +25,7 @@ foreach ($guide_prices as $key => $value) {
 <h1 class="text text-primary text-center">Guide Profile Information</h1>
 <div class="row">
             <div class="well well-sm">
+               
                 <div class="row">
                     <div class="col-sm-6 col-md-3">
                         <img src="<?php echo e($photo_path); ?>" alt="" class="img-rounded img-responsive" />

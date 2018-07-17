@@ -1,4 +1,4 @@
-@extends('layouts.frontend.master')
+@extends('layouts.admin.master')
 @section('style')
 	<link rel="stylesheet" href="{{asset('assets/frontend/plugins/sky-forms-pro/skyforms/css/sky-forms.css')}}">
 	<link rel="stylesheet" href="{{asset('assets/frontend/plugins/sky-forms-pro/skyforms/custom/custom-sky-forms.css')}}">
@@ -17,31 +17,73 @@
 	.ui-widget.ui-widget-content{
 		width:250px;
 	}
+	.profilephoto img{
+		width:200px;
+	}
 	
 	</style>
 @endsection
 @section('content')
 	<div id="content">
 	<div class="wrapper">
-		<div class="container" style="width:90%">
-			<form action="{{ route('guides.index') }}" id="sky-form4" class="sky-form" class="smart-form" method="post" enctype="multipart/form-data" >
+		<div class="container" style="width:100%;padding:0px;margin:0px">
+		@php
+			$fullname_en = '';
+			$fullname_kh = '';
+			$guide_certified='';
+			$photo='';
+		@endphp
+		@foreach($guide->user_metas as $um)
+			@php
+				switch($um->meta_key){
+					case 'fullname_en' : $fullname_en = $um->meta_value;break;
+					case 'fullname_kh' : $fullname_kh = $um->meta_value;break;
+					case 'license_id' : $license_id = $um->meta_value;break;
+					case 'address' : $address = $um->meta_value;break;
+					case 'dob' : $dob = $um->meta_value;break;
+					case 'gender' : $gender = $um->meta_value;break;
+					case 'telephone' : $telephone = $um->meta_value;break;
+					case 'nationality_id' : $nationality_id = $um->meta_value;break;
+			
+					case 'generation' : $generation = $um->meta_value;break;
+					case 'guide_certified' : $guide_certified = $um->meta_value;break;
+					case 'behavior_certified' : $behavior_certified = $um->meta_value;break;
+					case 'id_card' : $id_card = $um->meta_value;break;
+					case 'partner_id' : $partner_id = $um->meta_value;break;
+					case 'cv_provided' : $cv_provided = $um->meta_value;break;
+					case 'guide_type_id' : $guide_type_id = $um->meta_value;break;
+					case 'domicile_certified' : $domicile_certified = $um->meta_value;break;
+					case 'new_renew' : $new_renew = $um->meta_value;break;
+					case 'issued_date' : $issued_date = $um->meta_value;break;
+					case 'expired_date' : $expired_date = $um->meta_value;break;
+					case 'date_in_service' : $date_in_service = $um->meta_value;break;
+					case 'photo' : $photo = $um->meta_value;break;
+
+
+				}
+			@endphp
+			
+			
+		@endforeach
+		@php
+			if($photo!==''){			
+		
+				 $photo=Storage::url($guide->id.'/' . $photo);
+			}else{
+				$photo ='http://www.bsmc.net.au/wp-content/uploads/No-image-available.jpg';
+			}
+			@endphp
+			<form action="{{ route('guides.update', encrypt($guide->id)) }}" id="sky-form4" class="sky-form" class="smart-form" method="post" enctype="multipart/form-data" >
 				<div class="col-lg-5 col-md-5">
 								<header>
-									{{ $layout->label->guide_registration->title }}
+									{{ $layout->label->guide_registration->title }}  {{$guide_certified}}
 								</header>
 
 								<fieldset>
 									<div class="row">
-										@if(Session::has('inserted'))
+										@if(Session::has('updated'))
 											<section class="col col-12">
-												{!! Helper::alert('success', Session::get('inserted'), 'block font-15') !!}
-											</section>
-										@endif
-									</div>
-									<div class="row">
-										@if(Session::has('info'))
-											<section class="col col-12">
-												{!! Helper::alert('danger', Session::get('info'), 'block font-15') !!}
+												{!! Helper::alert('success', Session::get('updated'), 'block font-15') !!}
 											</section>
 										@endif
 									</div>
@@ -56,7 +98,7 @@
 														@endif
 											</label>
 											<label class="input">
-												<input type="text" value="{{ old('license_id') }}" name="license_id" placeholder="">
+												<input type="text" value="{{$license_id}}" name="license_id" placeholder="">
 											</label>
 									</section>
 								
@@ -71,7 +113,7 @@
 														@endif
 											</label>
 											<label class="input">
-												<input type="text" value="{{ old('fullname_kh') }}" name="fullname_kh" placeholder="">
+												<input type="text" value="{{$fullname_kh}}" name="fullname_kh" placeholder="">
 											</label>
 										</section>
 										<section class="col col-6 flexibled-error">
@@ -84,7 +126,7 @@
 														@endif
 											</label>
 											<label class="input">
-												<input type="text" value="{{ old('fullname_en') }}" name="fullname_en" placeholder="">
+												<input type="text" value="{{$fullname_en}}" name="fullname_en" placeholder="">
 											</label>
 										</section>
 									</div>
@@ -99,12 +141,12 @@
 										</label>
 										<label class="input">
 											<i class="icon-append fa fa-envelope"></i>
-											<input type="email" value="{{ old('email') }}" name="email" placeholder="">
+											<input type="email" value="{{$guide->email }}" name="email" placeholder="">
 											<b class="tooltip tooltip-bottom-right">Pls Fill your email account</b>
 										</label>
 									</section>
-
-									<div class="row">
+								<!-- Password and Confirm hidden -->
+								<!-- 	<div class="row">
 										<section class="col col-6 flexibled-error">
 											<label class="label">
 																{{ $layout->label->password->title }}<code>*</code>
@@ -135,7 +177,7 @@
 												<b class="tooltip tooltip-bottom-right">Don't forget your password</b>
 											</label>
 										</section>									
-									</div>
+									</div> -->
 									<section class="flexibled-error">
 										<label class="label">
 														{{ $layout->label->address->title }}<code>*</code>
@@ -147,7 +189,7 @@
 										</label>
 										<label class="textarea">
 											<i class="icon-append fa fa-comment"></i>
-											<textarea  rows="4" name="address" id="address">{{ old('address') }}</textarea>
+											<textarea  rows="4" name="address" id="address">{{ $address }}</textarea>
 										</label>
 									</section>
 
@@ -164,7 +206,7 @@
 												</label>
 												<label class="input">
 													<i class="icon-append fa fa-calendar"></i>
-													<input type="text" value="{{ old('dob') }}" name="dob" id="dob" placeholder="">
+													<input type="text" value="{{ Helper::CalendarDate($dob) }}" name="dob" id="dob" placeholder="">
 												</label>
 											</section>	
 											<section class="col col-6 flexibled-error">
@@ -178,12 +220,12 @@
 						                    </label>
 						                    <label class="select">
 						                       <select value="{{ old('gender') }}" name="gender" >
-						                           <option value="0" selected >{{$layout->label->please_select_below->title}}</option>
-						                              @foreach($genders as $gender)
-						                                   @if(old('gender') ==$gender->term_id)
-						                                      <option value="{{$gender->term_id}}" selected >{{$gender->title}}</option>
+						                           <option value="0" selected disabled >{{$layout->label->please_select_below->title}}</option>
+						                              @foreach($genders as $g)
+						                                   @if($gender ==$g->term_id)
+						                                      <option value="{{$g->term_id}}" selected >{{$g->title}}</option>
 						                                   @else
-						                                      <option value="{{$gender->term_id}}">{{$gender->title}}</option>
+						                                      <option value="{{$g->term_id}}">{{$g->title}}</option>
 						                                  @endif
 						                              @endforeach
 						                      </select>
@@ -202,7 +244,7 @@
 																@endif
 													</label>
 													<label class="input">
-														<input type="text" value="{{ old('telephone') }}" name="telephone" placeholder="">
+														<input type="text" value="{{ $telephone }}" name="telephone" placeholder="">
 													</label>
 										</section>					
 									</div>
@@ -219,11 +261,11 @@
 											<label class="select">
 												<select value="{{ old('nationality_id') }}" name="nationality_id" >
 													<option value="0" selected disabled>Select Below</option>
-													@foreach($nationalities as $nationality)
-														@if(old('nationality_id') ==$nationality->term_id)
-																	<option value="{{$nationality->term_id}}" selected >{{$nationality->title}}</option>
+													@foreach($nationalities as $n)
+														@if($nationality_id ==$n->term_id)
+																	<option value="{{$n->term_id}}" selected >{{$n->title}}</option>
 														@else
-																	<option value="{{$nationality->term_id}}">{{$nationality->title}}</option>
+																	<option value="{{$n->term_id}}">{{$n->title}}</option>
 														@endif
 														
 													@endforeach
@@ -245,11 +287,11 @@
 											<label class="select">
 												<select value="{{ old('province_id') }}" name="province_id" >
 													<option value="0" selected disabled>Select Below</option>
-													@foreach($provinces as $province)
-														@if(old('province_id') ==$province->term_id)
-																	<option value="{{$province->term_id}}" selected >{{$province->title}}</option>
+													@foreach($provinces as $p)
+														@if($guide_price->province_id ==$p->term_id)
+																	<option value="{{$p->term_id}}" selected >{{$p->title}}</option>
 														@else
-																	<option value="{{$province->term_id}}">{{$province->title}}</option>
+																	<option value="{{$p->term_id}}">{{$p->title}}</option>
 														@endif
 														
 													@endforeach
@@ -270,7 +312,7 @@
 												<select value="{{ old('language_id') }}" name="language_id" >
 													<option value="0" selected disabled>Select Below</option>
 													@foreach($guide_languages as $guide_language)
-														@if(old('language_id') ==$guide_language->term_id)
+														@if($guide_price->language_id ==$guide_language->term_id)
 																	<option value="{{$guide_language->term_id}}" selected >{{$guide_language->title}}</option>
 														@else
 																	<option value="{{$guide_language->term_id}}">{{$guide_language->title}}</option>
@@ -293,7 +335,7 @@
 																@endif
 													</label>
 													<label class="input">
-														<input type="text" value="{{ old('guide_price') }}" name="guide_price" placeholder="">
+														<input type="text" value="{{ $guide_price->price }}" name="guide_price" placeholder="">
 													</label>
 										</section>					
 									</div>
@@ -316,11 +358,10 @@
 																@endif
 											</label>
 											<label class="input">
-												<input type="text" value="{{ old('generation') }}" name="generation" placeholder="">
+												<input type="text" value="{{ $generation }}" name="generation" placeholder="">
 											</label>
 								</section>
-
-								<section class="col col-lg-4 col-md-4 flexibled-error">
+									<section class="col col-lg-4 col-md-4 flexibled-error">
 									<label class="label">
 																{{ $layout->label->guide_certified->title }}<code>*</code>
 																@if($errors->has('guide_certified'))
@@ -332,10 +373,10 @@
 									<label class="select">
 										<select name="guide_certified">
 										
-											@if(old('guide_certified') == 'yes')
+											@if($guide_certified == 'yes')
 												<option value="yes" selected>Yes</option>
 												<option value="no">No</option>
-											@elseif(old('guide_certified') == 'no')
+											@elseif($guide_certified == 'no')
 												<option value="yes" >Yes</option>
 												<option value="no" selected>No</option>
 											@else
@@ -349,6 +390,7 @@
 											<i></i>
 									</label>
 								</section>	
+							
 								<section class="col col-lg-4 col-md-4 flexibled-error">
 									<label class="label">
 																{{ $layout->label->behavior_certified->title }}<code>*</code>
@@ -361,10 +403,10 @@
 									<label class="select">
 										<select name="behavior_certified">
 										
-											@if(old('behavior_certified') == 'yes')
+											@if($behavior_certified == 'yes')
 												<option value="yes" selected>Yes</option>
 												<option value="no">No</option>
-											@elseif(old('behavior_certified') == 'no')
+											@elseif($behavior_certified == 'no')
 												<option value="yes" >Yes</option>
 												<option value="no" selected>No</option>
 											@else
@@ -390,7 +432,7 @@
 																@endif
 											</label>
 											<label class="input">
-												<input type="text" value="{{ old('id_card') }}" name="id_card" placeholder="ID Number">
+												<input type="text" value="{{$id_card}}" name="id_card" placeholder="ID Number">
 											</label>
 								</section>
 
@@ -408,7 +450,7 @@
 												<select value="{{ old('partner_id') }}" name="partner_id" >
 													<option value="0" selected disabled>Select Below</option>
 													@foreach($partner_types as $partner_type)
-														@if(old('partner_id') ==$partner_type->term_id)
+														@if($partner_id ==$partner_type->term_id)
 																	<option value="{{$partner_type->term_id}}" selected >{{$partner_type->title}}</option>
 														@else
 																	<option value="{{$partner_type->term_id}}">{{$partner_type->title}}</option>
@@ -432,10 +474,10 @@
 											<label class="select">
 												<select value="{{ old('cv_provided') }}" name="cv_provided" >
 													
-													@if(old('cv_provided') == 'yes')
+													@if($cv_provided == 'yes')
 														<option value="yes" selected>Yes</option>
 														<option value="no">No</option>
-													@elseif(old('cv_provided') == 'no')
+													@elseif($cv_provided == 'no')
 														<option value="yes" >Yes</option>
 														<option value="no" selected>No</option>
 													@else
@@ -463,10 +505,10 @@
 											<label class="select">
 												<select value="{{ old('domicile_certified') }}" name="domicile_certified" >
 													
-													@if(old('domicile_certified') == 'yes')
+													@if($domicile_certified == 'yes')
 														<option value="yes" selected>Yes</option>
 														<option value="no">No</option>
-													@elseif(old('domicile_certified') == 'no')
+													@elseif($domicile_certified == 'no')
 														<option value="yes" >Yes</option>
 														<option value="no" selected>No</option>
 													@else
@@ -481,7 +523,7 @@
 								<section class="col col-lg-6 col-md-6 flexibled-error">
 
 											<label class="label">
-																Re{{ $layout->label->renewal_type->title }}<code>*</code>
+																{{ $layout->label->renewal_type->title }}<code>*</code>
 																@if($errors->has('new_renew'))
 																	<div class="error-badge" id="for-new_renew">															
 																		{!! Helper::alert('danger', $errors->first('new_renew')) !!}
@@ -491,10 +533,10 @@
 											<label class="select">
 												<select value="{{ old('new_renew') }}" name="new_renew" >
 													
-													@if(old('new_renew') == 'new')
+													@if($new_renew == 'new')
 														<option value="new" selected>New</option>
-														<option value="renewal\">Renewal</option>
-													@elseif(old('new_renew') == 'renewal')
+														<option value="renewal">Renewal</option>
+													@elseif($new_renew == 'renewal')
 														<option value="new" >New</option>
 														<option value="renewal" selected>Renewal</option>
 													@else
@@ -522,7 +564,7 @@
 												<select value="{{ old('guide_type_id') }}" name="guide_type_id" >
 													<option value="0" selected disabled>Select Below</option>
 													@foreach($guide_types as $guide_type)
-														@if(old('guide_type_id') ==$guide_type->term_id)
+														@if($guide_type_id ==$guide_type->term_id)
 																	<option value="{{$guide_type->term_id}}" selected >{{$guide_type->title}}</option>
 														@else
 																	<option value="{{$guide_type->term_id}}">{{$guide_type->title}}</option>
@@ -546,7 +588,7 @@
 												</label>
 												<label class="input">
 													<i class="icon-append fa fa-calendar"></i>
-													<input type="text" value="{{old('issued_date')}}" name="issued_date" id="issued_date"  placeholder="Issued Date">
+													<input type="text" value="{{Helper::CalendarDate($issued_date)}}" name="issued_date" id="issued_date"  placeholder="Issued Date">
 												</label>
 											</section>	
 											<section class="col col-4 flexibled-error">
@@ -560,7 +602,7 @@
 												</label>
 												<label class="input">
 													<i class="icon-append fa fa-calendar"></i>
-													<input type="text" value="{{old('expired_date')}}"  name="expired_date" id="expired_date" placeholder="Expired Date">
+													<input type="text" value="{{Helper::CalendarDate($expired_date)}}"  name="expired_date" id="expired_date" placeholder="Expired Date">
 												</label>
 											</section>	
 											<section class="col col-4 flexibled-error">
@@ -574,173 +616,12 @@
 												</label>
 												<label class="input">
 													<i class="icon-append fa fa-calendar"></i>
-													<input type="text" value="{{old('date_in_service')}}"  name="date_in_service" id="date_in_service"  placeholder="Service Date">
+													<input type="text" value="{{Helper::CalendarDate($date_in_service)}}"  name="date_in_service" id="date_in_service"  placeholder="Service Date">
 												</label>
 											</section>								
 							</div>
-							<!-- Add block language -->
-							<!-- <div class="block_language">
-								<div class="row language_item">	
-									<div class="col-lg-12 col-md-12">
-										<div  style="border-top:1px dashed green;height:10px"></div>
-									</div>
-							        <section class="col col-lg-5 col-md-5 flexibled-error">
-											<label class="label">
-											
-																{{ $layout->label->language->title }}<code>*</code>
-																@if($errors->has('guide_language1'))
-																	<div class="error-badge" id="for-guide_language">															
-																		{!! Helper::alert('danger', $errors->first('guide_language1')) !!}
-																	</div>
-																@endif
-											
-											</label>
-											<label class="select">
-												<select value="{{ old('guide_language1') }}" id="guide_language1" class="guide_language" name="guide_language1" >
-													<option value="" selected disabled>Select Below</option>
-													@foreach($guide_languages as $guide_language)
-														@if(old('guide_language') ==$guide_language->term_id)
-																	<option value="{{$guide_language->term_id}}" selected >{{$guide_language->title}}</option>
-														@else
-																	<option value="{{$guide_language->term_id}}">{{$guide_language->title}}</option>
-														@endif
-														
-													@endforeach
-												</select>
-												<i></i>
-											</label>
-									</section>				 
-									<section class="col col-lg-4 col-md-4 flexibled-error">
-											<label class="label">
-																{{ $layout->label->proficiency->title }}<code>*</code>
-																@if($errors->has('proficiency'))
-																	<div class="error-badge" id="for-proficiency">															
-																		{!! Helper::alert('danger', $errors->first('proficiency')) !!}
-																	</div>
-																@endif
-											</label>
-											<label class="select">
-												<select value="{{ old('proficiency') }}" name="proficiency" >
-													<option value="0" selected disabled>Select Below</option>
-													@foreach($proficiencies as $proficiency)
-														@if(old('proficiency') ==$proficiency->term_id)
-																	<option value="{{$proficiency->term_id}}" selected >{{$proficiency->title}}</option>
-														@else
-																	<option value="{{$proficiency->term_id}}">{{$proficiency->title}}</option>
-														@endif
-														
-													@endforeach
-												</select>
-												<i></i>
-											</label>
-									</section>
-									<section class="col col-lg-3 col-md-3 flexibled-error">
-												<label class="label">
-																{{ $layout->label->price_usd->title }}<code>*</code>
-																@if($errors->has('guide_price'))
-																	<div class="error-badge" id="for-guide_price">															
-																		{!! Helper::alert('danger', $errors->first('guide_price')) !!}
-																	</div>
-																@endif
-												</label>
-												<label class="input">
-													<input type="text" value="{{old('price_description')}}" class="guide_price" id="guide_price" name="guide_price" placeholder="">
-												</label>
-									</section>									
-									<section class="col col-lg-12 col-md-12 margin_bottom">
-												<label class="label">
-																{{ $layout->label->description->title }}:<code>*</code>
-																@if($errors->has('guide_price'))
-																	<div class="error-badge" id="for-price_description">															
-																		{!! Helper::alert('danger', $errors->first('price_description')) !!}
-																	</div>
-																@endif
-												</label>
-												<label class="input">
-													<input type="text" value="{{old('price_description')}}" class="price" id="price_description" name="price_description[]" placeholder="">
-												</label>
-									</section>							
-								</div>
-								<div class="row">
-									<section class="col">
-										<button type="button"  id="add_language"  class="add_language btn btn-primary">
-											<i class=" fa fa-plus-circle" aria-hidden="true"></i>&nbsp;{{ $layout->label->add_language->title }}
-									</section>
-								</div>
-								
-							</div> -->
-							<!--end block language-->
-							<hr/>
-							<!-- Add Block Location -->
-							<!-- <div class="block_location">
-								<div class="row location_item">	
-									<div class="col-lg-12 col-md-12">
-										<div  style="border-top:1px dashed green;height:10px"></div>
-									</div>
-							       <section class="col col-lg-5 col-md-5 flexibled-error">
-											<label class="label">
-																{{ $layout->label->province->title }}<code>*</code>
-																@if($errors->has('province'))
-																	<div class="error-badge" id="for-province">															
-																		{!! Helper::alert('danger', $errors->first('province')) !!}
-																	</div>
-																@endif
-											</label>
-											<label class="select">
-												<select value="{{ old('province') }}" name="province" >
-													<option value="0" selected disabled>Select Below</option>
-													@foreach($provinces as $province)
-														@if(old('province') ==$province->term_id)
-																	<option value="{{$province->term_id}}" selected >{{$province->title}}</option>
-														@else
-																	<option value="{{$province->term_id}}">{{$province->title}}</option>
-														@endif
-														
-													@endforeach
-												</select>
-												<i></i>
-											</label>
-									</section>
-									<section class="col col-lg-4 col-md-4 flexibled-error">
-										<label class="label">
-																{{ $layout->label->location->title }}<code>*</code>
-																@if($errors->has('location'))
-																	<div class="error-badge" id="for-location">															
-																		{!! Helper::alert('danger', $errors->first('location')) !!}
-																	</div>
-																@endif
-										</label>
-										<label class="select">
-											<select name="location" class="location form-control" id="location">
-												
-											</select>
-												<i></i>
-										</label>
-									</section>
-									<section class="col col-lg-3 col-md-3">
-												<label class="label">
-																{{ $layout->label->price_usd->title }}<code>*</code>
-																@if($errors->has('location_price'))
-																	<div class="error-badge" id="for-location_price">															
-																		{!! Helper::alert('danger', $errors->first('location_price')) !!}
-																	</div>
-																@endif
-												</label>
-												<label class="input">
-													<input type="text" value="{{ old('location_price')}}" class="price" id="location_price" name="location_price" placeholder="">
-												</label>
-									</section>								
-														
-								</div>
-								<div class="row">
-									<section class="col">
-										<button type="button"  id="add_location"  class="add_location btn btn-primary">
-											<i class=" fa fa-plus-circle" aria-hidden="true"></i>&nbsp;{{ $layout->label->add_location->title }}
-										</button>
-									</section>
-								</div>
-							</div> -->
-							<!--end block location-->
+							
+							
 							<div class="row">
 										<section class="col col-6 flexibled-error">
 											<label class="label">
@@ -759,7 +640,10 @@
 												</span><input type="text" class="border-0 border-bottom-1" placeholder="" readonly="">
 											</div>
 										</section>
-							</div>							
+							</div>		
+							<div class="row profilephoto">					
+								<img src="{{$photo}}" class="img img-responsive img-thumbnail ">
+							</div>
 							<div class="row">
 										<section class="col col-lg-12">
 											<label class="label">
@@ -780,8 +664,9 @@
 											</label>
 										</section>
 										<footer>
+											{{ method_field('put') }}
 											{{ csrf_field() }}
-											<button type="submit"  class="btn-u">Submit</button>
+											<button type="submit"  class="btn-u btn btn-primary"> <i class="far fa fa-lg fa-save"></i> &nbsp;Submit</button>
 										</footer>
 							</div>
 
@@ -790,57 +675,24 @@
 					</div>
 					</form><!--end form-->
 							<!-- End Reg-Form -->
+		
 		</div>
 			
 	</div><!--end wrapper class-->
 	</div>
 	<!-- END MAIN CONTENT -->
 
+
+
+  
+
+
+
 @endsection
 @section('script')
 <script type="text/javascript" src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
  <script>
-            var c = 1;
-            $('.add_language').on('click', function() {            	
-               /* var last_ele=$(".language_item:last");
-                c++;
-                  var new_ele=last_ele.clone(true);
-                 last_ele.after(new_ele);*/
-                 
-                var orginalDiv = $('.language_item:last');
-				var clonedDiv = orginalDiv.clone();
-				c++;
-				clonedDiv.find('.guide_language').attr('name','guide_language'+c);
-				clonedDiv.appendTo('.language_item');
-
-
-
-               
-                
-            });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            $('.add_location').on('click', function() {            	
-                c++;
-                 // alert(c);
-                 var last_ele=$(".location_item:last");
-                 var new_ele=last_ele.clone(true);
-                 last_ele.after(new_ele);
-                
-            });
+          
             $( function() {
 			    $( "#dob" ).datepicker();
 			    $( "#issued_date" ).datepicker();
