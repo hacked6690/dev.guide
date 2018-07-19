@@ -143,6 +143,17 @@ class AuthorizeController extends Controller
         //
     }
 
+    public function mail_verify($user_id){
+        $id=decrypt($user_id);
+         User::where('id', $id)                
+                 ->update(
+                    ['active' => 1
+                ]);
+                 
+        return redirect('guides');
+
+    }
+
     /**
      * Store a newly created resource in storage.
      *

@@ -54,11 +54,12 @@ class CalendarsBooking extends Controller
         }else if($us=='guide'){
             $listings=Bookings::where('guide_id',$guide_id);
         }else{
-            $listings=Bookings::where('1','=','1');
+            // $listings=Bookings::where('1','=','1');
+            $listings=$listings->where('active','=','active');
         }
        
-                     $listings=$listings->where('active','=','active')
-                     ->where('booking_status','=',Bookings::statusID($booking_status))
+                     
+                    $listings=$listings->where('booking_status','=',Bookings::statusID($booking_status))
                      ->when($search!="", function($query) use ($search) {
                              $query->where('title', '=', $search); 
                         })

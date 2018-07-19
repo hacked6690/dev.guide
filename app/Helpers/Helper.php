@@ -19,6 +19,9 @@ class Helper
 	public static function encryptKey(){
 		return "GOBS_GIGB";
 	}
+	public static function VERIFY_LINK(){
+		return "http://localhost:8000/authorize/mail_verify";
+	}
 
 	public static function filesize($bytes, $dec = 2)
 	{

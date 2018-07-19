@@ -26,6 +26,9 @@ use App\Http\Controllers\Controller;
 use App\Helpers\Helper;
 use App\Model\Frontend\Guides;
 use Carbon\Carbon;
+use Mail;
+use App\Http\Requests;
+
 class GuidesController extends Controller
 {
     /**
@@ -205,8 +208,14 @@ class GuidesController extends Controller
        $guide_languages= ContentTerms::terms_by(['taxonomy' => 'languages']);
        $proficiencies= ContentTerms::terms_by(['taxonomy' => 'proficiencies']);
        $genders= ContentTerms::terms_by(['taxonomy' => 'gender']);
-       return view('frontend.guides.index', compact(['privileges', 'display','nationalities','provinces','partner_types','genders',
+       if(Auth::check() && Auth::user()->authorized('guide_create')){
+           return view('backend.guides.create', compact(['privileges', 'display','nationalities','provinces','partner_types','genders',
             'guide_types','guide_languages','proficiencies']));
+       }else{
+          return view('frontend.guides.index', compact(['privileges', 'display','nationalities','provinces','partner_types','genders',
+            'guide_types','guide_languages','proficiencies']));
+       }
+      
     }
     public static function countGuideByProvince($provinceID)
     {
@@ -300,13 +309,13 @@ class GuidesController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function store2(Request $request)
-    {
-            // return redirect('login');
-    }
+  
     public function store(Request $request)
     {
         //
+
+       
+   
          // dd(Helper::MyFormatDate($request->date_of_birth));
          $now = Carbon::now();
 
@@ -339,10 +348,16 @@ class GuidesController extends Controller
                 'agree' => 'required',
                 'photo' => 'image|mimes:jpg,jpeg,png,bmp|max:' . (1024 *16),
             ]);
-        
-        if(Auth::check()){
-          Session::flash('info', 'Logout first, before you can register account...');
-          return back();
+        $login=0;
+        if(Auth::check() && Auth::user()->authorized('guide_create')){
+          //Register By MOT or admin
+          $active = 1;
+          $creator_id=Auth::user()->id;
+          $login++;
+        }else{
+            //Register By Him Self (Guide Personal Registered)
+            $active=0;
+            $creator_id=0;
         }
     
         if($validator->fails()) {
@@ -350,15 +365,33 @@ class GuidesController extends Controller
                         ->withInput()
                         ->withErrors($validator);
         }             
-        // decrypted role_id, cause encrypted at frontend
+    
         $user = new User([
                 'role_id' => UserRoles::getRoleID('guide'),
                 'email' => $request->input('email'),
+                'active' => $active,
+                'creator_id' => $creator_id,
+                'remember_token' => $request->_token,
                 'password' => Hash::make($request->input('password')),
             ]);
 
         $user->save(); 
+        if($login==0){
+            try{
+             $data = array('name'=>$request->fullname_en,'id' => $user->id,'email' => $request->email);
+              Mail::send('mail', $data, function($message) use($request) {            
+                $email=$request->email;
+                $name=$request->fullname_en;
+                 $message->to($email, $name)->subject
+                      ('Confirm Account [MOT] ');
+                 $message->attach('https://i.stack.imgur.com/kS9Kf.png');
+                 $message->attach('https://i.stack.imgur.com/kS9Kf.png');
+                 $message->from('v.vannochit@gmail.com','Vannoch Vom');
+              });
+             }catch(Exception $ex){
 
+             }
+        }
          $request->merge(['password' => Hash::make($request->input('password'))]);
          $request->merge(['dob' => Helper::MyFormatDate($request->input('dob'))]);
          $request->merge(['date_in_service' => Helper::MyFormatDate($request->input('date_in_service'))]);
@@ -441,7 +474,9 @@ class GuidesController extends Controller
         $gp->save();
 
         Session::flash('inserted', 'Guide profile is saved successfully...');
-
+        if(Auth::check() && Auth::user()->authorized('guide_create')){
+          return back();
+        }
 
         return redirect('guides');
 
