@@ -91,6 +91,7 @@ class GuidePriceDetailController extends Controller
 
         Session::flash('deleted', "Additional Fee is deleted");
 
-        return redirect('guideprice');
+        // return redirect('guideprice');
+        return back();
     }
 }

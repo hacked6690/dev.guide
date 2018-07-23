@@ -19,6 +19,7 @@ class Helper
 	public static function encryptKey(){
 		return "GOBS_GIGB";
 	}
+	public static $DISPLAY=5;
 	public static function VERIFY_LINK(){
 		return "http://localhost:8000/authorize/mail_verify";
 	}
@@ -672,6 +673,7 @@ class Helper
 				  <option value="0">Pending</option>';
 		return $option;
 	}
+	
 
 
 

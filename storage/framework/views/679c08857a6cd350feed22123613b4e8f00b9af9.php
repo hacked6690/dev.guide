@@ -72,11 +72,15 @@
 				$photo ='http://www.bsmc.net.au/wp-content/uploads/No-image-available.jpg';
 			}
 			 ?>
+			
+		
 			<form action="<?php echo e(route('guides.update', encrypt($guide->id))); ?>" id="sky-form4" class="sky-form" class="smart-form" method="post" enctype="multipart/form-data" >
 				<div class="col-lg-5 col-md-5">
 								<header>
-									<?php echo e($layout->label->guide_registration->title); ?>  <?php echo e($guide_certified); ?>
-
+									<?php echo e($layout->label->guide_registration->title); ?>  
+									<a target="_blank" href="/authorize/settingprice/<?php echo e(encrypt($guide->id)); ?>" class="btn btn-success btn-sm" style="color:white">
+									<i class="fas fa-edit"></i> &nbsp;Setting Guide Price
+									</a>
 								</header>
 
 								<fieldset>
@@ -710,6 +714,11 @@
 							<!-- End Reg-Form -->
 		
 		</div>
+
+
+
+
+
 			
 	</div><!--end wrapper class-->
 	</div>

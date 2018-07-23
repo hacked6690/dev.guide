@@ -10,7 +10,7 @@ foreach ($users as $key=>$value) {
 }
 $photo_path="http://www.nurnberg.com/images/image_unavailable_lrg.png";
 if(($user_meta->photo->value)!=="")
-$photo_path=Storage::url('guide_profile_test/' . $user_meta->photo->value);
+$photo_path=Storage::url($uid.'/' . $user_meta->photo->value);
 $url='/guides/'.Helper::encodeString($uid,Helper::encryptKey());
 //$gp is guide price
 $gp_language="";
@@ -100,9 +100,9 @@ foreach ($guide_prices as $key => $value) {
                 </div>
                
                 <div class="table-responsive">
-                <table class="table table-hover">
+                <table class="table table-hover table-bordered">
                   <thead>
-                    <tr class="bg bg-primary">
+                    <tr class="bg">
                       <th>ID</th>          
                       <th>{{$layout->label->language->title}}</th>
                       <th>{{$layout->label->location->title}}</th>

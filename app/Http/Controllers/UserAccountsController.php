@@ -58,9 +58,9 @@ class UserAccountsController extends Controller
         // decode obj json ___
         $users = array();
 
-        foreach ($user_accounts as $key => $value)
+      /*  foreach ($user_accounts as $key => $value)
         {
-
+            
             $usr = json_decode($value->obj);
 
             $key = (object) array(
@@ -72,9 +72,19 @@ class UserAccountsController extends Controller
                         'created_at' => $value->created_at,
                         'updated_at' => $value->updated_at
                     );
-
+         
             array_push($users, $key);
-        }
+      
+        }*/
+
+        $role_guide = UserRoles::getRoleID('guide');
+        $role_admin = UserRoles::getRoleID('admin');
+
+        $users = User::with('user_metas')
+            ->where('role_id','!=',$role_guide)
+              ->orderBy('id','desc')
+              ->paginate($display);
+ 
 
         return view('user_accounts.index', compact(['user_accounts', 'users', 'display']));
     }
@@ -130,7 +140,9 @@ class UserAccountsController extends Controller
         $user = new User([
                 'role_id' => $request->input('role_id'),
                 'email' => $request->input('email'),
+                'name' => $request->name,
                 'password' => $request->input('password'),
+                'remember_token' => $request->input('_token'),
             ]);
 
         $user->save();

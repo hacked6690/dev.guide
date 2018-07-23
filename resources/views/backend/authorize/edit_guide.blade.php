@@ -73,10 +73,15 @@
 				$photo ='http://www.bsmc.net.au/wp-content/uploads/No-image-available.jpg';
 			}
 			@endphp
+			
+		
 			<form action="{{ route('guides.update', encrypt($guide->id)) }}" id="sky-form4" class="sky-form" class="smart-form" method="post" enctype="multipart/form-data" >
 				<div class="col-lg-5 col-md-5">
 								<header>
-									{{ $layout->label->guide_registration->title }}  {{$guide_certified}}
+									{{ $layout->label->guide_registration->title }}  
+									<a target="_blank" href="/authorize/settingprice/{{encrypt($guide->id) }}" class="btn btn-success btn-sm" style="color:white">
+									<i class="fas fa-edit"></i> &nbsp;Setting Guide Price
+									</a>
 								</header>
 
 								<fieldset>
@@ -677,6 +682,11 @@
 							<!-- End Reg-Form -->
 		
 		</div>
+
+
+
+
+
 			
 	</div><!--end wrapper class-->
 	</div>

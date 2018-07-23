@@ -39,7 +39,7 @@ class GuidePriceController extends Controller
             ->where('active','=','active')
             ->where('guide_id','=',Auth::user()->id)
             ->paginate($display);
-
+       
         return view('backend.guideprice.index', compact(['guideprices', 'display','fees']));
     }
 
@@ -80,7 +80,7 @@ class GuidePriceController extends Controller
 
       
         // dd($validator->errors());
-        $guide_id=$request->has('guide_id')?$request->input('guide_id'):Auth::user()->id;
+        $guide_id=$request->has('guide_id')?decrypt($request->input('guide_id')):Auth::user()->id;
         if($validator->fails()) {
             return redirect()->back()
                         ->withInput()
@@ -116,9 +116,10 @@ class GuidePriceController extends Controller
 
         $gp->save();   
         Session::flash('inserted', 'Guide price has been set successfully...');
-        if($request->has('sane'))
+       /* if($request->has('sane'))
             return redirect('guideprice/create');
-        return redirect('guideprice');
+        return redirect('guideprice');*/
+        return back();
     }
 
     public function ajx_store(Request $request)
@@ -251,7 +252,8 @@ class GuidePriceController extends Controller
 
                 ]);
          Session::flash('updated', 'Guide price has been updated successfully...');
-            return redirect('guideprice');
+            // return redirect('guideprice');
+         return back();
        
     }
 
@@ -274,6 +276,7 @@ class GuidePriceController extends Controller
 
         Session::flash('deleted', "Guide Price is deleted");
 
-        return redirect('guideprice');
+        // return redirect('guideprice');
+        return back();
     }
 }

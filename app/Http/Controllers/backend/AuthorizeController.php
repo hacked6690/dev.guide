@@ -14,7 +14,8 @@ use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
-
+use Auth;
+use App\Helpers\Helper;
 
 class AuthorizeController extends Controller
 {
@@ -26,6 +27,12 @@ class AuthorizeController extends Controller
     public function index(Request $request)
     {
         //
+
+         if(!Auth::user()->authorized('authorization_guide')) {
+            abort(403, 'Unauthorized action.');
+        }
+
+
         $display = Input::has('display') ? Input::get('display') :10;
 
         // $users = User::with('user_metas')->orderBy('id','desc')->get();
@@ -39,6 +46,14 @@ class AuthorizeController extends Controller
        $genders= ContentTerms::terms_by(['taxonomy' => 'gender']);
        $guide_languages= ContentTerms::terms_by(['taxonomy' => 'languages']);
        $proficiencies= ContentTerms::terms_by(['taxonomy' => 'proficiencies']);  
+       $guidestatus = [
+            '0' => 'Pending',
+            '1'  => 'active',
+            '2'   => 'Suspense'
+            
+        ];
+      
+       
         //Getting from url form when searching
         $fullname_en=Input::has('fullname_en')?Input::get('fullname_en'):'';
         $guide_type_id=Input::has('guide_type_id')?intval(Input::get('guide_type_id')):0;
@@ -46,16 +61,20 @@ class AuthorizeController extends Controller
         $nationality_id=Input::has('nationality_id')?intval(Input::get('nationality_id')):0;
         $guide_language=Input::has('guide_language')?intval(Input::get('guide_language')):0;
         $province_id=Input::has('province_id')?intval(Input::get('province_id')):0;
+        $status_id=Input::has('status_id')?Input::get('status_id'):'all';
+
         $searchField=array(
                 "fullname_en"=>$fullname_en,
                 "guide_type_id"=>$guide_type_id,
                 "gender"=>$gender,
                 "nationality_id"=>$nationality_id,
-                "guide_language"=>$guide_language
+                "guide_language"=>$guide_language,
+                "province_id"=>$province_id,
+                "status_id" => $status_id
                 );
         $searchField=(object) $searchField;
-  
-      
+        
+    
          if ($fullname_en!=="") 
         {  
               $users = $users->filter(function($user) use ($fullname_en)
@@ -114,12 +133,35 @@ class AuthorizeController extends Controller
                 }                 
                });
         }
+          if ($province_id!=0) 
+        {  
+              $users = $users->filter(function($gp) use ($province_id)
+              {
+                $u=$gp->guide_price;               
+                foreach ($u as $key => $value) {
+                     if($value->province_id==$province_id){return $value;} 
+                }                 
+               });
+        }
+
+         if ($status_id!='all') 
+        {  
+              
+           $users = $users->filter(function($user) use ($status_id)
+              {
+
+                // $u=$user->active;                
+                 if($user->active==$status_id) return $user;
+               });
+        }
+   
 
       
         $page = Input::get('page', 1); // Get the ?page=1 from the url
         $perPage = $display; // Number of items per page
         $offset = ($page * $perPage) - $perPage;
         // dd(array_slice($users->toArray(), $offset, $perPage, true));
+         $totalRecords=count($users);
         $users = new LengthAwarePaginator(
             array_slice($users->toArray(), $offset, $perPage, true), // Only grab the items we need
             count($users), // Total items
@@ -128,9 +170,15 @@ class AuthorizeController extends Controller
             ['path' => $request->url(), 'query' => $request->query()] // We need this so we can keep all old query parameters from the url
         );
 
-        // dd($users);
+
+
+
+
+
+
+    
         return view('backend.authorize.index',compact(['display','users','nationalities','provinces','partner_types','genders',
-            'guide_types','guide_languages','proficiencies','searchField']));
+            'guide_types','guide_languages','proficiencies','searchField','guidestatus','totalRecords']));
     }
 
     /**
@@ -141,7 +189,7 @@ class AuthorizeController extends Controller
     public function create()
     {
         //
-    }
+    }   
 
     public function mail_verify($user_id){
         $id=decrypt($user_id);
@@ -149,7 +197,7 @@ class AuthorizeController extends Controller
                  ->update(
                     ['active' => 1
                 ]);
-                 
+
         return redirect('guides');
 
     }
@@ -182,11 +230,13 @@ class AuthorizeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+
+ 
     public function edit($id)
     {
         //
         $id=decrypt($id);
-        $display = Input::has('display') ? Input::get('display') :7;
+        $display = Input::has('display') ? Input::get('display') :Helper::$DISPLAY;
         $privileges = DB::table('privileges as p1')
                         ->select('p1.*', 'p2.title as parent_title')
                         ->leftJoin('privileges as p2', 'p1.parent', '=', 'p2.id')
@@ -201,10 +251,28 @@ class AuthorizeController extends Controller
        $genders= ContentTerms::terms_by(['taxonomy' => 'gender']);
        $guide = User::with('user_metas')->where('id','=',$id)->first();
        $guide_price = GuidePrice::where('guide_id','=',$id)->where('default','=','yes')->first();
+
+
+       // Setting Price
+         /*if(!Auth::user()->authorized('read_guideprice')) {
+            abort(403, 'Unauthorized action.');
+        }*/
+
+
+
+       $fees= ContentTerms::terms_by(['taxonomy' => 'fees']);
+       $guideprices=GuidePrice::with('guideprice_detail')
+            ->where('active','=','active')
+            ->where('guide_id','=',$id)
+            ->paginate($display);
+
+        // return view('backend.guideprice.index', compact(['guideprices','fees']));
+
+
        
 
         return view('backend.authorize.edit_guide',compact(['privileges', 'display','nationalities','provinces','partner_types','genders',
-            'guide_types','guide_languages','proficiencies','guide','guide_price']));
+            'guide_types','guide_languages','proficiencies','guide','guide_price','guideprices','fees']));
     }
 
     /**
@@ -265,6 +333,32 @@ class AuthorizeController extends Controller
         
     }
 
+    function settingprice($id)
+    {
+        $id=decrypt($id);
+        $guide_id=$id;
+       $fees= ContentTerms::terms_by(['taxonomy' => 'fees']);
+       $guideprices=GuidePrice::with('guideprice_detail')
+            ->where('active','=','active')
+            ->where('guide_id','=',$id)
+            ->paginate(10);
+         $guideprices=GuidePrice::with('guideprice_detail')
+            ->where('active','=','active')
+            ->where('guide_id','=',$id)
+            ->paginate(10);
+        
+  
+      /*  if(!Auth::user()->authorized('create_guideprice')) {
+            abort(403, 'Unauthorized action.');
+            }*/
+
+          $languages= GuidePrice::getLanguagesAPI();
+          $provinces= GuidePrice::getProvincesAPI();
+          $booleans= ContentTerms::terms_by(['taxonomy' => 'booleans']);
+
+
+        return view('backend.authorize.settingprice',compact(['guideprices','fees','languages','provinces','booleans','guide_id']));
+    }
 
 
 }

@@ -63,7 +63,7 @@
 <form action="<?php echo e(route('authorize.index')); ?>" id="sky-form4" class="sky-form" class="smart-form" method="GET"  >
 
 <div class="row" style="border:1px dashed green;margin-bottom:5px;background:#c2d6d6;padding:2px;margin:0px">       
-        <div class="col-lg-2 col-md-2 col-xs-12">
+        <div class="col-lg-6 col-md-6 col-xs-12">
                 <section class="flexibled-error">
                     <label class="label">
                         <?php echo e($layout->label->fullname_en->title); ?> 
@@ -79,7 +79,7 @@
                     </label>
                 </section>
         </div>    
-        <section class="col col-lg-2 col-md-2 col-xs-12 flexibled-error">
+        <section class="col col-lg-3 col-md-3 col-xs-12 flexibled-error">
                     <label class="label">
                         <?php echo e($layout->label->gender->title); ?> 
                         <?php if($errors->has('gender')): ?>
@@ -90,7 +90,7 @@
                        <?php endif; ?>
                     </label>
                     <label class="select">
-                       <select value="<?php echo e(old('gender')); ?>" name="gender" >
+                       <select value="<?php echo e(old('gender')); ?>" name="gender" onchange="return form.submit()" >
                            <option value="0" selected ><?php echo e($layout->label->please_select_below->title); ?></option>
                               <?php $__currentLoopData = $genders; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $gender): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                    <?php if($searchField->gender==$gender->term_id): ?>
@@ -103,7 +103,7 @@
                       <i></i>
                     </label>
         </section>       
-        <section class="col col-lg-2 col-md-2 col-xs-12 flexibled-error">
+        <section class="col col-lg-3 col-md-3 col-xs-12 flexibled-error">
                 <label class="label">
                        <?php echo e($layout->label->guide_type->title); ?>
 
@@ -115,7 +115,7 @@
                             <?php endif; ?>
                 </label>
                 <label class="select">
-                     <select value="<?php echo e(old('guide_type_id')); ?>" name="guide_type_id" >
+                     <select value="<?php echo e(old('guide_type_id')); ?>" name="guide_type_id" onchange="return form.submit()" >
                          <option value="0" selected ><?php echo e($layout->label->please_select_below->title); ?></option>
                             <?php $__currentLoopData = $guide_types; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $guide_type): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                  <?php if($searchField->guide_type_id==$guide_type->term_id): ?>
@@ -140,7 +140,7 @@
                             <?php endif; ?>
                 </label>
                 <label class="select">
-                     <select value="<?php echo e(old('nationality_id')); ?>" name="nationality_id" >
+                     <select value="<?php echo e(old('nationality_id')); ?>" name="nationality_id" onchange="return form.submit()" >
                          <option value="0" selected ><?php echo e($layout->label->please_select_below->title); ?></option>
                             <?php $__currentLoopData = $nationalities; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $nationality): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                  <?php if($searchField->nationality_id==$nationality->term_id): ?>
@@ -153,7 +153,7 @@
                     <i></i>
                </label>
         </section> 
-        <section class="col col-lg-3 col-md-3 col-xs-12 flexibled-error">
+        <section class="col col-lg-2 col-md-2 col-xs-12 flexibled-error">
                 <label class="label">
                        <?php echo e($layout->label->language->title); ?>
 
@@ -165,7 +165,7 @@
                             <?php endif; ?>
                 </label>
                 <label class="select">
-                     <select value="<?php echo e(old('guide_language')); ?>" name="guide_language" >
+                     <select value="<?php echo e(old('guide_language')); ?>" name="guide_language"  onchange="return form.submit()" >
                          <option value="0" selected ><?php echo e($layout->label->please_select_below->title); ?></option>
                             <?php $__currentLoopData = $guide_languages; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $guide_language): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                  <?php if($searchField->guide_language==$guide_language->term_id): ?>
@@ -178,8 +178,72 @@
                     <i></i>
                </label>
         </section>  
+         <section class="col col-lg-2 col-md-2 col-xs-12 flexibled-error">
+                <label class="label">
+                       <?php echo e($layout->label->province->title); ?>
+
+                            <?php if($errors->has('province_id')): ?>
+                                <div class="error-badge" id="for-province_id">                                                            
+                                    <?php echo Helper::alert('danger', $errors->first('province_id')); ?>
+
+                                </div>
+                            <?php endif; ?>
+                </label>
+                <label class="select">
+                     <select value="<?php echo e(old('province_id')); ?>" name="province_id" onchange="return form.submit()" >
+                         <option value="0" selected ><?php echo e($layout->label->please_select_below->title); ?></option>
+                            <?php $__currentLoopData = $provinces; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $province): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                 <?php if($searchField->province_id==$province->term_id): ?>
+                                    <option value="<?php echo e($province->term_id); ?>" selected ><?php echo e($province->title); ?></option>
+                                 <?php else: ?>
+                                    <option value="<?php echo e($province->term_id); ?>"><?php echo e($province->title); ?></option>
+                                <?php endif; ?>
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                    </select>
+                    <i></i>
+               </label>
+              
+
+        </section> 
+         <section class="col col-lg-2 col-md-2 col-xs-12 flexibled-error">
+                <label class="label">
+                       <?php echo e($layout->label->province->title); ?>
+
+                            <?php if($errors->has('status_id')): ?>
+                                <div class="error-badge" id="for-status_id">                                                            
+                                    <?php echo Helper::alert('danger', $errors->first('status_id')); ?>
+
+                                </div>
+                            <?php endif; ?>
+                </label>
+                <label class="select">
+                     <select value="<?php echo e(old('status_id')); ?>" name="status_id" onchange="return form.submit()" >
+                     	
+                         <option value="all" selected ><?php echo e($layout->label->please_select_below->title); ?></option>
+                        
+                       	 <?php $__currentLoopData = $guidestatus; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $value): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                 <?php if($searchField->status_id ==$key): ?>
+                                 	<?php if($searchField->status_id=='all' && $key==0): ?>
+                                 		<option value="<?php echo e($key); ?>"  ><?php echo e($value); ?></option>  
+                                 	<?php else: ?>
+                                 		<option value="<?php echo e($key); ?>" selected ><?php echo e($value); ?></option>  
+                                 	<?php endif; ?>
+                                                                  
+                                 <?php else: ?>
+                                    <option value="<?php echo e($key); ?>"><?php echo e($value); ?></option>
+                                <?php endif; ?>
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+
+
+                    </select>
+                    <i></i>
+               </label>
+              
+
+        </section> 
+
         <section class="col col-lg-1 col-md-1 col-xs-12 flexibled-error">
-                <button type="submit"  class="btn-u" style="width:100%;margin-top:25px">
+                <button type="submit"  class="btn-u btn btn-primary" style="width:100%;margin-top:30px;padding:2px">
                     <span class="button_search"><i class="fa fa-search"></i></span>
                  </button>   
         </section>    
@@ -283,9 +347,15 @@
 										        			<i class="fas fa-edit"></i> &nbsp;Authorized
 								</button>
 
+								
 								<a target="_blank" href="<?php echo e(route('authorize.edit', encrypt($user['id']))); ?>" class="btn btn-primary btn-xs">
 									<i class="fas fa-edit"></i> &nbsp;Edit
 								</a>
+
+								<a target="_blank" href="/authorize/settingprice/<?php echo e(encrypt($user['id'])); ?>" class="btn btn-primary btn-xs">
+									<i class="fas fa-edit"></i> &nbsp;Setting Price
+								</a>
+								
 								<form action="<?php echo e(route('guides.destroy', encrypt($user['id']))); ?>" method="post" class="inline-block">
 									<?php echo e(method_field('delete')); ?>
 
@@ -295,6 +365,10 @@
 										<i class="fas fa-trash-alt"></i> &nbsp;Delete
 									</button>
 								</form>
+
+								
+
+
 								</div>
 							</td>
 						
@@ -303,8 +377,18 @@
 				<?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 			</tbody>
 		</table>
-		<?php echo $users->appends(Input::except('page'))->links(); ?>
+		
+		<div class="col-lg-12" >
 
+			<div class="col-lg-2">
+				   <h5>Total Records:<b> <?php echo e($totalRecords); ?></b></h5>
+			</div>
+			<div class="col-lg-3">
+				<?php echo $users->appends(Input::except('page'))->links(); ?>
+
+			</div>
+	
+		</div>
 
 
 </div>
@@ -348,9 +432,7 @@
 							</select><i></i>
 						</label>
 					</section>
-				</div>
-				
-          	
+				</div>	
         </div>
         <div class="modal-footer">        
           <button type="submit" name="save_detail" value="true" class="bt_save btn btn-default">
@@ -363,6 +445,9 @@
       </div>      
     </div>
   </div>
+
+
+
 
 
 		

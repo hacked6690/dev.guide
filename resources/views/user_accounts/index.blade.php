@@ -45,15 +45,19 @@
 											{!! Helper::empty_table(8) !!}
 										@endif
 
-										@foreach($users as $key => $user)
+										@foreach($users as $key => $user)										
+											
 									      	<tr>
+									      		@php
+												$user_meta = \Helper::metas('user_meta', ['user_id' => $user->id]);
+												@endphp
 										        <td>{{ \Helper::indexed($user_accounts, $key) }}</td>
 										        <td>
-										        	<code>{{ $user->role }}</code>
+										        	<code>{{ $user->role->title }}</code>
 										        </td>
-										        <td>{{ $user->name }}</td>
+										        <td>{{ isset($user_meta->name->value)?$user_meta->name->value:"..."}}</td>
 										        <td>{!! $user->email !!}</td>
-										        <td>{{ $user->phone }}</td>
+										        <td>{{ isset($user_meta->phone->value)?$user_meta->phone->value:"..." }}</td>
 										        <td>{{ $user->created_at }}</td>
 										        <td>{{ $user->updated_at }}</td>
 										        <td>
@@ -66,6 +70,7 @@
 														</form>
 													</div>
 										        </td>
+
 									      	</tr>
 										@endforeach
 									</tbody>

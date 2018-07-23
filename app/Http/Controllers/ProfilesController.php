@@ -37,11 +37,11 @@ class ProfilesController extends Controller
         $decrypted_id = decrypt($encrypted_id);
 
         $user_meta = \Helper::metas('user_meta', ['user_id' => $decrypted_id]);
-
+        
         $profile = isset($user_meta->profile) ? Storage::url($decrypted_id .'/profile/'. $user_meta->profile->value) : '/assets/admin/img/avatars/male.png';
 
         $user = \App\User::select('id', 'role_id', 'email', 'created_at')->where('id', $decrypted_id)->first();
-        // dd($user_meta);
+        // dd($profile);
         return view('profiles.edit', compact(['user', 'user_meta', 'profile']));
     }
 
@@ -97,8 +97,18 @@ class ProfilesController extends Controller
 
             $excepts =[];
         }
+        // echo json_encode($meta);
+        foreach ($meta as $key => $value) {
+             DB::table('user_meta')
+            ->where('user_id', $decrypted_id)
+            ->where('meta_key',$key)
+            ->update(['meta_value' => $value]);
+        }
+      
+          
 
-        \Helper::store_meta('user_meta', ['user_id' => $decrypted_id], $meta, $excepts, false);
+
+        // \Helper::store_meta('user_meta', ['user_id' => $decrypted_id], $meta, $excepts, false);
 
         Session::flash('updated', 'Profile is updated');
 

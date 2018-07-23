@@ -64,7 +64,7 @@
 <form action="{{ route('authorize.index') }}" id="sky-form4" class="sky-form" class="smart-form" method="GET"  >
 
 <div class="row" style="border:1px dashed green;margin-bottom:5px;background:#c2d6d6;padding:2px;margin:0px">       
-        <div class="col-lg-2 col-md-2 col-xs-12">
+        <div class="col-lg-6 col-md-6 col-xs-12">
                 <section class="flexibled-error">
                     <label class="label">
                         {{ $layout->label->fullname_en->title }} 
@@ -79,7 +79,7 @@
                     </label>
                 </section>
         </div>    
-        <section class="col col-lg-2 col-md-2 col-xs-12 flexibled-error">
+        <section class="col col-lg-3 col-md-3 col-xs-12 flexibled-error">
                     <label class="label">
                         {{ $layout->label->gender->title }} 
                         @if($errors->has('gender'))
@@ -89,7 +89,7 @@
                        @endif
                     </label>
                     <label class="select">
-                       <select value="{{ old('gender') }}" name="gender" >
+                       <select value="{{ old('gender') }}" name="gender" onchange="return form.submit()" >
                            <option value="0" selected >{{$layout->label->please_select_below->title}}</option>
                               @foreach($genders as $gender)
                                    @if($searchField->gender==$gender->term_id)
@@ -102,7 +102,7 @@
                       <i></i>
                     </label>
         </section>       
-        <section class="col col-lg-2 col-md-2 col-xs-12 flexibled-error">
+        <section class="col col-lg-3 col-md-3 col-xs-12 flexibled-error">
                 <label class="label">
                        {{ $layout->label->guide_type->title }}
                             @if($errors->has('guide_type_id'))
@@ -112,7 +112,7 @@
                             @endif
                 </label>
                 <label class="select">
-                     <select value="{{ old('guide_type_id') }}" name="guide_type_id" >
+                     <select value="{{ old('guide_type_id') }}" name="guide_type_id" onchange="return form.submit()" >
                          <option value="0" selected >{{$layout->label->please_select_below->title}}</option>
                             @foreach($guide_types as $guide_type)
                                  @if($searchField->guide_type_id==$guide_type->term_id)
@@ -135,7 +135,7 @@
                             @endif
                 </label>
                 <label class="select">
-                     <select value="{{ old('nationality_id') }}" name="nationality_id" >
+                     <select value="{{ old('nationality_id') }}" name="nationality_id" onchange="return form.submit()" >
                          <option value="0" selected >{{$layout->label->please_select_below->title}}</option>
                             @foreach($nationalities as $nationality)
                                  @if($searchField->nationality_id==$nationality->term_id)
@@ -148,7 +148,7 @@
                     <i></i>
                </label>
         </section> 
-        <section class="col col-lg-3 col-md-3 col-xs-12 flexibled-error">
+        <section class="col col-lg-2 col-md-2 col-xs-12 flexibled-error">
                 <label class="label">
                        {{ $layout->label->language->title }}
                             @if($errors->has('guide_language'))
@@ -158,7 +158,7 @@
                             @endif
                 </label>
                 <label class="select">
-                     <select value="{{ old('guide_language') }}" name="guide_language" >
+                     <select value="{{ old('guide_language') }}" name="guide_language"  onchange="return form.submit()" >
                          <option value="0" selected >{{$layout->label->please_select_below->title}}</option>
                             @foreach($guide_languages as $guide_language)
                                  @if($searchField->guide_language==$guide_language->term_id)
@@ -171,8 +171,68 @@
                     <i></i>
                </label>
         </section>  
+         <section class="col col-lg-2 col-md-2 col-xs-12 flexibled-error">
+                <label class="label">
+                       {{ $layout->label->province->title }}
+                            @if($errors->has('province_id'))
+                                <div class="error-badge" id="for-province_id">                                                            
+                                    {!! Helper::alert('danger', $errors->first('province_id')) !!}
+                                </div>
+                            @endif
+                </label>
+                <label class="select">
+                     <select value="{{ old('province_id') }}" name="province_id" onchange="return form.submit()" >
+                         <option value="0" selected >{{$layout->label->please_select_below->title}}</option>
+                            @foreach($provinces as $province)
+                                 @if($searchField->province_id==$province->term_id)
+                                    <option value="{{$province->term_id}}" selected >{{$province->title}}</option>
+                                 @else
+                                    <option value="{{$province->term_id}}">{{$province->title}}</option>
+                                @endif
+                            @endforeach
+                    </select>
+                    <i></i>
+               </label>
+              
+
+        </section> 
+         <section class="col col-lg-2 col-md-2 col-xs-12 flexibled-error">
+                <label class="label">
+                       {{ $layout->label->province->title }}
+                            @if($errors->has('status_id'))
+                                <div class="error-badge" id="for-status_id">                                                            
+                                    {!! Helper::alert('danger', $errors->first('status_id')) !!}
+                                </div>
+                            @endif
+                </label>
+                <label class="select">
+                     <select value="{{ old('status_id') }}" name="status_id" onchange="return form.submit()" >
+                     	
+                         <option value="all" selected >{{$layout->label->please_select_below->title}}</option>
+                        
+                       	 @foreach($guidestatus as $key => $value)
+                                 @if($searchField->status_id ==$key)
+                                 	@if($searchField->status_id=='all' && $key==0)
+                                 		<option value="{{$key}}"  >{{$value}}</option>  
+                                 	@else
+                                 		<option value="{{$key}}" selected >{{$value}}</option>  
+                                 	@endif
+                                                                  
+                                 @else
+                                    <option value="{{$key}}">{{$value}}</option>
+                                @endif
+                            @endforeach
+
+
+                    </select>
+                    <i></i>
+               </label>
+              
+
+        </section> 
+
         <section class="col col-lg-1 col-md-1 col-xs-12 flexibled-error">
-                <button type="submit"  class="btn-u" style="width:100%;margin-top:25px">
+                <button type="submit"  class="btn-u btn btn-primary" style="width:100%;margin-top:30px;padding:2px">
                     <span class="button_search"><i class="fa fa-search"></i></span>
                  </button>   
         </section>    
@@ -272,9 +332,15 @@
 										        			<i class="fas fa-edit"></i> &nbsp;Authorized
 								</button>
 
+								
 								<a target="_blank" href="{{ route('authorize.edit', encrypt($user['id'])) }}" class="btn btn-primary btn-xs">
 									<i class="fas fa-edit"></i> &nbsp;Edit
 								</a>
+
+								<a target="_blank" href="/authorize/settingprice/{{encrypt($user['id'])}}" class="btn btn-primary btn-xs">
+									<i class="fas fa-edit"></i> &nbsp;Setting Price
+								</a>
+								
 								<form action="{{ route('guides.destroy', encrypt($user['id'])) }}" method="post" class="inline-block">
 									{{ method_field('delete') }}
 									{{ csrf_field() }}
@@ -282,6 +348,10 @@
 										<i class="fas fa-trash-alt"></i> &nbsp;Delete
 									</button>
 								</form>
+
+								
+
+
 								</div>
 							</td>
 						
@@ -290,7 +360,17 @@
 				@endforeach
 			</tbody>
 		</table>
-		{!! $users->appends(Input::except('page'))->links() !!}
+		
+		<div class="col-lg-12" >
+
+			<div class="col-lg-2">
+				   <h5>Total Records:<b> {{$totalRecords}}</b></h5>
+			</div>
+			<div class="col-lg-3">
+				{!! $users->appends(Input::except('page'))->links() !!}
+			</div>
+	
+		</div>
 
 
 </div>
@@ -330,9 +410,7 @@
 							</select><i></i>
 						</label>
 					</section>
-				</div>
-				
-          	
+				</div>	
         </div>
         <div class="modal-footer">        
           <button type="submit" name="save_detail" value="true" class="bt_save btn btn-default">
@@ -344,6 +422,9 @@
       </div>      
     </div>
   </div>
+
+
+
 
 
 		

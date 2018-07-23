@@ -88,6 +88,8 @@ Route::get('/fireEvent',function(){
 Route::resource('authorize', 'backend\AuthorizeController');
 Route::post('ajax/authorize', 'backend\AuthorizeController@ajx_status');
 Route::get('authorize/mail_verify/{id}','backend\AuthorizeController@mail_verify');
+Route::get('authorize/settingprice/{id}','backend\AuthorizeController@settingprice');
+Route::get('guide_edit','frontend\GuidesController@guide_edit');
 
 
 
@@ -95,3 +97,8 @@ Route::get('authorize/mail_verify/{id}','backend\AuthorizeController@mail_verify
 Route::get('sendbasicemail','MailController@basic_email');
 Route::get('sendhtmlemail','MailController@html_email');
 Route::get('sendattachmentemail','MailController@attachment_email');
+
+
+
+
+Route::get('/','frontend\GuidesController@index');

@@ -51,7 +51,7 @@
 
 		<!-- #MAIN PANEL -->
 		<div id="main" role="main">
-
+			<!-- <a href="javascript:history.go(-2)" class="btn btn-primary"><i class="far fa-arrow-alt-circle-left"></i> &nbsp;Go Back</a> -->
 			<!-- #MAIN CONTENT -->
 
 				<!-- col -->
