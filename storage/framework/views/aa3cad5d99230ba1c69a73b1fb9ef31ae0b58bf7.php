@@ -26,6 +26,12 @@
 							<?php endif; ?>
 							
 							<div class="table-responsive">
+								 <form action="<?php echo e(route('layout_items.index')); ?>" id="sky-form4" class="sky-form" class="smart-form" method="GET"  >     
+							        <div class="col-lg-12" style="">							 
+							           <input type="text"  style="width:100%" name="search" placeholder="Search by Title" class="form-control">
+							               <hr/> 
+							        </div> 
+							       </form>
 
 								<table class="table table-hover">
 									<thead>

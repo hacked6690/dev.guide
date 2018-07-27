@@ -39,7 +39,7 @@
 
 		
 		<!-- loaded switcher style-->
-		@include('layouts.frontend.partials.style_switcher')
+		<?php //@include('layouts.frontend.partials.style_switcher') ?>
 		<!-- loaded footer page-->
 		@include('layouts.frontend.partials.footer')
 		<!-- Link to Google CDN's jQuery + jQueryUI; fall back to local -->

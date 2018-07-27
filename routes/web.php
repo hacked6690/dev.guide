@@ -13,6 +13,8 @@ use App\Model\Backend\Bookings;
 */
 
 Auth::routes();
+
+Route::get('pagenotfound',['as'=>'notfound','uses'=>'frontend\HomeController@pagenotfound']);
 Route::get('test','frontend\GuidesController@test');
 
 Route::get('dashboard', ['uses' => 'DashboardController@index']);

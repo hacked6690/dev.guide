@@ -3,3 +3,20 @@
 	background-color: gray;
 	color:red;
 }
+
+
+@font-face {
+    font-family: "khla";
+    src: url("/fonts/Khla-Bold.ttf") format("truetype");
+}
+*{
+	font-family: "khla";
+}
+.blockguide{
+	font-family: "khla";
+}
+
+.mybg{
+	background-color: #ffe699;
+	color:green;
+}

@@ -33,6 +33,8 @@ class ContentTermsController extends Controller
         }
 
         $display = Input::has('display') ? Input::get('display') :7;
+        $search = Input::has('search') ? Input::get('search') :'';
+        $taxonomysearch = Input::has('taxonomy') ? Input::get('taxonomy') :'';
 
         $content_terms = DB::table('content_terms')
                             ->select(
@@ -43,10 +45,25 @@ class ContentTermsController extends Controller
                             ->join('content_taxonomy', function($join) {
                                 $join->on('content_terms.term_id', '=', 'content_taxonomy.term_id');
                             })
+                            ->where(function($qry) use ($search) {
+                                if($search!==''){
+                                   return  $qry->where('content_terms.title', 'like', '%'.$search.'%');
+                                }
+                            })
+                             ->where(function($qry) use ($taxonomysearch) {
+                                if($taxonomysearch!==''){
+                                   return  $qry->where('content_taxonomy.taxonomy', ''.$taxonomysearch.'');
+                                }
+                            })
                             ->orderBy('content_terms.term_id', 'desc')
                             ->paginate($display);
-                      
-        return view('content_terms.index', compact(['content_terms', 'display']));
+            
+             $taxonomies = DB::table('content_taxonomy')
+                            ->distinct()
+                            ->get(['taxonomy']);
+          
+
+        return view('content_terms.index', compact(['content_terms', 'display','taxonomies','taxonomysearch']));
     }
 
     /**

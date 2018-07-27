@@ -4,7 +4,7 @@ use App\User;
 use Illuminate\Support\Facades\Storage;
 ?>
  <form action="{{ route('guides.index') }}" id="sky-form4" class="sky-form" class="smart-form" method="GET"  >
-<div class="row" style="border:1px dashed green;margin-bottom:5px;background:#c2d6d6">       
+<div class="row" style="border:1px dashed green;margin-bottom:5px;background:#ffe699">       
         <div class="col-lg-2 col-md-2 col-xs-12">
                 <section class="flexibled-error">
                     <label class="label">
@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Storage;
                        @endif
                     </label>
                     <label class="input">
-                        <input type="text" value="{{$searchField->fullname_en}}" name="fullname_en" placeholder="Guide name">
+                        <input type="text" value="{{$searchField->fullname_en}}" name="fullname_en" placeholder="{{$layout->label->fullname_en->title }}">
                     </label>
                 </section>
         </div>    
@@ -264,10 +264,15 @@ $profileID=Helper::encodeString($uid,Helper::encryptKey());
                             case 'photo' : $photo = $um["meta_value"];break;
                         }
                         $photo_path='';
-                        $file=Storage::url($uid.'/'. $photo);
-                        if(!file_exists($file)){
-                            $photo_path=Storage::url($uid.'/'. $photo);
+                        if($photo!==''){
+                           $file=Storage::url($uid.'/'. $photo);
+                            if(!file_exists($file)){
+                                $photo_path=Storage::url($uid.'/'. $photo);
+                            }
+                        }else{
+                          $photo_path ='https://www.greatplacetowork.com/templates/gptw/images/no-image-available.jpg';
                         }
+                       
                         $url='/guides/'.Helper::encodeString($uid,Helper::encryptKey());
                         $profileID=Helper::encodeString($uid,Helper::encryptKey());
                         $date1=new DateTime($dob);
@@ -293,11 +298,11 @@ $profileID=Helper::encodeString($uid,Helper::encryptKey());
 
                     <div class="row" >
             <div class="well well-sm" style="margin-bottom:10px">
-                <div class="row" >
+                <div class="row blockguide" >
                     <div class="col-xs-12 col-md-2 text-center">
                         <a href="/guides/detail/{{$profileID}}">
                         <img src="{{$photo_path}}" alt="Guide"
-                            class="img-rounded img-responsive guideprofile" />
+                            class="img-thumbnail<img img-responsive guideprofile" />
                         </a>
                     </div>
                     <div class="col-xs-12 col-md-6 section-box">
@@ -311,16 +316,16 @@ $profileID=Helper::encodeString($uid,Helper::encryptKey());
                                 </span>                               
                         </h2>
                         <p>
-                            {{$layout->label->nationality->title}}: {{$nationality}}
-                            | {{$layout->label->date_of_birth->title}}:{{$dob}} &nbsp;[{{$age}} years old]
-                            | {{$layout->label->gender->title}}: {{ContentTerms::getTermTitle($gender)}}
-                            | {{$layout->label->guide_type->title}}: {{ContentTerms::getTermTitle($guide_type_id)}} 
+                            {{$layout->label->nationality->title}}: {{Helper::term_translate($nationality_id)}}
+                            | {{$layout->label->date_of_birth->title}}:{{$dob}} &nbsp; | {{$layout->label->guide_age->title}} : {{$age}} {{$layout->label->year->title}}
+                            | {{$layout->label->gender->title}}: {{Helper::term_translate($gender)}} <br>
+                            | {{$layout->label->guide_type->title}}: {{Helper::term_translate($guide_type_id)}} 
                         </p>
                          <p>
-                            {{$layout->label->location->title}}: {{ContentTerms::getTermTitle($gp_province)}} | {{$layout->label->language->title}}: {{ContentTerms::getTermTitle($gp_language)}} 
+                            {{$layout->label->location->title}}: {{Helper::term_translate($gp_province)}} | {{$layout->label->language->title}}: {{Helper::term_translate($gp_language)}} 
                         </p>
                         <p>
-                            {{$layout->label->number_of_booking->title}}: <b>34</b> BOOKINGS
+                            {{$layout->label->number_of_booking->title}}: <b>{{Helper::countBooking($uid)}}</b> {{$layout->label->number_booking->title}}
                         </p>
                        
                        

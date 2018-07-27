@@ -27,6 +27,10 @@ class HomeController extends Controller
     {
         //
     }
+    public function pagenotfound()
+    {
+       return view('errors.pagenotfound');
+    }
 
     /**
      * Store a newly created resource in storage.

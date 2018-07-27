@@ -1,4 +1,4 @@
-<?php
+@php
 $user=$users;
 $uid=null;
 $uemail=null;
@@ -6,6 +6,7 @@ foreach ($users as $key=>$value) {
   $uid=$value->id;
   $uemail=$value->email;
   $user_meta=Helper::metas('user_meta',['user_id' => $uid] );
+
   $guide_prices=$value->guide_price;
 }
 $photo_path="http://www.nurnberg.com/images/image_unavailable_lrg.png";
@@ -17,12 +18,14 @@ $gp_language="";
 $gp_province="";
 $gp_price="";
 foreach ($guide_prices as $key => $value) {
-    $gp_language=($value->default=='yes')?$value->language->title:"";
-    $gp_province=($value->default=='yes')?$value->province->title:"";   
+    $gp_language=($value->default=='yes')?$value->language_id:"";
+    $gp_province=($value->default=='yes')?$value->province_id:"";   
     $gp_price=($value->default=='yes')?$value->price:""; 
 }
-?>
-<h1 class="text text-primary text-center">Guide Profile Information</h1>
+@endphp
+
+
+<h2 class="text-center" style="font-family:Khla">{{$layout->label->guide_profile_information->title}}</h2>
 <div class="row">
             <div class="well well-sm">
                
@@ -63,29 +66,29 @@ foreach ($guide_prices as $key => $value) {
                             <br/>                            
                         </p>
                        <table class="table table-responsive tabledetail" >
-                          <tr class="underreview">
-                            <td class="first_td " >Number of Bookings:</td>
-                            <td> <b>4</b>bookings</td>
+                          <tr class="underreviewnana">
+                            <td class="first_td " > {{$layout->label->number_of_booking->title}}:</td>
+                            <td> <b>{{Helper::countBooking($uid)}}</b>&nbsp;{{$layout->label->number_booking->title}}</td>
                           </tr>
                           <tr>
                             <td class="first_td">{{$layout->label->gender->title}}:</td>
-                            <td> {{$user_meta->gender->title}}</td>
+                            <td> {{Helper::term_translate($user_meta->gender->value)}}</td>
                           </tr>
                           <tr>
                             <td class="first_td">{{$layout->label->nationality->title}}:</td>
-                            <td> {{$user_meta->nationality_id->title}}</td>
+                            <td> {{Helper::term_translate($user_meta->nationality_id->value)}}</td>
                           </tr>
                           <tr>
                             <td class="first_td">{{$layout->label->guide_type->title}}:</td>
-                            <td> {{$user_meta->guide_type_id->title}}</td>
+                            <td> {{Helper::term_translate($user_meta->guide_type_id->value)}}</td>
                           </tr>
                           <tr>
                             <td class="first_td">{{$layout->label->language->title}}:</td>
-                            <td>  {{$gp_language}}</td>
+                            <td>  {{Helper::term_translate($gp_language)}}</td>
                           </tr>
                           <tr>
                             <td class="first_td">{{$layout->label->province->title}}:</td>
-                            <td>  {{$gp_province}}</td>
+                            <td>  {{Helper::term_translate($gp_province)}}</td>
                           </tr>
                           <tr>
                             <td class="first_td">{{$layout->label->license_id->title}}:</td>
@@ -103,7 +106,7 @@ foreach ($guide_prices as $key => $value) {
                 <table class="table table-hover table-bordered">
                   <thead>
                     <tr class="bg">
-                      <th>ID</th>          
+                      <th>{{$layout->label->id->title}}</th>          
                       <th>{{$layout->label->language->title}}</th>
                       <th>{{$layout->label->location->title}}</th>
                       <th>{{$layout->label->guide_price->title}}</th>
@@ -119,31 +122,22 @@ foreach ($guide_prices as $key => $value) {
                       <?php $user_meta=Helper::metas('user_meta',['user_id' => $guideprice->guide_id] );?>
                           <tr>
                             <td>{{ \Helper::indexed($guideprices, $key) }}</td>
-                           <!--  <td>
-                              <code>
-                                {{ $guideprice->guide_id }}
-                              </code>
-                              <a id="{{ $guideprice->id }}" class="hyper"></a>
-                              <br>
-                              {{$user_meta->fullname_en->value}}
-                              
-                           
-                            </td> -->
+                          
                             <td>
                               <a href="{{ $guideprice->content_parent }}">
-                                {{ $guideprice->language->title }}
+                                {{ Helper::term_translate($guideprice->language_id) }}
                               </a>
                             </td>
                             <td>
-                              <a href="#p{{ $guideprice->translate_of }}">
+                              <a href="{{ $guideprice->translate_of }}">
                                 <span class="font-12 txt-color-blue">
-                                  {{ $guideprice->province->title }}
+                                  {{ Helper::term_translate($guideprice->province_id) }}
                                 </span>
                               </a>
                             </td>
                             <td>
                               <code>
-                                {{ $guideprice->price }} <code>USD</code>
+                                {{ $guideprice->price }} <code>{{$layout->label->usd->title}}</code>
                               </code>
                             </td>
                            

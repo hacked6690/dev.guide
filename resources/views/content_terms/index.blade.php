@@ -26,6 +26,41 @@
 							@endif
 							
 							<div class="table-responsive">
+								<form action="{{ route('content_terms.index') }}" id="sky-form4" class="sky-form" class="smart-form" method="GET"  >     
+							        <div class="col-lg-6" style="">							 
+							           <input type="text"  style="width:100%" name="search" placeholder="Search by Title" class="form-control">
+							               <hr/> 
+							           
+							        </div> 
+							        <div class="col-lg-6">
+										<section class="col col-6 flexibled-error">
+											<label class="label" style="color:green">
+												Taxonomy <code>*</code>
+
+												@if($errors->has('taxonomy'))
+													<div class="error-badge" id="for-taxonomy">
+														{!! Helper::alert('danger', $errors->first('taxonomy')) !!}
+													</div>
+												@endif
+											</label>
+											<label class="select">
+												<select class="input-sm border-0 border-bottom-1" name="taxonomy" onchange="return form.submit()">
+
+													{!! Helper::empty_option() !!}
+
+													@foreach($taxonomies as $taxonomy)
+
+														@if($taxonomysearch ==$taxonomy->taxonomy)
+															<option value="{{ $taxonomy->taxonomy }}" selected>{{ $taxonomy->taxonomy }}</option>
+														@else
+															<option value="{{ $taxonomy->taxonomy }}">{{ $taxonomy->taxonomy }}</option>
+														@endif
+													@endforeach
+												</select><i></i>
+											</label>
+										</section>
+									</div>
+							       </form>
 
 								<table class="table table-hover">
 									<thead>
@@ -77,7 +112,7 @@
 										        <td>{{ $content_term->term_group }}</td>
 										        <td>
 										        	<div class="btn-action">
-											        	<a href="{{ route('content_terms.edit', encrypt($content_term->term_id)) }}" class="btn btn-primary btn-xs">edit</a>
+											        	<a target="_blank" href="{{ route('content_terms.edit', encrypt($content_term->term_id)) }}" class="btn btn-primary btn-xs">edit</a>
 											        	<form action="{{ route('content_terms.destroy', encrypt($content_term->term_id)) }}" method="post" class="inline-block">
 															{{ method_field('delete') }}
 															{{ csrf_field() }}

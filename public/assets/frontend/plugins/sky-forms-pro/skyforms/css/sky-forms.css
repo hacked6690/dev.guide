@@ -93,6 +93,7 @@
 	appearance: normal;
 	-moz-appearance: none;
 	-webkit-appearance: none;
+	font-family: 'khla';
 }
 .sky-form .progress {
 	float: right;

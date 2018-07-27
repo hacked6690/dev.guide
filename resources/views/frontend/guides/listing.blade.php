@@ -22,9 +22,10 @@
 		.mycontent .guideprofile{
 			/*height:140px;
 			width: 140px;*/
-			width:80%;
-			min-height: 130px;
-			max-height: 130px;
+			/*width:100%;*/
+			width: 160px;
+			min-height: 140px;
+			max-height: 140px;
 		}
 		.table-footer .sky-form{
 			border:0px;

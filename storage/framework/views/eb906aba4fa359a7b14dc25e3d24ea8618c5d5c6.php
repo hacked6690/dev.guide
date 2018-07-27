@@ -39,7 +39,7 @@
 
 		
 		<!-- loaded switcher style-->
-		<?php echo $__env->make('layouts.frontend.partials.style_switcher', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
+		<?php //@include('layouts.frontend.partials.style_switcher') ?>
 		<!-- loaded footer page-->
 		<?php echo $__env->make('layouts.frontend.partials.footer', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
 		<!-- Link to Google CDN's jQuery + jQueryUI; fall back to local -->

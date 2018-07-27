@@ -40,6 +40,7 @@ class LayoutItemsController extends Controller
         }
 
         $display = Input::has('display') ? Input::get('display') :7;
+        $search = Input::has('search') ? Input::get('search') :'';
 
         $layout_items = DB::table('layout_items as li')
                             ->select(
@@ -56,9 +57,14 @@ class LayoutItemsController extends Controller
                                     // $qry->where('li.category_id', '=', $filter->pull('layout_category'));
                                 }
                             })
+                            ->where(function($qry) use ($search) {
+                                if($search!==''){
+                                   return  $qry->where('li.title', 'like', '%'.$search.'%');
+                                }
+                            })
                             ->orderBy('li.id', 'desc')
                             ->paginate($display);
-
+                            
         return view('layout_items.index')
                     ->with(compact(['layout_items', 'display']))
                     ->with('filter', $filter->values());

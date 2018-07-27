@@ -12,4 +12,8 @@ class LayoutItemTranslates extends Model
     	'title',
     	'options',
     ];
+
+    public function language(){
+    	return $this->hasOne('App\Languages','id','language_id');
+    }
 }

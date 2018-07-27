@@ -38,4 +38,14 @@ class LayoutItems extends Model
 
         return $items;
     }
+
+    public function category()
+    {
+        return $this->hasOne('App\LayoutCategories','id','category_id');
+    }
+
+    public function translate()
+    {
+        return $this->hasMany('App\LayoutItemTranslates','item_id');
+    }
 }

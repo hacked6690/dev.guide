@@ -11,7 +11,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Route;
-
+use App\ContentTermMetas;
+use App\ContentTerms;
+use App\Model\Backend\Bookings;
 class Helper
 {
 	// __________________________________ Here ↓ are custom functions ;
@@ -50,6 +52,33 @@ class Helper
 	        }
 	    }
 	}
+	//Count Number of Booking for each guide
+	public static function countBooking($guide_id)
+	{
+		$booking_status="booking";
+		$count=Bookings::where('guide_id',$guide_id)
+                     ->where('active','=','active')
+                     ->where('booking_status','=',Bookings::statusID($booking_status))
+                     ->count();
+		return $count;
+	}
+	//This function is for translate the term return with string
+	public static function term_translate($term_id){
+        $slug=Session::get('locale');
+        $ctm=ContentTermMetas::where('term_id',$term_id)
+            ->where('meta_key','translate_'.$slug)
+            ->get();
+       
+        if(count($ctm)>0){
+            return $ctm[0]->meta_value;
+        }else{
+            $ct= ContentTerms::where('term_id',$term_id)->get();
+            if(count($ct)>0) {return $ct[0]->title;}
+            else{return "NA";}
+        }
+    }
+
+
 
 	public static function layout()
 	{

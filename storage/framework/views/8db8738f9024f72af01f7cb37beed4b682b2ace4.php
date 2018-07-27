@@ -4,7 +4,8 @@
 		<div class="row">
 			<div class="col-xs-12 col-sm-7 col-md-7 col-lg-4">
 				<h1 class="page-title txt-color-blueDark">
-					<?php echo e($layout->menu->privileges->title); ?>					
+					<?php echo e($layout->menu->languages->title); ?>
+
 				</h1>
 			</div>
 		</div>
@@ -32,37 +33,36 @@
 											<th>#</th>
 											<th>Slug</th>
 											<th>Title</th>
-											<th>Parent</th>
-											<th>Description</th>
+											<th>Priority</th>
+											<th>Set default</th>
+											<th>Icon</th>
+											<th>Options (Json)</th>
+											<th>Status</th>
 											<th>Module</th>
 										</tr>
 									</thead>
 									<tbody>
-										<?php if(count($privileges) ==0): ?>
-											<?php echo Helper::empty_table(6); ?>
+										<?php if(count($languages) ==0): ?>
+											<?php echo Helper::empty_table(8); ?>
 
 										<?php endif; ?>
 
-										<?php $__currentLoopData = $privileges; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $privilege): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+										<?php $__currentLoopData = $languages; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $language): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
 									      	<tr>
-										        <td><?php echo e(\Helper::indexed($privileges, $key)); ?></td>
+										        <td><?php echo e($key +1); ?></td>
 										        <td>
-										        	<code><?php echo e($privilege->slug); ?></code>
+										        	<code><?php echo e($language->slug); ?></code>
 										        </td>
-										        <td><?php echo e($privilege->title); ?></td>
-										        <td>
-										        	<?php if($privilege->parent_title !=''): ?>
-										        		<span class="font-12 font-light txt-color-blue">
-										        			<?php echo $privilege->parent_title; ?>
-
-										        		</span>
-										        	<?php endif; ?>
-										        </td>
-										        <td><?php echo e($privilege->description); ?></td>
+										        <td><?php echo e($language->title); ?></td>
+										        <td><?php echo e($language->priority); ?></td>
+										        <td><?php echo e($language->set_default); ?></td>
+										        <td><?php echo $language->icon; ?></td>
+										        <td><?php echo e($language->options); ?></td>
+										        <td><?php echo e($language->status); ?></td>
 										        <td>
 										        	<div class="btn-action">
-											        	<a href="<?php echo e(route('privileges.edit', encrypt($privilege->id))); ?>" class="btn btn-primary btn-xs">edit</a>
-											        	<form action="<?php echo e(route('privileges.destroy', encrypt($privilege->id))); ?>" method="post" class="inline-block">
+											        	<a href="<?php echo e(route('languages.edit', encrypt($language->id))); ?>" class="btn btn-primary btn-xs">edit</a>
+											        	<form action="<?php echo e(route('languages.destroy', encrypt($language->id))); ?>" method="post" class="inline-block">
 															<?php echo e(method_field('delete')); ?>
 
 															<?php echo e(csrf_field()); ?>
@@ -76,14 +76,6 @@
 									</tbody>
 								</table>
 
-							</div>
-							<!-- End + div.table-responsive -->
-
-							<div class="table-footer">
-
-								<?php echo \Helper::paginator(['route' => 'privileges'], ['items' => $privileges], ['display' => $display]); ?>
-
-								
 							</div>
 
 						</div>

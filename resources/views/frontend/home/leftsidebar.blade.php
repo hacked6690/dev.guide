@@ -7,16 +7,17 @@ use Illuminate\Support\Facades\Storage;
 						.list-group-item{
 							padding:5px 10px;
 						}
+						
 						.media-heading{margin-bottom: -5px;}
 						.media-left img{width:40px;margin-left:5px;}
 					</style>
 					
-					 <ul class="list-group">
-					    				<li class="list-group-item  li_parent">
+					 <ul class="list-group" >
+					    				<li class="list-group-item  li_parent mybg" >
 					    						<img src="https://d30y9cdsu7xlg0.cloudfront.net/png/14236-200.png">
-							    				Guide By Location...
+							    				{{$layout->label->guide_by_location->title}}
 							    		</li>	
-					    		@foreach($provinces as $pro)
+					    				@foreach($provinces as $pro)
 					    				<li class="list-group-item">
 							            <div class="media">
 								              <div class="media-left">
@@ -31,7 +32,7 @@ use Illuminate\Support\Facades\Storage;
 								                	</a>
 								                </h4>
 								                
-								                <span style='color:gray;font-size:12px'><b>{{GuidesController::countGuideByProvince($pro->term_id)}}</b> Guides</span>
+								                <span style='color:gray;font-size:12px'><b>{{GuidesController::countGuideByProvince($pro->term_id)}}</b> {{$layout->label->guide->title}}</span>
 								            </div>	
 								            <div class="media-right">
 								                 <a href="/guides?province_id={{$pro->term_id}}">
@@ -46,9 +47,9 @@ use Illuminate\Support\Facades\Storage;
 							    				 
 					 </ul>
 					 <ul class="list-group">
-					    				<li class="list-group-item  li_parent">
+					    				<li class="list-group-item  li_parent mybg">
 					    						<img src="https://cdn4.iconfinder.com/data/icons/free-large-boss-icon-set/512/Security.png">
-							    				Top 10 Guides...
+							    				{{$layout->label->top_guide->title}}
 							    		</li>	
 					    			<?php for($i=1;$i<=10;$i++){ ?>
 					    				<li class="list-group-item">

@@ -5,6 +5,9 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use Session;
+use App\ContentTermMetas;
+use App\Helpers\Helper;
 
 class ContentTerms extends Model
 {
@@ -15,6 +18,11 @@ class ContentTerms extends Model
     	'title',
     ];
 
+    public function metas()
+    {
+        return $this->hasMany("App\ContentTermMetas","term_id","term_id");
+    }
+    
     public static function getTermTitle($id)
     {
         $term= ContentTerms::where('term_id','=',$id)->first();
@@ -45,7 +53,10 @@ class ContentTerms extends Model
                     })
                     ->orderBy('content_terms.title', 'asc')
                     ->get();
-
+        foreach ($terms as $t) {
+            $t->title = Helper::term_translate($t->term_id);
+        }
+   
 	    return $terms;
     }
 

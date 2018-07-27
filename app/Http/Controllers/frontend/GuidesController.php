@@ -199,6 +199,10 @@ class GuidesController extends Controller
             'guide_types','guide_languages','proficiencies','totalPage','page','totalRecords','searchField']));
     }
 
+    public function top10Guide(){
+      
+    }
+
     public function index2(Request $request){
           if(!Auth::user()->authorized('authorization_guide')) {
             abort(403, 'Unauthorized action.');
@@ -413,6 +417,8 @@ class GuidesController extends Controller
 
         $uid=Helper::decodeString($uid,Helper::encryptKey());
         $users = User::with('user_metas','guide_price')->groupBy('id')->get();   
+
+    
         $users = $users->filter(function($user) use ($uid)
               {
                 $u=$user->user_metas;                
