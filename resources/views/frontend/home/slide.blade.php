@@ -10,7 +10,7 @@
 					<!-- Wrapper for slides -->
 					<div class="carousel-inner">
 					    <div class="item active">
-					    	<img src="http://www.destinationsbeyondindia.com/cambodia/images/angkor-wat-temple-banner.jpg" alt="First slide">
+					    	<img src="{{URL::asset('/assets/slideshow/1.jpg')}}" alt="First slide">
 		                    <!-- Static Header -->
 		                    <div class="header-text hidden-xs">
 		                        <div class="col-md-12 text-center">		                           
@@ -19,7 +19,7 @@
 		                    </div><!-- /header-text -->
 					    </div>
 					    <div class="item">
-					    	<img src="http://www.destinationsbeyondindia.com/cambodia/images/angkor-wat-temple-banner.jpg" alt="Second slide">
+					    	<img src="{{URL::asset('/assets/slideshow/2.jpg')}}" alt="Second slide">
 					    	<!-- Static Header -->
 		                    <div class="header-text hidden-xs">
 		                        <div class="col-md-12 text-center">
@@ -28,7 +28,7 @@
 		                    </div><!-- /header-text -->
 					    </div>
 					    <div class="item">
-					    	<img src="https://backpackerbible.org/wp-content/uploads/2014/06/400pxcambodia1.jpg" alt="Third slide">
+					    	<img src="{{URL::asset('/assets/slideshow/3.jpg')}}"  alt="Third slide">
 					    	<!-- Static Header -->
 		                    <div class="header-text hidden-xs">
 		                        <div class="col-md-12 text-center">

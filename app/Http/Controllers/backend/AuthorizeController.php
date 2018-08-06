@@ -24,6 +24,18 @@ class AuthorizeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+     public function cus()
+    {
+        $display=10;
+         if(!Auth::user()->authorized('cus')) {
+            abort(403, 'Unauthorized action.');
+        }
+        $contacts=DB::table('contactus')->where('active',1)->orderBy('id','desc')->paginate($display);
+         return view('backend.authorize.cus',compact(['contacts']));
+
+    }
+
     public function index(Request $request)
     {
         //

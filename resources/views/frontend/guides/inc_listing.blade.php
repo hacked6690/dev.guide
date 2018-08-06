@@ -122,101 +122,7 @@ use Illuminate\Support\Facades\Storage;
 </div>
 
 
-<?php
 
-/*
-if(sizeof($users)==0){
-    echo "<h2 class='text text-center text-danger' style='padding:100px;font-size:66px'>NO DATA FOUND!!!</h2>";
-}
-
-foreach ($users as $key=>$value) {
-    $uid=$value->id;
-  $url='/guides/'.Helper::encodeString($value->id,Helper::encryptKey());
-  $uemail=$value->email;  
-
-$user_meta=Helper::metas('user_meta',['user_id' => $uid] );
-$guide_prices=$value->guide_price;
-
-$gp_language="";
-$gp_province="";
-$gp_price="";
-//$gp is guide price
-foreach ($guide_prices as $key => $value) {    
-   if($value->default=='yes'){
-        $gp_language=($value->default=='yes')?$value->language->title:"";
-        $gp_province=($value->default=='yes')?$value->province->title:"";   
-        $gp_price=($value->default=='yes')?$value->price:""; 
-   }
-}
-
-$photo_path='';
-$file=Storage::url($uid.'/'. $user_meta->photo->value);
-if(!file_exists($file)){
-    $photo_path=Storage::url($uid.'/'. $user_meta->photo->value);
-}
-
-
-$date1=new DateTime($user_meta->dob->value);
-$date_2 = new DateTime( date( 'Y-m-d' ) );
-$difference = $date_2->diff( $date1);
-$age= $difference->y;
-$profileID=Helper::encodeString($uid,Helper::encryptKey());
-// $profileID=$uid;*/
-
- 
-/*echo '
-  <div class="row" >
-            <div class="well well-sm" style="margin-bottom:10px">
-                <div class="row" >
-                    <div class="col-xs-12 col-md-2 text-center">
-                        <a href="/guides/detail/'.$profileID.'">
-                        <img src="'. $photo_path .'" alt="Guide"
-                            class="img-rounded img-responsive guideprofile" />
-                        </a>
-                    </div>
-                    <div class="col-xs-12 col-md-6 section-box">
-                        <h2 class="text text-info">
-                             <a href="/guides/detail/'.$profileID.'">'.$user_meta->fullname_en->value.'</a>
-                                <span style="font-size:14px">
-                                    <span class="glyphicon glyphicon-star-empty"></span><span class="glyphicon glyphicon-star-empty">
-                                    </span><span class="glyphicon glyphicon-star-empty"></span><span class="glyphicon glyphicon-star-empty">
-                                    </span><span class="glyphicon glyphicon-star-empty"></span><span class="separator">|</span>
-                                    <span class="glyphicon glyphicon-comment"></span>(100 Comments)
-                                </span>                               
-                        </h2>
-                        <p>
-                            '.$layout->label->nationality->title.': '.$user_meta->nationality_id->title.' 
-                            | '.$layout->label->date_of_birth->title.':'.$user_meta->dob->value.' 
-                            | '.$layout->label->gender->title.': '.$user_meta->gender->title.' 
-                            | '.$layout->label->guide_type->title.': '.$user_meta->guide_type_id->title.'  
-                        </p>
-                         <p>
-                            '.$layout->label->location->title.': '.$gp_province.' | '.$layout->label->language->title.': '.$gp_language.'  
-                        </p>
-                        <p>
-                            '.$layout->label->number_of_booking->title.': <b>34</b> BOOKINGS
-                        </p>
-                       
-                       
-                    </div>
-                     <div class="col-xs-12 col-md-2 text-center">
-                        <h3 class="price"><b>'.$gp_price.'</b> '.$layout->label->usd->title.'</h3>
-                        <em class="perday">'.$layout->label->per_day->title.'</em>
-                       
-                    </div>
-                    <div class="col-xs-12 col-md-2 text-center">
-                         <img src="data:image/png;base64,'.base64_encode(QrCode::format("png")->size(140)->generate($url)).' ">
-                    </div>
-                </div>
-            </div>
-    </div>
-    ';*/
-
-
-
-
-
-?>
 
 
 @if(count($users)==0)   
@@ -270,7 +176,7 @@ $profileID=Helper::encodeString($uid,Helper::encryptKey());
                                 $photo_path=Storage::url($uid.'/'. $photo);
                             }
                         }else{
-                          $photo_path ='https://www.greatplacetowork.com/templates/gptw/images/no-image-available.jpg';
+                          $photo_path ='https://cdn1.iconfinder.com/data/icons/rcons-user-action/512/user-512.png';
                         }
                        
                         $url='/guides/'.Helper::encodeString($uid,Helper::encryptKey());
@@ -302,7 +208,7 @@ $profileID=Helper::encodeString($uid,Helper::encryptKey());
                     <div class="col-xs-12 col-md-2 text-center">
                         <a href="/guides/detail/{{$profileID}}">
                         <img src="{{$photo_path}}" alt="Guide"
-                            class="img-thumbnail<img img-responsive guideprofile" />
+                            class="img-thumbnail img img-responsive guideprofile" />
                         </a>
                     </div>
                     <div class="col-xs-12 col-md-6 section-box">
@@ -312,12 +218,16 @@ $profileID=Helper::encodeString($uid,Helper::encryptKey());
                                     <span class="glyphicon glyphicon-star-empty"></span><span class="glyphicon glyphicon-star-empty">
                                     </span><span class="glyphicon glyphicon-star-empty"></span><span class="glyphicon glyphicon-star-empty">
                                     </span><span class="glyphicon glyphicon-star-empty"></span><span class="separator">|</span>
-                                    <span class="glyphicon glyphicon-comment"></span>(100 Comments)
-                                </span>                               
+                                    <!-- <span class="glyphicon glyphicon-comment"></span>(100 Comments) -->
+                                     (<i>{{$layout->label->fullname_kh->title}}</i>):
+                                     &nbsp;
+                                </span>    
+                             <a href="/guides/detail/{{$profileID}}">{{$fullname_kh}}</a>                           
                         </h2>
                         <p>
                             {{$layout->label->nationality->title}}: {{Helper::term_translate($nationality_id)}}
-                            | {{$layout->label->date_of_birth->title}}:{{$dob}} &nbsp; | {{$layout->label->guide_age->title}} : {{$age}} {{$layout->label->year->title}}
+                            | {{$layout->label->date_of_birth->title}}:{{Helper::convertDate($dob,$format='full')}} &nbsp; 
+                            | {{$layout->label->guide_age->title}} : {{Helper::convertNumber($age)}} {{$layout->label->year->title}}
                             | {{$layout->label->gender->title}}: {{Helper::term_translate($gender)}} <br>
                             | {{$layout->label->guide_type->title}}: {{Helper::term_translate($guide_type_id)}} 
                         </p>
@@ -325,13 +235,13 @@ $profileID=Helper::encodeString($uid,Helper::encryptKey());
                             {{$layout->label->location->title}}: {{Helper::term_translate($gp_province)}} | {{$layout->label->language->title}}: {{Helper::term_translate($gp_language)}} 
                         </p>
                         <p>
-                            {{$layout->label->number_of_booking->title}}: <b>{{Helper::countBooking($uid)}}</b> {{$layout->label->number_booking->title}}
+                            {{$layout->label->number_of_booking->title}}: <b>{{Helper::convertNumber(Helper::countBooking($uid))}}</b> {{$layout->label->number_booking->title}}
                         </p>
                        
                        
                     </div>
                      <div class="col-xs-12 col-md-2 text-center">
-                        <h3 class="price"><b>{{$gp_price}} </b> {{$layout->label->usd->title}}</h3>
+                        <h3 class="price"><b>{{Helper::convertNumber($gp_price)}} </b> {{$layout->label->usd->title}}</h3>
                         <em class="perday">{{$layout->label->per_day->title}}</em>
                        
                     </div>

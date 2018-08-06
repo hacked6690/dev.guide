@@ -28,6 +28,7 @@ use App\Model\Frontend\Guides;
 use Carbon\Carbon;
 use Mail;
 use App\Http\Requests;
+
 use Illuminate\Pagination\LengthAwarePaginator;
 
 class GuidesController extends Controller
@@ -49,9 +50,27 @@ class GuidesController extends Controller
 
     }
 
+     public function popularGuide(){
+      // $pg is stand for PouplarGuide
+        $booking_status=Bookings::statusID('booking');
+        $pg=DB::table('bookings')->select(DB::raw('count(*) as CO, guide_id'))
+        ->where('booking_status',$booking_status)
+        ->groupBy('guide_id')
+        ->orderBy('CO','desc')
+        ->limit(10)
+        ->get();
+
+        return $pg;
+       
+    }
+
+
     public function index(Request $request)
     {
         //
+
+      $popularGuide=self::popularGuide();
+      
         $display = Input::has('display') ? Input::get('display') :Helper::$DISPLAY;
         $privileges = DB::table('privileges as p1')
                         ->select('p1.*', 'p2.title as parent_title')
@@ -196,12 +215,10 @@ class GuidesController extends Controller
      
 
         return view('frontend.guides.listing', compact(['users','privileges', 'display','nationalities','provinces','partner_types','genders',
-            'guide_types','guide_languages','proficiencies','totalPage','page','totalRecords','searchField']));
+            'guide_types','guide_languages','proficiencies','totalPage','page','totalRecords','searchField','popularGuide']));
     }
 
-    public function top10Guide(){
-      
-    }
+   
 
     public function index2(Request $request){
           if(!Auth::user()->authorized('authorization_guide')) {

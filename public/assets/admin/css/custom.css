@@ -35,6 +35,14 @@
     src: url("/fonts/ang+daunteav/ang+daunteav.ttf") format("truetype");
 }
 
+@font-face {
+    font-family: "khla";
+    src: url("/fonts/Khla-Bold.ttf") format("truetype");
+}
+*{
+    font-family: "khla";
+}
+
 
 
 .font-koulen1plus {

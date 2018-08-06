@@ -208,7 +208,7 @@
 											</label>
 											<label class="select">
 												<select value="<?php echo e(old('nationality_id')); ?>" name="nationality_id" >
-													<option value="0" selected disabled>Select Below</option>
+													<option value="0" selected disabled><?php echo e($layout->label->please_select_below->title); ?></option>
 													<?php $__currentLoopData = $nationalities; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $nationality): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
 														<?php if(old('nationality_id') ==$nationality->term_id): ?>
 																	<option value="<?php echo e($nationality->term_id); ?>" selected ><?php echo e($nationality->title); ?></option>
@@ -224,7 +224,8 @@
 									<div class="row">
 										<section class="col col-6 flexibled-error">
 											<label class="label">
-												Profile
+												<?php echo e($layout->label->profile_photo->title); ?>
+
 
 												<?php if($errors->has('photo')): ?>
 													<div class="error-badge" id="for-photo">
@@ -245,7 +246,7 @@
 										<footer>
 											<?php echo e(csrf_field()); ?>
 
-											<button style="width:100%" type="submit"  class="btn-u btn-primary btn-lg">Submit</button>
+											<button style="width:100%" type="submit"  class="btn-u btn-primary btn-lg"><?php echo e($layout->label->save->title); ?></button>
 										</footer>
 									</div>
 								</fieldset>		

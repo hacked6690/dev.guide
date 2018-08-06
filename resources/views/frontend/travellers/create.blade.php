@@ -197,7 +197,7 @@
 											</label>
 											<label class="select">
 												<select value="{{ old('nationality_id') }}" name="nationality_id" >
-													<option value="0" selected disabled>Select Below</option>
+													<option value="0" selected disabled>{{$layout->label->please_select_below->title}}</option>
 													@foreach($nationalities as $nationality)
 														@if(old('nationality_id') ==$nationality->term_id)
 																	<option value="{{$nationality->term_id}}" selected >{{$nationality->title}}</option>
@@ -213,7 +213,7 @@
 									<div class="row">
 										<section class="col col-6 flexibled-error">
 											<label class="label">
-												Profile
+												{{$layout->label->profile_photo->title}}
 
 												@if($errors->has('photo'))
 													<div class="error-badge" id="for-photo">
@@ -232,7 +232,7 @@
 									<div class="row">
 										<footer>
 											{{ csrf_field() }}
-											<button style="width:100%" type="submit"  class="btn-u btn-primary btn-lg">Submit</button>
+											<button style="width:100%" type="submit"  class="btn-u btn-primary btn-lg">{{ $layout->label->save->title }}</button>
 										</footer>
 									</div>
 								</fieldset>		

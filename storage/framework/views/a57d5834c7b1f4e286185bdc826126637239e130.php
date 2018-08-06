@@ -9,7 +9,7 @@ foreach ($users as $key=>$value) {
 
   $guide_prices=$value->guide_price;
 }
-$photo_path="http://www.nurnberg.com/images/image_unavailable_lrg.png";
+$photo_path="https://cdn1.iconfinder.com/data/icons/rcons-user-action/512/user-512.png";
 if(($user_meta->photo->value)!=="")
 $photo_path=Storage::url($uid.'/' . $user_meta->photo->value);
 $url='/guides/'.Helper::encodeString($uid,Helper::encryptKey());
@@ -33,15 +33,15 @@ foreach ($guide_prices as $key => $value) {
                     <div class="col-sm-6 col-md-3">
                         <img src="<?php echo e($photo_path); ?>" alt="" class="img-rounded img-responsive" />
                         <br/>
-                          <h4 class="text text-center">ID: <b><?php echo e($uid); ?></b></h4>
+                          <h4 class="text text-center">ID: <b><?php echo e(Helper::convertNumber($uid)); ?></b></h4>
                         <table class="table table-responsive tabledetail" >                           
                           <tr>
                             <td class="first_td"><?php echo e($layout->label->issued_date->title); ?>:</td>
-                            <td> <b><?php echo e($user_meta->issued_date->value); ?></b></td>
+                            <td> <b><?php echo e(Helper::convertDate($user_meta->issued_date->value,$format='full')); ?></b></td>
                           </tr>
                           <tr>
                             <td class="first_td"><?php echo e($layout->label->expired_date->title); ?>:</td>
-                            <td><b><?php echo e($user_meta->expired_date->value); ?></b></td>
+                            <td><b><?php echo e(Helper::convertDate($user_meta->expired_date->value,$format='full')); ?></b></td>
                           </tr>                           
                        </table>
                        
@@ -53,23 +53,25 @@ foreach ($guide_prices as $key => $value) {
                                     <span class="glyphicon glyphicon-star-empty"></span><span class="glyphicon glyphicon-star-empty">
                                     </span><span class="glyphicon glyphicon-star-empty"></span><span class="glyphicon glyphicon-star-empty">
                                     </span><span class="glyphicon glyphicon-star-empty"></span><span class="separator">|</span>
-                                    <span class="glyphicon glyphicon-comment"></span>(100 Comments)
-                                </span>       
+                                    <!-- <span class="glyphicon glyphicon-comment"></span>(100 Comments) -->
+                                      (<i><?php echo e($layout->label->fullname_kh->title); ?></i>):
+                                </span>   
+                                <a href=""><?php echo e($user_meta->fullname_kh->value); ?></a>       
                          </h4>
                         
                         <p>
                             <i class="glyphicon glyphicon-envelope"></i><?php echo e($layout->label->email->title); ?>: <a href="#"><?php echo e($uemail); ?></a>
                             <br />
-                            <i class="glyphicon glyphicon-phone"></i><?php echo e($layout->label->telephone->title); ?>: <a href="#"><?php echo e($user_meta->telephone->value); ?></a>
+                            <i class="glyphicon glyphicon-phone"></i><?php echo e($layout->label->telephone->title); ?>: <a href="#"><?php echo e(Helper::convertNumber($user_meta->telephone->value)); ?></a>
                             <br />
-                            <i class="glyphicon glyphicon-gift"></i><?php echo e($layout->label->date_of_birth->title); ?>: <?php echo e($user_meta->dob->value); ?>
+                            <i class="glyphicon glyphicon-gift"></i><?php echo e($layout->label->date_of_birth->title); ?>: <?php echo e(Helper::convertDate($user_meta->dob->value,$format='full')); ?>
 
                             <br/>                            
                         </p>
                        <table class="table table-responsive tabledetail" >
                           <tr class="underreviewnana">
                             <td class="first_td " > <?php echo e($layout->label->number_of_booking->title); ?>:</td>
-                            <td> <b><?php echo e(Helper::countBooking($uid)); ?></b>&nbsp;<?php echo e($layout->label->number_booking->title); ?></td>
+                            <td> <b><?php echo e(Helper::convertNumber(Helper::countBooking($uid))); ?></b>&nbsp;<?php echo e($layout->label->number_booking->title); ?></td>
                           </tr>
                           <tr>
                             <td class="first_td"><?php echo e($layout->label->gender->title); ?>:</td>
@@ -123,7 +125,7 @@ foreach ($guide_prices as $key => $value) {
                     <?php $__currentLoopData = $guideprices; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $guideprice): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                       <?php $user_meta=Helper::metas('user_meta',['user_id' => $guideprice->guide_id] );?>
                           <tr>
-                            <td><?php echo e(\Helper::indexed($guideprices, $key)); ?></td>
+                            <td><?php echo e(Helper::convertNumber(\Helper::indexed($guideprices, $key))); ?></td>
                           
                             <td>
                               <a href="<?php echo e($guideprice->content_parent); ?>">
@@ -141,7 +143,7 @@ foreach ($guide_prices as $key => $value) {
                             </td>
                             <td>
                               <code>
-                                <?php echo e($guideprice->price); ?> <code><?php echo e($layout->label->usd->title); ?></code>
+                                <?php echo e(Helper::convertNumber($guideprice->price)); ?> <code><?php echo e($layout->label->usd->title); ?></code>
                               </code>
                             </td>
                            
@@ -159,7 +161,7 @@ foreach ($guide_prices as $key => $value) {
                                 <tr>
                                   <td><?php echo e($n++); ?></td>
                                   <td><?php echo e($detail->fee->title); ?></td>
-                                  <td><?php echo e($detail->gp_price); ?><code>USD</code></td>
+                                  <td><?php echo e(Helper::convertDate($detail->gp_price)); ?><code>USD</code></td>
                                   
                                 </tr>
                                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>

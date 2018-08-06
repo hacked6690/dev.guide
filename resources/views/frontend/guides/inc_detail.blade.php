@@ -9,7 +9,7 @@ foreach ($users as $key=>$value) {
 
   $guide_prices=$value->guide_price;
 }
-$photo_path="http://www.nurnberg.com/images/image_unavailable_lrg.png";
+$photo_path="https://cdn1.iconfinder.com/data/icons/rcons-user-action/512/user-512.png";
 if(($user_meta->photo->value)!=="")
 $photo_path=Storage::url($uid.'/' . $user_meta->photo->value);
 $url='/guides/'.Helper::encodeString($uid,Helper::encryptKey());
@@ -33,15 +33,15 @@ foreach ($guide_prices as $key => $value) {
                     <div class="col-sm-6 col-md-3">
                         <img src="{{$photo_path}}" alt="" class="img-rounded img-responsive" />
                         <br/>
-                          <h4 class="text text-center">ID: <b>{{$uid}}</b></h4>
+                          <h4 class="text text-center">ID: <b>{{Helper::convertNumber($uid)}}</b></h4>
                         <table class="table table-responsive tabledetail" >                           
                           <tr>
                             <td class="first_td">{{$layout->label->issued_date->title}}:</td>
-                            <td> <b>{{$user_meta->issued_date->value}}</b></td>
+                            <td> <b>{{Helper::convertDate($user_meta->issued_date->value,$format='full')}}</b></td>
                           </tr>
                           <tr>
                             <td class="first_td">{{$layout->label->expired_date->title}}:</td>
-                            <td><b>{{$user_meta->expired_date->value}}</b></td>
+                            <td><b>{{Helper::convertDate($user_meta->expired_date->value,$format='full')}}</b></td>
                           </tr>                           
                        </table>
                        
@@ -53,22 +53,24 @@ foreach ($guide_prices as $key => $value) {
                                     <span class="glyphicon glyphicon-star-empty"></span><span class="glyphicon glyphicon-star-empty">
                                     </span><span class="glyphicon glyphicon-star-empty"></span><span class="glyphicon glyphicon-star-empty">
                                     </span><span class="glyphicon glyphicon-star-empty"></span><span class="separator">|</span>
-                                    <span class="glyphicon glyphicon-comment"></span>(100 Comments)
-                                </span>       
+                                    <!-- <span class="glyphicon glyphicon-comment"></span>(100 Comments) -->
+                                      (<i>{{$layout->label->fullname_kh->title}}</i>):
+                                </span>   
+                                <a href="">{{$user_meta->fullname_kh->value}}</a>       
                          </h4>
                         
                         <p>
                             <i class="glyphicon glyphicon-envelope"></i>{{$layout->label->email->title}}: <a href="#">{{$uemail}}</a>
                             <br />
-                            <i class="glyphicon glyphicon-phone"></i>{{$layout->label->telephone->title}}: <a href="#">{{$user_meta->telephone->value}}</a>
+                            <i class="glyphicon glyphicon-phone"></i>{{$layout->label->telephone->title}}: <a href="#">{{Helper::convertNumber($user_meta->telephone->value)}}</a>
                             <br />
-                            <i class="glyphicon glyphicon-gift"></i>{{$layout->label->date_of_birth->title}}: {{$user_meta->dob->value}}
+                            <i class="glyphicon glyphicon-gift"></i>{{$layout->label->date_of_birth->title}}: {{Helper::convertDate($user_meta->dob->value,$format='full')}}
                             <br/>                            
                         </p>
                        <table class="table table-responsive tabledetail" >
                           <tr class="underreviewnana">
                             <td class="first_td " > {{$layout->label->number_of_booking->title}}:</td>
-                            <td> <b>{{Helper::countBooking($uid)}}</b>&nbsp;{{$layout->label->number_booking->title}}</td>
+                            <td> <b>{{Helper::convertNumber(Helper::countBooking($uid))}}</b>&nbsp;{{$layout->label->number_booking->title}}</td>
                           </tr>
                           <tr>
                             <td class="first_td">{{$layout->label->gender->title}}:</td>
@@ -121,7 +123,7 @@ foreach ($guide_prices as $key => $value) {
                     @foreach($guideprices as $key => $guideprice)
                       <?php $user_meta=Helper::metas('user_meta',['user_id' => $guideprice->guide_id] );?>
                           <tr>
-                            <td>{{ \Helper::indexed($guideprices, $key) }}</td>
+                            <td>{{ Helper::convertNumber(\Helper::indexed($guideprices, $key)) }}</td>
                           
                             <td>
                               <a href="{{ $guideprice->content_parent }}">
@@ -137,7 +139,7 @@ foreach ($guide_prices as $key => $value) {
                             </td>
                             <td>
                               <code>
-                                {{ $guideprice->price }} <code>{{$layout->label->usd->title}}</code>
+                                {{ Helper::convertNumber($guideprice->price) }} <code>{{$layout->label->usd->title}}</code>
                               </code>
                             </td>
                            
@@ -155,7 +157,7 @@ foreach ($guide_prices as $key => $value) {
                                 <tr>
                                   <td>{{$n++}}</td>
                                   <td>{{$detail->fee->title}}</td>
-                                  <td>{{$detail->gp_price}}<code>USD</code></td>
+                                  <td>{{Helper::convertDate($detail->gp_price)}}<code>USD</code></td>
                                   
                                 </tr>
                                 @endforeach

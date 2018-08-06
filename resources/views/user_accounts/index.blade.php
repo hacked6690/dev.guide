@@ -51,7 +51,7 @@
 									      		@php
 												$user_meta = \Helper::metas('user_meta', ['user_id' => $user->id]);
 												@endphp
-										        <td>{{ \Helper::indexed($user_accounts, $key) }}</td>
+										        <td>{{ \Helper::indexed($users, $key) }}</td>
 										        <td>
 										        	<code>{{ $user->role->title }}</code>
 										        </td>
@@ -81,7 +81,7 @@
 
 							<div class="table-footer">
 								
-								{!! \Helper::paginator(['route' => 'user_accounts'], ['items' => $user_accounts], ['display' => $display]) !!}
+								{!! \Helper::paginator(['route' => 'user_accounts'], ['items' => $users], ['display' => $display]) !!}
 
 							</div>
 

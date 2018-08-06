@@ -4,7 +4,11 @@ namespace App\Http\Controllers\frontend;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-
+use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Validator;
+use Session;
+use DB;
+use Carbon\Carbon;
 class HomeController extends Controller
 {
     /**
@@ -87,4 +91,48 @@ class HomeController extends Controller
     {
         //
     }
+    public function sys_register(){
+        return view('frontend.sys_register');
+    }
+     public function contact_us(){    
+        return view('frontend.contact_us');
+    }
+
+     public function save_contact_us(Request $request){
+         $now = Carbon::now();
+
+        $validator = Validator::make($request->all(), [
+            'name' => 'required',
+            'email' => 'required',
+            'message' => 'required',
+            'telephone' => 'required|numeric',
+        ]);   
+
+        if($validator->fails()) {
+            return redirect()->back()
+                        ->withInput()
+                        ->withErrors($validator);
+        } 
+
+        $name = Input::has('name')?Input::get('name'):'';
+        $email = Input::has('email')?Input::get('email'):'';
+        $telephone = Input::has('telephone')?Input::get('telephone'):'';
+        $message = Input::has('message')?Input::get('message'):'';
+        DB::table('contactus')->insert(
+            [
+                'fullname_en' => $name,
+                'email' => $email,
+                'telephone' => $telephone,
+                'message' => $message,
+                'created_at' => $now,
+                'active' => 1
+            ]
+        );        
+        Session::flash('inserted', 'Submited...');
+      
+
+
+        return back();
+    }
+
 }

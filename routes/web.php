@@ -60,6 +60,9 @@ Route::prefix('ajax')->group(function () {
 
 Route::resource('guides', 'frontend\GuidesController');
 Route::resource('travellers', 'frontend\TravellersController');
+Route::post('ajax/travellers', 'frontend\TravellersController@ajx_status');
+
+
 Route::resource('guideprice', 'backend\GuidePriceController');
 Route::resource('bookings', 'backend\CalendarsBooking');
 Route::get('booking_history', 'backend\CalendarsBooking@booking_history');
@@ -91,7 +94,8 @@ Route::resource('authorize', 'backend\AuthorizeController');
 Route::post('ajax/authorize', 'backend\AuthorizeController@ajx_status');
 Route::get('authorize/mail_verify/{id}','backend\AuthorizeController@mail_verify');
 Route::get('authorize/settingprice/{id}','backend\AuthorizeController@settingprice');
-Route::get('guide_edit','frontend\GuidesController@guide_edit');
+Route::get('guide_edit', [
+    'as' => 'guide_edit', 'uses' => 'frontend\GuidesController@guide_edit']);
 
 
 
@@ -104,3 +108,9 @@ Route::get('sendattachmentemail','MailController@attachment_email');
 
 
 Route::get('/','frontend\GuidesController@index');
+
+
+Route::get('sys_register','frontend\HomeController@sys_register');
+Route::get('contact_us','frontend\HomeController@contact_us');
+Route::post('contact_us','frontend\HomeController@save_contact_us');
+Route::get('cus','backend\AuthorizeController@cus');

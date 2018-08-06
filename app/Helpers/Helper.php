@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Route;
 use App\ContentTermMetas;
 use App\ContentTerms;
 use App\Model\Backend\Bookings;
+use App\UserRoles;
 class Helper
 {
 	// __________________________________ Here ↓ are custom functions ;
@@ -119,12 +120,19 @@ class Helper
 
 					if($next->url =='/profiles')
 					{
-						$next->url = route('profiles.edit', encrypt(Auth::user()->id));
+						$urole=Auth::user()->role_id;
+						if($urole==UserRoles::getRoleID('guide') || $urole==UserRoles::getRoleID('traveller')){
+							if($urole==UserRoles::getRoleID('guide')){
+								$next->url = route('guide_edit');
+							}elseif($urole==UserRoles::getRoleID('traveller')){
+								$next->url = route('travellers.edit', encrypt(Auth::user()->id));
+							}
+						}else{
+							$next->url = route('profiles.edit', encrypt(Auth::user()->id));
+						}
+						
 					}
-					if($next->url =='/travellers_edit')
-					{
-						$next->url = route('travellers.edit', encrypt(Auth::user()->id));
-					}
+					
 
 					
 					$str_navigated .='<li '. ($current_uri == $next->url ? 'class="active"' :'') .'>
@@ -702,6 +710,62 @@ class Helper
 				  <option value="0">Pending</option>';
 		return $option;
 	}
+
+	public static function convertNumber($str){
+	$khNum = array('០','១','២','៣','៤','៥','៦','៧','៨','៩');
+	$newStr = '';
+	for($i=0;$i<sizeof($khNum);$i++){
+		if(is_numeric(substr($str,$i,1))){
+			$newStr .= $khNum[substr($str,$i,1)];
+		}else{
+			$newStr .= substr($str,$i,1);
+		}
+	}
+	if(Session::get('locale')=='kh'){return $newStr;}
+	return $str;
+   }
+
+   public static function convertDate($date,$format='full'){
+
+	$language_code=Session::get('locale');
+
+	if($date==''){
+		return 'NULL';	
+	}
+
+	$d = date("d",strtotime($date));
+	$m = date("m",strtotime($date));
+	$y = date("Y",strtotime($date));
+
+	$h = date("H",strtotime($date));
+	$i = date("i",strtotime($date));
+	$s = date("s",strtotime($date));
+
+
+
+	$khmerMonth = array('មករា','កុម្ភៈ','មីនា','មេសា','ឧសភា','មិថុនា','កក្កដា','សីហា','កញ្ញា','តុលា','វិច្ឆិកា','ធ្វូ');
+
+	$full = self::convertNumber($d).' '.$khmerMonth[$m-1].' '.self::convertNumber($y);
+	$full_dt = self::convertNumber($d).' '.$khmerMonth[$m-1].' '.self::convertNumber($y).' '.self::convertNumber($h).':'.self::convertNumber($i);
+
+	$khdate = array(
+				'd'=>self::convertNumber($d),
+				'm'=>$khmerMonth[$m-1],
+				'y'=>self::convertNumber($y),
+				'full'=>$full,
+				'full_dt'=>$full_dt
+			);
+	$endate = array(
+				'd'=>$d,
+				'm'=>$m,
+				'y'=>$y,
+				'full'=>date("d/m/Y", strtotime($date)),
+				'full_dt'=>date("d/m/Y H:i",strtotime($date))
+			);
+
+	return ($language_code=='kh' ? $khdate[$format] : $endate[$format]);
+}
+
 	
 
 

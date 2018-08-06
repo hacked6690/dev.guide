@@ -38,9 +38,12 @@ class UserAccountsController extends Controller
             abort(403, 'Unauthorized action.');
         }
 
+    
+
+
         $display = Input::has('display') ? Input::get('display') :7;
 
-        $user_accounts = DB::table('users')
+        /*$user_accounts = DB::table('users')
                             ->select(
                                 'users.id',
                                 'user_roles.title as role',
@@ -53,7 +56,7 @@ class UserAccountsController extends Controller
                             ->leftJoin('user_meta', 'users.id', '=', 'user_meta.user_id')
                             ->groupBy('users.id')
                             ->orderBy('users.created_at', 'desc')
-                            ->paginate($display);
+                            ->paginate($display);*/
 
         // decode obj json ___
         $users = array();
@@ -76,17 +79,21 @@ class UserAccountsController extends Controller
             array_push($users, $key);
       
         }*/
-
-        $role_guide = UserRoles::getRoleID('guide');
+        $role_mot = UserRoles::getRoleID('mot');
         $role_admin = UserRoles::getRoleID('admin');
-
+        if(User::getUserLogin()=='mot'){             
+             $arr_roles=array($role_mot);
+        }
+        if(User::getUserLogin()=='admin'){
+             $arr_roles=array($role_mot,$role_admin);
+        }
         $users = User::with('user_metas')
-            ->where('role_id','!=',$role_guide)
+             ->whereIn('role_id',$arr_roles)
               ->orderBy('id','desc')
               ->paginate($display);
- 
+    // dd($users);
 
-        return view('user_accounts.index', compact(['user_accounts', 'users', 'display']));
+        return view('user_accounts.index', compact(['users', 'display']));
     }
 
     /**
@@ -100,8 +107,9 @@ class UserAccountsController extends Controller
             abort(403, 'Unauthorized action.');
         }
 
-        $user_roles = UserRoles::all();
-
+        if(User::getUserLogin()=='mot'){$user_roles = UserRoles::whereIn('slug',array('mot'))->get();}
+        if(User::getUserLogin()=='admin'){$user_roles = UserRoles::whereIn('slug',array('mot','admin'))->get();}
+      
         return view('user_accounts.create', compact('user_roles'));
     }
 
@@ -198,7 +206,9 @@ class UserAccountsController extends Controller
             abort(403, 'Unauthorized action.');
         }
 
-        $user_roles = UserRoles::all();
+        // $user_roles = UserRoles::all();
+         if(User::getUserLogin()=='mot'){$user_roles = UserRoles::whereIn('slug',array('mot'))->get();}
+        if(User::getUserLogin()=='admin'){$user_roles = UserRoles::whereIn('slug',array('mot','admin'))->get();}
 
         $decrypted_id = decrypt($encrypted_id);
 
